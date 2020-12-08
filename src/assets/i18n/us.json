@@ -1,0 +1,28 @@
+{
+    "PREVIOUS_PAGE_LABEL": "Previous page",
+    "NEXT_PAGE_LABEL": "Next page",
+    "ITEMS_PER_PAGE_LABEL": "Line per page",
+    "FIRST_PAGE_LABEL": "First page",
+    "LAST_PAGE_LABEL": "Last page",
+    "RANGE_PAGE_LABEL_1": "of {{length}}",
+    "RANGE_PAGE_LABEL_2": "{{startIndex}} of {{endIndex}}",
+    "Cancel": "Cancel",
+    "close": {
+        "text": "Close"
+    },
+    "clientList": {
+        "text": "List of clients"
+    },
+    "priorityAssignment": {
+        "text": "Priority assignment"
+    },
+    "segment": {
+        "text": "Segment"
+    },
+    "warehouse": {
+        "text": "Warehouse"
+    },
+    "description": {
+        "text": "Description"
+    }
+}

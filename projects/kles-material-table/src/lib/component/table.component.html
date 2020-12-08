@@ -1,0 +1,26 @@
+<form class="dynamic-form" [formGroup]="form">
+  <table mat-table [dataSource]="dataSource" [ngClass]="formatElevation()" formArrayName="rows">
+    <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef" [sticky]="isSticky(column)">
+
+      <th mat-header-cell *matHeaderCellDef [ngClass]="{'vertical-separator': options.verticalSeparator}">
+        <ng-container dynamicField [field]="column.headerCell" [group]="formHeader">
+        </ng-container>
+      </th>
+      <div *ngIf="column.visible">
+        <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
+          [ngClass]="{'vertical-separator': options.verticalSeparator}">
+          <ng-container dynamicField [field]="getLineFields(index,column.cell.name)" [group]="getControls(index)">
+          </ng-container>
+        </td>
+      </div>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
+    <tr mat-row [ngClass]="{'highlight-on-hover': options.highlightRowOnHover}"
+      *matRowDef="let row; columns: displayedColumns;"></tr>
+    <div *ngIf="showFooter">
+      <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
+      </tr>
+    </div>
+  </table>
+</form>

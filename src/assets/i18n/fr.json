@@ -1,0 +1,212 @@
+{
+    "PREVIOUS_PAGE_LABEL": "Précédent",
+    "NEXT_PAGE_LABEL": "Suivant",
+    "ITEMS_PER_PAGE_LABEL": "Ligne par page",
+    "FIRST_PAGE_LABEL": "Première page",
+    "LAST_PAGE_LABEL": "Dernière page",
+    "RANGE_PAGE_LABEL_1": "sur {{length}}",
+    "RANGE_PAGE_LABEL_2": "{{startIndex}} sur {{endIndex}}",
+    "cancel": "Annuler",
+    "yes": "Oui",
+    "back": "Retour",
+    "close": {
+        "text": "Fermer"
+    },
+    "validate": {
+        "text": "Valider"
+    },
+    "deselectAll": {
+        "text": "Tout désélectionner"
+    },
+    "selectAll": {
+        "text": "Tout sélectionner"
+    },
+    "loading": {
+        "text": "Chargement"
+    },
+    "unauthorized": {
+        "app": {
+            "message": "Vous n'êtes pas autorisé à lancer l'application du pilotage des affectations"
+        }
+    },
+    "settings": {
+        "text": "Paramétrages"
+    },
+    "filterSettings": {
+        "text": "Filtre par défaut",
+        "update": {
+            "message": "Mise à jour des filtres par défaut réalisée avec succès!"
+        },
+        "orderType": {
+            "select": "Sélection des types de commande"
+        },
+        "hierarchy3": {
+            "select": "Sélection des codes familles"
+        },
+        "segment": {
+            "select": "Sélection des segments"
+        },
+        "podium": {
+            "select": "Sélection des podiums"
+        }
+    },
+    "statusSettings": {
+        "text": "Couleur statut",
+        "validator": {
+            "beginend": "La valeur de fin doit être supérieure à la valeur de début",
+            "overlap": "L'intervalle est en conflit avec un intervalle existant"
+        },
+        "add": {
+            "message": "Ajout du paramètre réalisé avec succès!"
+        },
+        "update": {
+            "message": "Mise à jour de la couleur réalisée avec succès!"
+        },
+        "headerLabel": {
+            "text": "Paramétrage de la couleur pour la colonne % FACTURÉ / OBJECTIF YTD"
+        },
+        "color": {
+            "text": "Couleur",
+            "validator": {
+                "required": "La couleur est obligatoire",
+                "notValid": "La couleur est invalide"
+            }
+        },
+        "beginValue": {
+            "text": "Valeur début",
+            "validator": {
+                "required": "La valeur de début est obligatoire",
+                "notValid": "La valeur de début est invalide"
+            }
+        },
+        "endValue": {
+            "text": "Valeur fin",
+            "validator": {
+                "required": "La valeur de fin est obligatoire",
+                "notValid": "La valeur de fin est invalide"
+            }
+        }
+    },
+    "userManager": {
+        "text": "Gestion utilisateur"
+    },
+    "customerList": {
+        "text": "Liste des clients"
+    },
+    "priorityAssignment": {
+        "text": "Affectations prioritaires"
+    },
+    "missionid": {
+        "text": "N° TA"
+    },
+    "segment": {
+        "text": "Segment"
+    },
+    "periode": {
+        "text": "Période"
+    },
+    "warehouse": {
+        "text": "Dépôt"
+    },
+    "description": {
+        "text": "Description"
+    },
+    "engagement": {
+        "entityName": "Nom Entité",
+        "budgetHolder": "Porteur budget",
+        "objectiveYTD": "Obj YTD",
+        "invoicedYTD": "Facturé YTD",
+        "%Invoiced/ObjectiveYTD": "% Facturé / Obj YTD",
+        "%Invoiced+Current/ObjectiveYTD": "% Facturé + EC / Obj YTD",
+        "affectedNotFreeze": "Aff non gelé",
+        "invoiced+Current+AffectedNotFreeze": "Facturé + EC + Aff non gelé",
+        "%Invoiced+Current+AffectedNotFreeze/Objective": "% Facturé + EC + Aff non gelé/ Obj",
+        "tbd": "RAF",
+        "tdbCurrent": "RAF - EC",
+        "tdbCurrentAffectedNotFreeze": "RAF - EC et aff non gelé",
+        "affectedFreeze": "Aff gelé",
+        "status": "Statut",
+        "amountRemainingQuantity": "Montant qté restante",
+        "amountRemainingQuantityNotAllocatedAndNotFrozen": "Montant qté restante non aff et non gelée",
+        "amountRemainingNotAllocatedFrozenQuantity": "Montant qté restante non aff et gelée",
+        "filters": {
+            "daiZone": {
+                "text": "Zone DAI"
+            },
+            "subZone": {
+                "text": "Sous zone"
+            },
+            "subsidiary": {
+                "text": "Filiale"
+            },
+            "country": {
+                "text": "Pays"
+            },
+            "customer": {
+                "text": "Client"
+            },
+            "customerGroup": {
+                "text": "Groupe client"
+            },
+            "status": {
+                "text": "Statut"
+            }
+        },
+        "filterSelection": {
+            "orders": {
+                "title": "Sélection des commandes",
+                "orderType": {
+                    "text": "Type de commandes"
+                },
+                "podium": {
+                    "text": "Saison des commandes"
+                },
+                "otherCriteria": {
+                    "text": "Autres critères"
+                },
+                "ordersFrozenPreparation": {
+                    "text": "Commandes gelées à la préparation"
+                },
+                "marketing": {
+                    "text": "Commandes concernées par les mises en marché"
+                },
+                "interchangeabilityPodium": {
+                    "text": "Autoriser intéerchangeabilité des podiums"
+                }
+            },
+            "items": {
+                "title": "Sélection des produits",
+                "segment": {
+                    "text": "Segment"
+                },
+                "family": {
+                    "text": "Code famille"
+                }
+            }
+        }
+    },
+    "receivers": {
+        "text": "Receveurs",
+        "list": "Liste des receveurs"
+    },
+    "donnors": {
+        "text": "Donneurs"
+    },
+    "proposition": {
+        "text": "Proposition d'affectation prioritaire",
+        "entityName": "Nom entité",
+        "before": "% avant",
+        "after": "% après",
+        "TBDAfter": "RAF après",
+        "amount": "Montant"
+    },
+    "simulation": {
+        "text": "Simulation d'affectation prioritaire"
+    },
+    "thresholdBillingRate": {
+        "text": "Seuil de taux de facturation EC"
+    },
+    "logging": {
+        "text": "Historique"
+    }
+}
