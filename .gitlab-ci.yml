@@ -16,6 +16,7 @@ before_script:
   - npm -v
   - node -v
   - npm cache verify
+  - npm get registry
   
 build:
   stage: build
