@@ -14,10 +14,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
-import { ColumnConfig } from '../models/column.model';
+import { KlesColumnConfig } from '../models/columnconfig.model';
 //import { IModelError } from '@app/material-app/shared/models';
-import { Options } from '../models';
-import { IFieldConfig, IValidator } from 'kles-material-dynamicforms';
+import { Options } from '../models/options.model';
+import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -26,7 +26,7 @@ import { IFieldConfig, IValidator } from 'kles-material-dynamicforms';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class TableComponent implements OnInit, OnChanges, AfterViewInit {
+export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     protected paginator: MatPaginator;
     protected sort: MatSort;
 
@@ -44,7 +44,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
         this.updateData(lines);
     }
 
-    @Input() columns = [] as ColumnConfig[];
+    @Input() columns = [] as KlesColumnConfig[];
     @Input() selectionMode = true;
     @Input() options: Options<any> = {
         verticalSeparator: true,
@@ -52,6 +52,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
         highlightRowOnHover: true,
         elevation: 5
     };
+    @Input() showFooter = false;
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -64,7 +65,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     // Table
     formHeader: FormGroup;
     form: FormGroup;
-    lineFields: IFieldConfig[][];
+    lineFields: IKlesFieldConfig[][];
     formFooter: FormGroup;
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(this.selectionMode);
@@ -262,7 +263,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
         return this.lineFields[index].find(f => f.name === key);
     }
 
-    protected bindValidations(validations: IValidator<ValidatorFn>[]): ValidatorFn {
+    protected bindValidations(validations: IKlesValidator<ValidatorFn>[]): ValidatorFn {
         if (validations.length > 0) {
             const validList = [];
             validations.forEach(valid => {
@@ -274,7 +275,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
         return null;
     }
 
-    protected bindAsyncValidations(validations: IValidator<AsyncValidatorFn>[]): AsyncValidatorFn {
+    protected bindAsyncValidations(validations: IKlesValidator<AsyncValidatorFn>[]): AsyncValidatorFn {
         if (validations.length > 0) {
             const validList = [];
             validations.forEach(valid => {
@@ -303,23 +304,23 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
      * @param row
      * @param column
      */
-    /*getCellStyle(row: any, column: ColumnConfig): SafeStyle {
+    getCellStyle(row: any, column: KlesColumnConfig): SafeStyle {
         const style = 'text-align: center; background-color: ';
-        if (row.error) {
+        /*if (row.error) {
             if (row.error.filter((e: IModelError) => e.key === column.columnDef && e.level === 'error').length > 0) {
                 return 'lightcoral';
             } else if (row.error.filter(e => e.key === column.columnDef && e.level === 'warn').length > 0) {
                 return 'lightyellow';
             }
-        }
+        }*/
         return this.sanitizer.bypassSecurityTrustStyle(style);
-    }*/
+    }
 
     /**
      * Method to check if column is sticky
      * @param column
      */
-    isSticky(column: ColumnConfig): boolean {
+    isSticky(column: KlesColumnConfig): boolean {
         return column.sticky || false;
     }
 

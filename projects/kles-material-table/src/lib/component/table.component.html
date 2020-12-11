@@ -2,14 +2,15 @@
   <table mat-table [dataSource]="dataSource" [ngClass]="formatElevation()" formArrayName="rows">
     <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef" [sticky]="isSticky(column)">
 
-      <th mat-header-cell *matHeaderCellDef [ngClass]="{'vertical-separator': options.verticalSeparator}">
-        <ng-container dynamicField [field]="column.headerCell" [group]="formHeader">
+      <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.class}}"
+        [ngClass]="{'vertical-separator': options.verticalSeparator}">
+        <ng-container klesDynamicField [field]="column.headerCell" [group]="formHeader">
         </ng-container>
       </th>
       <div *ngIf="column.visible">
         <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
-          <ng-container dynamicField [field]="getLineFields(index,column.cell.name)" [group]="getControls(index)">
+          <ng-container klesDynamicField [field]="getLineFields(index,column.cell.name)" [group]="getControls(index)">
           </ng-container>
         </td>
       </div>
