@@ -1,11 +1,10 @@
-import { FieldAbstract } from 'kles-material-dynamicforms';
+import { KlesFieldAbstract, IKlesFieldConfig } from 'kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-textheaderfilter',
+    selector: 'kles-form-textheaderfilter',
     template: `
     <div><span>{{ field.label | translate | uppercase}}</span></div>
     
@@ -41,7 +40,7 @@ import { startWith, map } from 'rxjs/operators';
     `,
     styles: ['mat-form-field {width: calc(100%)}']
 })
-export class TextHeaderFilterComponent extends FieldAbstract implements OnInit {
+export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
 
     filteredOption: Observable<any[]>;
 
