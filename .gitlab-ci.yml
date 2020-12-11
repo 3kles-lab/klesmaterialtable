@@ -15,6 +15,7 @@ before_script:
   # Ensure that node works correctly
   - npm -v
   - node -v
+  - npm cache clean --force
   
 build:
   stage: build
