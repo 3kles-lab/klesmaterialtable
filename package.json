@@ -27,7 +27,6 @@
     "@ngx-translate/core": "^12.1.1",
     "@ngx-translate/http-loader": "^4.0.0",
     "fp-ts": "^1.13.0",
-    "kles-material-dialog": "^1.0.0",
     "kles-material-dynamicforms": "^1.0.0",
     "lodash": "^4.17.19",
     "ngx-color-picker": "^10.0.1",
