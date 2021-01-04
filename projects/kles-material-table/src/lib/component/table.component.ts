@@ -2,47 +2,53 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef,
-    Type,
+    ChangeDetectorRef, Inject
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter } from '@angular/material/core';
-//import * as _moment from 'moment';
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
-//import { IModelError } from '@app/material-app/shared/models';
 import { Options } from '../models/options.model';
 import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
+import { KlesTableService } from '../services/table.service';
+import { AbstractKlesTableService } from '../services/abstracttable.service';
 
 @Component({
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
+    providers: [
+        {
+            provide: 'tableService',
+            useValue: new KlesTableService()
+        }
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     protected paginator: MatPaginator;
     protected sort: MatSort;
+    private sortDefault = false;
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
         this.sort = ms;
         this.setDataSourceAttributes();
     }
 
+    @ViewChild(MatPaginator, { static: false }) set matPaginator(mp: MatPaginator) {
+        this.paginator = mp;
+        this.setDataSourceAttributes();
+    }
+
     /** Input Component */
     @Input() _lines: any[] = [];
-    @Input() set lines(lines: any | any[]) {
-        // const oldTree = _.cloneDeep(this._tree);
-        //this._lines = lines;
-        //const oldSelection = _.cloneDeep(this.selection.selected);
-        this.updateData(lines);
-    }
+    @Input() set lines(lines: any | any[]) { this.updateData(lines); }
 
     @Input() columns = [] as KlesColumnConfig[];
     @Input() selectionMode = true;
@@ -52,7 +58,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         highlightRowOnHover: true,
         elevation: 5
     };
-    @Input() showFooter = false;
+    @Input() sortConfig: Sort;
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -67,28 +73,24 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     form: FormGroup;
     lineFields: IKlesFieldConfig[][];
     formFooter: FormGroup;
+    @Input() showFooter: boolean = false;
     dataSource = new MatTableDataSource<any>([]);
     selection = new SelectionModel<any>(this.selectionMode);
 
     displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
 
-    constructor(protected translate: TranslateService, protected adapter: DateAdapter<any>,
+    constructor(protected translate: TranslateService,
+        protected adapter: DateAdapter<any>,
         private fb: FormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
-        public sanitizer: DomSanitizer
+        public sanitizer: DomSanitizer,
+        @Inject('tableService') public tableService: AbstractKlesTableService
     ) { }
 
     ngOnInit() {
-        //this.updateData(this._lines);
-        /*this.form = this.fb.group({
-            rows: this.fb.array([])
-        });
-        this.form.get('rows').valueChanges.subscribe(e => {
-            console.log('Value change on rows in form table=', e);
-        })
-        */
         console.log('Table columns=', this.columns);
+        this.formHeader = this.initFormHeader();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -97,7 +99,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             console.warn('Changes Columns Table');
             this.columns = changes.columns.currentValue;
             this.formHeader = this.initFormHeader();
-            this.formHeader.statusChanges.subscribe(s => this._onStatusHeaderChange.emit(s));
+            /*this.formHeader.valueChanges.subscribe(e => {
+                console.log('Header Group table value=', e);
+                this.tableService.filterData();
+            })*/
+            this.formHeader.statusChanges.subscribe(s => {
+                console.log('Header Group table state=', s);
+                this._onStatusHeaderChange.emit(s)
+            });
         }
         if (changes.lines) {
             this.updateData(changes.lines.currentValue);
@@ -111,33 +120,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     ngAfterViewInit() {
         this.setDataSourceAttributes();
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
-        //this.showFooter = this.columns.some(column => column.total);
-    }
-
-    formatElevation(): string {
-        return `mat-elevation-z${this.options.elevation}`;
-    }
-
-    /**
-   * Method to set the data lines to datasource table
-   */
-    protected setItems() {
-        this.dataSource.data = this._lines;
-        this.form = this.fb.group({
-            rows: this.initFormArray()
-        });
-        this.form.get('rows').valueChanges.subscribe(e => {
-            console.log('Value change on rows in form table=', e);
+        this.selection.changed.subscribe(s => {
+            console.log('selection table changed=', s);
         })
-        this._onLoaded.emit();
-    }
-
-    updateData(lines: any[]) {
-        //this.updateLines();
-        this._lines = lines;
-        this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
-        //            this.showFooter = this.columns.some(column => column.total);
-        this.setItems();
+        console.log('Table Service=', this.tableService);
+        this.tableService.setTable(this);
     }
 
     /** Form Header */
@@ -145,30 +132,19 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const group = this.fb.group({});
         this.columns.forEach(column => {
             column.headerCell.name = column.columnDef;
-            console.log('Column name=', column.headerCell.name);
-            if (column.headerCell.type === 'button') {
-                return;
-            }
-            console.log('Header column=', column.headerCell.name);
-            const control = this.fb.control(
-                column.headerCell.value || '',
-                this.bindValidations(column.headerCell.validations || []),
-                this.bindAsyncValidations(column.headerCell.asyncValidations || [])
-            );
-            if (column.headerCell.disabled) {
-                control.disable();
-            }
+            const control = this.buildControlField(column.cell, column.headerCell.value || '');
             control.valueChanges.subscribe(e => {
                 console.log('Control headerCell change table=', e);
-                const parent = control.parent;
-                this._onChangeHeaderCell.emit({ column, parent });
+                const group = control.parent;
+                this._onChangeHeaderCell.emit({ column, group });
             })
             console.log('Control for column name', column.headerCell.name, "=", control);
             group.addControl(column.headerCell.name, control);
         });
 
         group.valueChanges.subscribe(e => {
-            console.log('Line change table=', e);
+            console.log('Header Group table=', e);
+            this.tableService.onHeaderChange();
         })
         return group;
     }
@@ -188,32 +164,22 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            console.log('Column name=', column.cell.name);
-            if (column.cell.type === 'button') {
-                return;
-            }
-            console.log('Row=', row[column.cell.name], ' column=', column.cell.name);
-            const control = this.fb.control(
-                row[column.cell.name] || '',
-                this.bindValidations(column.cell.validations || []),
-                this.bindAsyncValidations(column.cell.asyncValidations || [])
-            );
-            if (column.cell.disabled) {
-                control.disable();
-            }
+            const control = this.buildControlField(column.cell, row[column.cell.name]);
             listField.push({ ...column.cell });
             control.valueChanges.subscribe(e => {
                 console.log('Control Cell change table=', e);
-                const parent = control.parent;
-                this._onChangeCell.emit({ column, parent });
+                const group = control.parent;
+                this.tableService.onCellChange();
+                this._onChangeCell.emit({ column, row, group });
             })
             console.log('Control for column name', column.cell.name, "=", control);
             group.addControl(column.cell.name, control);
         });
-        this.lineFields.push([...listField]);
+        this.lineFields.push(listField);
         group.valueChanges.subscribe(e => {
             console.log('Line change table=', e);
             console.log('Parent change line table=', group);
+            this.tableService.onLineChange();
         })
         return group;
     }
@@ -223,23 +189,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const group = this.fb.group({});
         this.columns.forEach(column => {
             column.footerCell.name = column.columnDef;
-            console.log('Column name=', column.footerCell.name);
-            if (column.footerCell.type === 'button') {
-                return;
-            }
-            console.log('Header column=', column.footerCell.name);
-            const control = this.fb.control(
-                column.footerCell.name || '',
-                this.bindValidations(column.footerCell.validations || []),
-                this.bindAsyncValidations(column.footerCell.asyncValidations || [])
-            );
-            if (column.footerCell.disabled) {
-                control.disable();
-            }
+            const control = this.buildControlField(column.cell, column.footerCell.value || '');
             control.valueChanges.subscribe(e => {
                 console.log('Control footerCell change table=', e);
-                const parent = control.parent;
-                this._onChangeFooterCell.emit({ column, parent });
+                const group = control.parent;
+                this._onChangeFooterCell.emit({ column, group });
             })
             console.log('Control for column name', column.footerCell.name, "=", control);
             group.addControl(column.footerCell.name, control);
@@ -250,6 +204,26 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             console.log('Parent change line table=', group);
         })
         return group;
+    }
+
+    /**Field and control */
+
+    buildControlField(field: IKlesFieldConfig, value?: any): FormControl {
+        console.log('Column name=', field.name);
+        if (field.type === 'button') {
+            return;
+        }
+        console.log('Row=', value, ' column=', field.name);
+        if (!value) { value = '' };
+        const control = this.fb.control(
+            value,
+            this.bindValidations(field.validations || []),
+            this.bindAsyncValidations(field.asyncValidations || [])
+        );
+        if (field.disabled) {
+            control.disable();
+        }
+        return control;
     }
 
     getControls(index) {
@@ -263,6 +237,78 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         return this.lineFields[index].find(f => f.name === key);
     }
 
+    /**Manage Data */
+
+    /**
+* Method to set the data lines to datasource table
+*/
+    protected setItems() {
+        this.dataSource.data = this._lines;
+        this.form = this.fb.group({
+            rows: this.initFormArray()
+        });
+        this.form.get('rows').valueChanges.subscribe(e => {
+            console.log('Value change on rows in form table=', e);
+            //this.tableService.onLineChange();
+        })
+        this._onLoaded.emit();
+    }
+
+    updateData(lines: any[]) {
+        this._lines = lines;
+        this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+        //            this.showFooter = this.columns.some(column => column.total);
+        this.setItems();
+    }
+
+    setDataSourceAttributes() {
+        this.dataSource.paginator = this.paginator;
+        if (this.sort) {
+            this.dataSource.sort = this.sort;
+            this.dataSource.sortingDataAccessor = this.tableService.getSortingDataAccessor;
+            if (this.paginator) {
+                this.sort.sortChange.subscribe(() => {
+                    this.paginator.pageIndex = 0;
+                });
+            }
+            if (!this.sortDefault && this.sortConfig) {
+                console.log('Active default sort');
+                this.sort.active = this.sortConfig.active;
+                this.sort.direction = this.sortConfig.direction;
+                this.sort.sortChange.emit(this.sortConfig);
+                this.sortDefault = !this.sortDefault;
+            }
+        }
+    }
+
+    public getSelectedLines(): any[] {
+        return (this._lines) ? this._lines.filter(line => this.selection.isSelected(line)) : [];
+    }
+
+    /** Table rendering */
+
+    /**
+     * Method to rendering cell color
+     * @param row
+     * @param column
+     */
+    getCellStyle(row: any, column: KlesColumnConfig): SafeStyle {
+        return this.tableService.getCellStyle(row, column);
+    }
+
+    /**
+     * Method to check if column is sticky
+     * @param column
+     */
+    isSticky(column: KlesColumnConfig): boolean {
+        return column.sticky || false;
+    }
+
+    formatElevation(): string {
+        return `mat-elevation-z${this.options.elevation}`;
+    }
+
+    /**Validation */
     protected bindValidations(validations: IKlesValidator<ValidatorFn>[]): ValidatorFn {
         if (validations.length > 0) {
             const validList = [];
@@ -285,103 +331,5 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
         }
         return null;
-    }
-
-    setDataSourceAttributes() {
-        this.dataSource.paginator = this.paginator;
-        if (this.sort) {
-            this.dataSource.sort = this.sort;
-            if (this.paginator) {
-                this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
-            }
-        }
-    }
-
-    /** Table rendering */
-
-    /**
-     * Method to rendering cell color
-     * @param row
-     * @param column
-     */
-    getCellStyle(row: any, column: KlesColumnConfig): SafeStyle {
-        const style = 'text-align: center; background-color: ';
-        /*if (row.error) {
-            if (row.error.filter((e: IModelError) => e.key === column.columnDef && e.level === 'error').length > 0) {
-                return 'lightcoral';
-            } else if (row.error.filter(e => e.key === column.columnDef && e.level === 'warn').length > 0) {
-                return 'lightyellow';
-            }
-        }*/
-        return this.sanitizer.bypassSecurityTrustStyle(style);
-    }
-
-    /**
-     * Method to check if column is sticky
-     * @param column
-     */
-    isSticky(column: KlesColumnConfig): boolean {
-        return column.sticky || false;
-    }
-
-    /**Table Selection */
-    isAllSelected() {
-        const numSelected = this.selection.selected
-            .filter(s => this.dataSource.filteredData.includes(s)).length;
-        // const numSelected = this.selection.selected.length;
-        const numRows = this.dataSource.filteredData.length;
-        // const numRows = this.dataSource.data.length;
-        return numSelected === numRows;
-    }
-
-    masterToggle() {
-        this.isAllSelected() ?
-            this.dataSource.filteredData.forEach(row => {
-                this.selection.deselect(row);
-                // this._onSelected.emit(row);
-            })
-            // this.selection.clear()
-            :
-            this.dataSource.filteredData.forEach(row => {
-                this.selection.select(row);
-                // this._onSelected.emit(row);
-            });
-        this._onSelected.emit(this.selection.selected);
-    }
-
-    changeSelectLine(row) {
-        console.log('changeSelectLine for row=', row);
-        if (row) {
-            this.selection.toggle(row);
-            // if (this.selection.isSelected(row)) {
-            // this._onSelected.emit(row);
-            // }
-            this._onSelected.emit(this.selection.selected);
-        }
-    }
-
-    checkboxLabel(row?: any): string {
-        if (!row) {
-            return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-        }
-        return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-    }
-
-    public getSelectedLines(): any[] {
-        return (this._lines) ? this._lines.filter(line => this.selection.isSelected(line)) : [];
-    }
-
-    addRecord(record) {
-        record = { beginvalue: 35, envalue: 100, color: '#CCCCCC' };
-        this._lines.push(record);
-        this.dataSource.data = this._lines;
-
-        (this.form.get('rows') as FormArray).push(this.addFormLine(record));
-    }
-
-    deleteRecord(record) {
-        record = { beginvalue: 35, endvalue: 50, color: '#CCCCCC' };
-        this.lines.push(record);
-        (this.form.get('rows') as FormArray).push(this.addFormLine(record));
     }
 }
