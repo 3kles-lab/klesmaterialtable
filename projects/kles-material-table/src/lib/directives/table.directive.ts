@@ -1,6 +1,5 @@
-import { ViewContainerRef, Component, Injector, ComponentFactoryResolver, ComponentRef, ReflectiveInjector, Directive, Input, Type, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { ViewContainerRef, Component, Injector, ComponentFactoryResolver, ComponentRef, ReflectiveInjector, Directive, Input, Type, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { KlesTableComponent } from '../component/table.component';
-import { KlesColumnConfig } from '../models/columnconfig.model';
 import { KlesTableConfig } from '../models/tableconfig.model';
 
 @Directive({
@@ -9,6 +8,14 @@ import { KlesTableConfig } from '../models/tableconfig.model';
 export class KlesTableDirective implements OnInit, OnChanges {
     @Input() tableConfig: KlesTableConfig;
     @Input() lines: any[];
+
+    @Output() _onLoaded = new EventEmitter();
+    @Output() _onSelected = new EventEmitter();
+    @Output() _onChangeHeaderCell = new EventEmitter();
+    @Output() _onChangeCell = new EventEmitter();
+    @Output() _onChangeFooterCell = new EventEmitter();
+    @Output() _onStatusHeaderChange = new EventEmitter();
+
 
     componentRef: ComponentRef<any>;
 
@@ -64,5 +71,9 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.componentRef.instance.sortConfig = this.tableConfig.sortConfig;
         }
         this.componentRef.instance.lines = this.lines;
+
+        this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
+        this.componentRef.instance._onChangeCell = this._onChangeCell;
+        this.componentRef.instance._onChangeFooterCell = this._onChangeFooterCell;
     }
 }
