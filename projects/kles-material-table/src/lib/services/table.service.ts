@@ -1,12 +1,30 @@
 import { Injectable } from '@angular/core';
-import { cloneDeep } from 'lodash';
-import { Option, some, none } from 'fp-ts/lib/Option';
 import { AbstractKlesTableService } from './abstracttable.service';
 
 @Injectable({
     providedIn: 'root'
 })
 export class KlesTableService extends AbstractKlesTableService {
+    
+    onHeaderChange() {
+    }
+    onCellChange() {
+    }
+    onLineChange() {
+    }
+    onFooterChange() {
+    }
+
+    filteredValues = {};
+    filterData() {
+        if (this.table) {
+            this.filteredValues = this.table.formHeader.value;
+            console.log('filterValue=', this.filteredValues);
+            this.table.dataSource.filterPredicate = this.createFilter();
+            console.log('JSON filterValues=', JSON.stringify(this.filteredValues));
+            this.table.dataSource.filter = JSON.stringify(this.filteredValues);
+        }
+    }
 
     /**Filter */
     protected createFilter() {
