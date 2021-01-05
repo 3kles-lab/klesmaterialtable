@@ -17,6 +17,7 @@ import { Options } from '../models/options.model';
 import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
 import { KlesTableService } from '../services/table.service';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
+import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -85,7 +86,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
-        @Inject('tableService') public tableService: AbstractKlesTableService
+        @Inject('tableService') public tableService: DefaultKlesTableService
     ) { }
 
     ngOnInit() {
@@ -207,7 +208,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     /**Field and control */
-
     buildControlField(field: IKlesFieldConfig, value?: any): FormControl {
         console.log('Column name=', field.name);
         if (field.type === 'button') {

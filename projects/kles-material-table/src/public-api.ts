@@ -17,7 +17,12 @@ export * from './lib/component/header/textheaderfilter.component';
 
 /**SERVICES */
 export * from './lib/services/abstracttable.service';
+export * from './lib/services/defaulttable.service';
 export * from './lib/services/table.service';
+
+/**FEATURES */
+export * from './lib/services/features/filter/textfiltertable.service';
+export * from './lib/services/features/selection/selectiontable.service';
 
 /**MODULE */
 export * from './lib/table.module';
