@@ -17,6 +17,7 @@
     "fp-ts": "^1.13.0",
     "kles-material-dynamicforms": "^1.0.0",
     "ngx-color-picker": "^10.0.1",
+    "polytype": "^0.11.0",
     "lodash": "^4.17.19",
     "rxjs": "~6.5.4",
     "zone.js": "~0.10.2"
