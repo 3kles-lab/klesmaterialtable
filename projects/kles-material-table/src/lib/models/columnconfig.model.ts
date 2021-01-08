@@ -1,3 +1,4 @@
+import { Type } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
 import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
 
@@ -9,11 +10,11 @@ export interface KlesColumnConfig {
     disabled?: boolean;
     type: string;
     name?: string;
-    ngClass?:any;
+    ngClass?: any;
     resizable?: boolean;
     headerCell: IKlesFieldConfig;
     cell: IKlesFieldConfig;
+    footerCell?: IKlesFieldConfig;
     lineValidations?: IKlesValidator<ValidatorFn>[];
     lineAsyncValidations?: IKlesValidator<AsyncValidatorFn>[];
-    footerCell: IKlesFieldConfig;
 }
