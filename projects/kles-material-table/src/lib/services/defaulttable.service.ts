@@ -10,14 +10,15 @@ import { AbstractKlesTableService } from './abstracttable.service';
 })
 export class DefaultKlesTableService extends AbstractKlesTableService {
     //Header
-    onHeaderChange() {}
+    onHeaderChange(e: any) { }
+    onHeaderCellChange(e: any) { }
 
     //Line
-    onCellChange() {}
-    onLineChange() {}
+    onCellChange(e: any) { }
+    onLineChange(e: any) { }
 
     //Footer
-    onFooterChange() { }
+    onFooterChange(e: any) { }
 
     //Cell Style
     getCellStyle(row: any, column: KlesColumnConfig): SafeStyle { return "" };

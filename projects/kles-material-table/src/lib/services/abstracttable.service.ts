@@ -12,14 +12,15 @@ export abstract class AbstractKlesTableService {
     protected table: KlesTableComponent;
 
     //Header
-    abstract onHeaderChange();
+    abstract onHeaderChange(e:any);
+    abstract onHeaderCellChange(e:any);
 
     //Line
-    abstract onCellChange();
-    abstract onLineChange();
-
+    abstract onLineChange(e:any);
+    abstract onCellChange(e:any);
+    
     //Footer
-    abstract onFooterChange();
+    abstract onFooterChange(e:any);
     
     /**Setters */
     public setTable(table: KlesTableComponent) {
