@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject
+    ChangeDetectorRef, Inject, ViewEncapsulation
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter } from '@angular/material/core';
@@ -23,12 +23,6 @@ import { DefaultKlesTableService } from '../services/defaulttable.service';
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
-    providers: [
-        {
-            provide: 'tableService',
-            useValue: new KlesTableService()
-        }
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -60,6 +54,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         elevation: 5
     };
     @Input() sortConfig: Sort;
+    @Input() hidePaginator: boolean = false;
+    @Input() pageSize = 10;
+    @Input() pageSizeOptions = [2, 5, 7, 10, 13, 16, 20, 25, 50];
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -100,17 +97,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             console.warn('Changes Columns Table');
             this.columns = changes.columns.currentValue;
             this.formHeader = this.initFormHeader();
-            /*this.formHeader.valueChanges.subscribe(e => {
-                console.log('Header Group table value=', e);
-                this.tableService.filterData();
-            })*/
             this.formHeader.statusChanges.subscribe(s => {
                 console.log('Header Group table state=', s);
                 this._onStatusHeaderChange.emit(s)
             });
         }
         if (changes.lines) {
-            this.updateData(changes.lines.currentValue);
+            //this.updateData(changes.lines.currentValue);
         }
         if (changes.selectionMode) {
             this.selectionMode = changes.selectionMode.currentValue;
@@ -121,9 +114,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     ngAfterViewInit() {
         this.setDataSourceAttributes();
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
-        this.selection.changed.subscribe(s => {
-            console.log('selection table changed=', s);
-        })
         console.log('Table Service=', this.tableService);
         this.tableService.setTable(this);
     }
@@ -138,6 +128,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
                 console.log('Control headerCell change table=', e);
                 const group = control.parent;
                 this._onChangeHeaderCell.emit({ column, group });
+                this.tableService.onHeaderCellChange({ column, group });
             })
             console.log('Control for column name', column.headerCell.name, "=", control);
             group.addControl(column.headerCell.name, control);
@@ -145,7 +136,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
         group.valueChanges.subscribe(e => {
             console.log('Header Group table=', e);
-            this.tableService.onHeaderChange();
+            this.tableService.onHeaderChange(e);
         })
         return group;
     }
@@ -170,7 +161,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             control.valueChanges.subscribe(e => {
                 console.log('Control Cell change table=', e);
                 const group = control.parent;
-                this.tableService.onCellChange();
+                this.tableService.onCellChange({ column, row, group });
                 this._onChangeCell.emit({ column, row, group });
             })
             console.log('Control for column name', column.cell.name, "=", control);
@@ -180,7 +171,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         group.valueChanges.subscribe(e => {
             console.log('Line change table=', e);
             console.log('Parent change line table=', group);
-            this.tableService.onLineChange();
+            this.tableService.onLineChange({ group, e });
         })
         return group;
     }
@@ -249,7 +240,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         });
         this.form.get('rows').valueChanges.subscribe(e => {
             console.log('Value change on rows in form table=', e);
-            //this.tableService.onLineChange();
+            this.tableService.onLineChange(e);
         })
         this._onLoaded.emit();
     }
@@ -262,7 +253,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     setDataSourceAttributes() {
-        this.dataSource.paginator = this.paginator;
+        setTimeout(() => this.dataSource.paginator = this.paginator);
         if (this.sort) {
             this.dataSource.sort = this.sort;
             this.dataSource.sortingDataAccessor = this.tableService.getSortingDataAccessor;

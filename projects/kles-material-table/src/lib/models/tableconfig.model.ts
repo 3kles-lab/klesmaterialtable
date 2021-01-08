@@ -11,4 +11,7 @@ export interface KlesTableConfig {
     selectionMode?: boolean;
     options?: Options<any>;
     sortConfig?: Sort;
+    hidePaginator?: boolean;
+    pageSize?: number;
+    pageSizeOptions?: number[];
 }
