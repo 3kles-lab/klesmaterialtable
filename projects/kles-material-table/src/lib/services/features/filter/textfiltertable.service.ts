@@ -1,9 +1,16 @@
 import { KlesTableComponent } from "../../../component/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
-export class KlesTextFilterTableService implements KlesTableBaseService{
+export class KlesTextFilterTableService implements KlesTableBaseService {
     table: KlesTableComponent;
     filteredValues = {};
+    columnExclude;
+
+    constructor(column: string) {
+        this.columnExclude = column;
+    }
+
     filterData() {
+        console.log('#FilterData Table=', this.table);
         if (this.table) {
             this.filteredValues = this.table.formHeader.value;
             console.log('filterValue=', this.filteredValues);
@@ -17,11 +24,15 @@ export class KlesTextFilterTableService implements KlesTableBaseService{
     protected createFilter() {
         const myFilterPredicate = (data: any, filter: string): boolean => {
             const searchString = JSON.parse(filter);
-            return Object.keys(searchString).every(key => {
+            return Object.keys(searchString).filter(f => f !== this.columnExclude).every(key => {
+                console.log('Data key=', data[key]);
+                console.log('SearchString key=', searchString[key]);
                 if (!data[key] && searchString[key].length === 0) {
                     return true;
                 } else if (!data[key]) {
                     return false;
+                } else if (!searchString[key]) {
+                    return true;
                 }
                 return data[key].toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
             });
