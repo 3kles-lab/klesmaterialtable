@@ -4,19 +4,39 @@ import { classes } from 'polytype';
 import { DefaultKlesTableService } from './defaulttable.service';
 import { KlesSelectionTableService } from './features/selection/selectiontable.service';
 import { KlesTextFilterTableService } from './features/filter/textfiltertable.service';
+import { FormArray, FormGroup } from '@angular/forms';
 
 @Injectable({
     providedIn: 'root'
 })
 export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesTextFilterTableService) {
 
-    onHeaderChange() {
+    constructor() {
+        // super();
+        // this.columnExclude = '#select';
+        // this.columnSelect = '#select';
+
+        super
+            (
+                { super: KlesSelectionTableService, arguments: ['#select'] },
+                { super: KlesTextFilterTableService, arguments: ['#select'] }
+            );
+    }
+    //Header 
+    onHeaderChange(e: any) {
         this.filterData();
     }
-    onCellChange() {
+    onHeaderCellChange(e: any) {
+        this.changeSelectionHeader(e);
     }
-    onLineChange() {
+
+    //Line
+    onCellChange(e: any) {
+        this.changeSelectionLine(e);
     }
-    onFooterChange() {
-    }
+
+    onLineChange(e: any) { }
+
+    //Footer
+    onFooterChange(e: any) { }
 }
