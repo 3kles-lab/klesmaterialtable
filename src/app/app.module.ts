@@ -6,7 +6,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { KlesMaterialTableModule } from 'kles-material-table';
 import { MaterialModule } from './modules/material.module';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
@@ -25,7 +25,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     TranslateModule.forRoot(
       {
         loader: {
-          provide: TranslateModule,
+          provide: TranslateLoader,
           useFactory: (HttpLoaderFactory),
           deps: [HttpClient]
         }
