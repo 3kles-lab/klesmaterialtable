@@ -16,7 +16,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
     @Output() _onChangeFooterCell = new EventEmitter();
     @Output() _onStatusHeaderChange = new EventEmitter();
 
-
     componentRef: ComponentRef<any>;
 
     constructor(private resolver: ComponentFactoryResolver,
@@ -47,14 +46,13 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
     buildComponent() {
         console.log('Directive KlesTable BuildComp=', this.tableConfig);
-        const injector: Injector = ReflectiveInjector.resolveAndCreate([
-            {
+        const options = {
+            providers: [{
                 provide: 'tableService',
-                useValue: {
-                    value: this.tableConfig.tableService
-                }
-            }
-        ]);
+                useValue: this.tableConfig.tableService
+            }]
+        }
+        const injector: Injector = Injector.create(options);
         const factory = this.resolver.resolveComponentFactory(
             this.tableConfig.tableComponent || KlesTableComponent
         );
@@ -70,6 +68,15 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.sortConfig) {
             this.componentRef.instance.sortConfig = this.tableConfig.sortConfig;
         }
+        // if (this.tableConfig.hidePaginator) {
+        //     this.componentRef.instance.hidePaginator = this.tableConfig.hidePaginator;
+        // }
+        // if (this.tableConfig.pageSize) {
+        //     this.componentRef.instance.pageSize = this.tableConfig.pageSize;
+        // }
+        // if (this.tableConfig.pageSizeOptions) {
+        //     this.componentRef.instance.pageSizeOptions = this.tableConfig.pageSizeOptions;
+        // }
         this.componentRef.instance.lines = this.lines;
 
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
