@@ -8,15 +8,13 @@ import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter } from '@angular/material/core';
 import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatPaginator } from "@angular/material/paginator"
 import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
 import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
-import { KlesTableService } from '../services/table.service';
-import { AbstractKlesTableService } from '../services/abstracttable.service';
 import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 @Component({
@@ -103,7 +101,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             });
         }
         if (changes.lines) {
-            //this.updateData(changes.lines.currentValue);
+            this.updateData(changes.lines.currentValue);
         }
         if (changes.selectionMode) {
             this.selectionMode = changes.selectionMode.currentValue;
@@ -217,15 +215,27 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         return control;
     }
 
+    getFormArray(): FormArray {
+        return (this.form.get('rows') as FormArray)
+    }
+
+    getActualIndex(index: number) {
+        if (this.paginator && !this.hidePaginator) {
+            return index + this.paginator.pageSize * this.paginator.pageIndex;
+        }
+        return index;
+    }
+
     getControls(index) {
         //console.log('GetControls index=', index, "=", (this.form.get('rows') as FormArray).controls);
         //(this.form.get('rows') as FormArray).push
         //(this.form.get('rows') as FormArray).removeAt(index)
-        return (this.form.get('rows') as FormArray).controls[index];
+        //return (this.form.get('rows') as FormArray).controls[index];
+        return this.getFormArray().controls[this.getActualIndex(index)];
     }
 
     getLineFields(index, key) {
-        return this.lineFields[index].find(f => f.name === key);
+        return this.lineFields[this.getActualIndex(index)].find(f => f.name === key);
     }
 
     /**Manage Data */
@@ -234,11 +244,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 * Method to set the data lines to datasource table
 */
     protected setItems() {
-        this.dataSource.data = this._lines;
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        this.form.get('rows').valueChanges.subscribe(e => {
+        this.dataSource.data = this.getFormArray().controls;
+        this.getFormArray().valueChanges.subscribe(e => {
             console.log('Value change on rows in form table=', e);
             this.tableService.onLineChange(e);
         })

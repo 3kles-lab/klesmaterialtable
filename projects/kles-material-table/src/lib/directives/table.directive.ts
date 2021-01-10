@@ -68,15 +68,15 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.sortConfig) {
             this.componentRef.instance.sortConfig = this.tableConfig.sortConfig;
         }
-        // if (this.tableConfig.hidePaginator) {
-        //     this.componentRef.instance.hidePaginator = this.tableConfig.hidePaginator;
-        // }
-        // if (this.tableConfig.pageSize) {
-        //     this.componentRef.instance.pageSize = this.tableConfig.pageSize;
-        // }
-        // if (this.tableConfig.pageSizeOptions) {
-        //     this.componentRef.instance.pageSizeOptions = this.tableConfig.pageSizeOptions;
-        // }
+        if (this.tableConfig.hidePaginator) {
+            this.componentRef.instance.hidePaginator = this.tableConfig.hidePaginator;
+        }
+        if (this.tableConfig.pageSize) {
+            this.componentRef.instance.pageSize = this.tableConfig.pageSize;
+        }
+        if (this.tableConfig.pageSizeOptions) {
+            this.componentRef.instance.pageSizeOptions = this.tableConfig.pageSizeOptions;
+        }
         this.componentRef.instance.lines = this.lines;
 
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
