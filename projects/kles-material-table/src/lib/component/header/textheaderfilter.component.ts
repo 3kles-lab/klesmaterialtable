@@ -1,4 +1,4 @@
-import { KlesFieldAbstract, IKlesFieldConfig } from 'kles-material-dynamicforms';
+import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';

@@ -14,7 +14,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
-import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
+import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 @Component({
