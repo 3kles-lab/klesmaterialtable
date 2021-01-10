@@ -1,6 +1,5 @@
-import { Type } from '@angular/core';
 import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
-import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
+import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 
 export interface KlesColumnConfig {
     columnDef: string;

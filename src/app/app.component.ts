@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import {
   IKlesFieldConfig, KlesFormCheckboxComponent, KlesFormColorComponent,
   KlesFormInputComponent, KlesFormLabelComponent
-} from 'kles-material-dynamicforms';
+} from '@3kles/kles-material-dynamicforms';
 import { KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService, KlesFormTextHeaderFilterComponent } from 'kles-material-table';
 import { Subject } from 'rxjs';
 import * as _ from 'lodash';
