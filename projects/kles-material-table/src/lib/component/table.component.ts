@@ -247,7 +247,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        this.dataSource.data = this.getFormArray().controls;
+        this.dataSource.data = this._lines;
         this.getFormArray().valueChanges.subscribe(e => {
             console.log('Value change on rows in form table=', e);
             this.tableService.onLineChange(e);
