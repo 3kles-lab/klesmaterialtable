@@ -14,7 +14,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
-import { IKlesFieldConfig, IKlesValidator } from 'kles-material-dynamicforms';
+import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 @Component({
@@ -54,7 +54,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() sortConfig: Sort;
     @Input() hidePaginator: boolean = false;
     @Input() pageSize = 10;
-    @Input() pageSizeOptions = [2, 5, 7, 10, 13, 16, 20, 25, 50];
+    @Input() pageSizeOptions = [5, 10, 20, 25, 50];
+
+    @Input() lineValidations: ValidatorFn[];
+    @Input() lineAsyncValidations: AsyncValidatorFn[];
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -166,10 +169,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             group.addControl(column.cell.name, control);
         });
         this.lineFields.push(listField);
+
+        group.setValidators(this.lineValidations);
+        group.setAsyncValidators(this.lineAsyncValidations);
+
         group.valueChanges.subscribe(e => {
             console.log('Line change table=', e);
             console.log('Parent change line table=', group);
-            this.tableService.onLineChange({ group, e });
+            this.tableService.onLineChange({ group, row, e });
         })
         return group;
     }
@@ -247,10 +254,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        this.dataSource.data = this.getFormArray().controls;
+        this.dataSource.data = this._lines;
         this.getFormArray().valueChanges.subscribe(e => {
             console.log('Value change on rows in form table=', e);
-            this.tableService.onLineChange(e);
+            //this.tableService.onLineChange(e);
         })
         this._onLoaded.emit();
     }

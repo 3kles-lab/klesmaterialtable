@@ -6,7 +6,7 @@ import { MaterialModule } from './modules/material.module';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KlesFormTextHeaderFilterComponent } from './component/header/textheaderfilter.component';
-import { KlesMaterialDynamicformsModule } from 'kles-material-dynamicforms';
+import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { KlesTableDirective } from './directives/table.directive';
 import { AbstractKlesTableService } from './services/abstracttable.service';
 import { KlesTableService } from './services/table.service';

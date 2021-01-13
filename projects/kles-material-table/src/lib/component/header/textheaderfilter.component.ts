@@ -1,4 +1,4 @@
-import { KlesFieldAbstract, IKlesFieldConfig } from 'kles-material-dynamicforms';
+import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -6,7 +6,7 @@ import { startWith, map } from 'rxjs/operators';
 @Component({
     selector: 'kles-form-textheaderfilter',
     template: `
-    <div><span>{{ field.label | translate | uppercase}}</span></div>
+    <div><span>{{ field.label | translate}}</span></div>
     
     <mat-form-field [formGroup]="group" class="form-element">
                
