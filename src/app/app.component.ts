@@ -94,11 +94,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'beginvalue', header: 'statusSettings.beginValue.text',
         type: 'text', visible: true, sticky: true,
-        //resizable: true,
+        resizable: true,
         headerCell: {
           type: 'input',
           name: 'beginvalue',
-          label: this.translateService.instant('statusSettings.beginValue.text'),
           component: KlesFormLabelComponent,
           value: 'Begin',
           pipeTransform: [{
@@ -131,7 +130,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'endvalue', header: 'statusSettings.endValue.text',
         type: 'text', visible: true, sticky: true,
-        //resizable: true,
+        resizable: true,
         headerCell: {
           type: 'input',
           name: 'endvalue',
@@ -167,7 +166,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'color', header: 'statusSettings.color.text',
         type: 'text', visible: true, sticky: true,
-        //resizable: true,
+        resizable: true,
         headerCell: {
           type: 'input',
           name: 'color',
@@ -193,6 +192,23 @@ export class AppComponent implements OnInit, AfterViewInit {
             }
           ]
         } as IKlesFieldConfig
+      },
+      {
+        columnDef: '#checker', sticky: true, header: '', type: '', visible: true,
+        headerCell: {
+          type: 'input',
+          name: '#checker',
+          component: KlesFormLabelComponent,
+          value: 'Begin',
+          pipeTransform: [{
+            pipe: new UpperCasePipe
+          }]
+        } as IKlesFieldConfig,
+        cell: {
+          type: 'text',
+          name: '#checker',
+          component: KlesFormLabelComponent,
+        } as IKlesFieldConfig,
       }
 
     ];
