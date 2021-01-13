@@ -14,6 +14,4 @@ export interface KlesColumnConfig {
     headerCell: IKlesFieldConfig;
     cell: IKlesFieldConfig;
     footerCell?: IKlesFieldConfig;
-    lineValidations?: IKlesValidator<ValidatorFn>[];
-    lineAsyncValidations?: IKlesValidator<AsyncValidatorFn>[];
 }
