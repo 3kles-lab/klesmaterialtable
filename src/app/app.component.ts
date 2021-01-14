@@ -99,7 +99,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         headerCell: {
           type: 'input',
           name: 'beginvalue',
-          label: this.translateService.instant('statusSettings.beginValue.text'),
           component: KlesFormLabelComponent,
           value: 'Begin',
           pipeTransform: [{
@@ -194,6 +193,23 @@ export class AppComponent implements OnInit, AfterViewInit {
             }
           ]
         } as IKlesFieldConfig
+      },
+      {
+        columnDef: '#checker', sticky: true, visible: true,
+        headerCell: {
+          type: 'input',
+          name: '#checker',
+          component: KlesFormLabelComponent,
+          value: 'Begin',
+          pipeTransform: [{
+            pipe: new UpperCasePipe
+          }]
+        } as IKlesFieldConfig,
+        cell: {
+          type: 'text',
+          name: '#checker',
+          component: KlesFormLabelComponent,
+        } as IKlesFieldConfig,
       }
 
     ];

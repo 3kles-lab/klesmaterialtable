@@ -54,7 +54,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() sortConfig: Sort;
     @Input() hidePaginator: boolean = false;
     @Input() pageSize = 10;
-    @Input() pageSizeOptions = [2, 5, 7, 10, 13, 16, 20, 25, 50];
+    @Input() pageSizeOptions = [5, 10, 20, 25, 50];
+
+    @Input() lineValidations: ValidatorFn[];
+    @Input() lineAsyncValidations: AsyncValidatorFn[];
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -166,10 +169,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             group.addControl(column.cell.name, control);
         });
         this.lineFields.push(listField);
+
+        group.setValidators(this.lineValidations);
+        group.setAsyncValidators(this.lineAsyncValidations);
+
         group.valueChanges.subscribe(e => {
             console.log('Line change table=', e);
             console.log('Parent change line table=', group);
-            this.tableService.onLineChange({ group, e });
+            this.tableService.onLineChange({ group, row, e });
         })
         return group;
     }
@@ -250,7 +257,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.dataSource.data = this._lines;
         this.getFormArray().valueChanges.subscribe(e => {
             console.log('Value change on rows in form table=', e);
-            this.tableService.onLineChange(e);
+            //this.tableService.onLineChange(e);
         })
         this._onLoaded.emit();
     }

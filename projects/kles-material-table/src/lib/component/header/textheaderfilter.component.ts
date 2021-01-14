@@ -6,7 +6,7 @@ import { startWith, map } from 'rxjs/operators';
 @Component({
     selector: 'kles-form-textheaderfilter',
     template: `
-    <div><span>{{ field.label | translate | uppercase}}</span></div>
+    <div><span>{{ field.label | translate}}</span></div>
     
     <mat-form-field [formGroup]="group" class="form-element">
                

@@ -68,6 +68,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.sortConfig) {
             this.componentRef.instance.sortConfig = this.tableConfig.sortConfig;
         }
+        //PAGINATION
         if (this.tableConfig.hidePaginator) {
             this.componentRef.instance.hidePaginator = this.tableConfig.hidePaginator;
         }
@@ -76,6 +77,13 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
         if (this.tableConfig.pageSizeOptions) {
             this.componentRef.instance.pageSizeOptions = this.tableConfig.pageSizeOptions;
+        }
+        //VALIDATION
+        if (this.tableConfig.lineValidations) {
+            this.componentRef.instance.lineValidations = this.tableConfig.lineValidations;
+        }
+        if (this.tableConfig.lineAsyncValidations) {
+            this.componentRef.instance.lineAsyncValidations = this.tableConfig.lineAsyncValidations;
         }
         this.componentRef.instance.lines = this.lines;
 
