@@ -260,6 +260,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             //this.tableService.onLineChange(e);
         })
         this._onLoaded.emit();
+        this.tableService.onDataLoaded();
     }
 
     updateData(lines: any[]) {

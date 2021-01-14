@@ -20,6 +20,9 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     //Footer
     onFooterChange(e: any) { }
 
+    //Data
+    onDataLoaded() { }
+
     //Cell Style
     getCellStyle(row: any, column: KlesColumnConfig): SafeStyle { return "" };
 
