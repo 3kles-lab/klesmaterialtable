@@ -3,11 +3,7 @@ import { KlesTableBaseService } from "../tableservice.interface";
 export class KlesTextFilterTableService implements KlesTableBaseService {
     table: KlesTableComponent;
     filteredValues = {};
-    columnExclude;
 
-    constructor(column: string) {
-        this.columnExclude = column;
-    }
 
     filterData() {
         console.log('#FilterData Table=', this.table);
@@ -24,7 +20,8 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
     protected createFilter() {
         const myFilterPredicate = (data: any, filter: string): boolean => {
             const searchString = JSON.parse(filter);
-            return Object.keys(searchString).filter(f => f !== this.columnExclude).every(key => {
+            const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
+            return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
                 console.log('Data key=', data[key]);
                 console.log('SearchString key=', searchString[key]);
                 if (!data[key] && searchString[key].length === 0) {

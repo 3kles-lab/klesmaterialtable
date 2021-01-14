@@ -4,12 +4,13 @@ import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicfo
 export interface KlesColumnConfig {
     columnDef: string;
     sticky?: boolean;
-    header: string;
+    //header: string;
     visible: boolean;
     disabled?: boolean;
-    type: string;
+    //type: string;
     name?: string;
     ngClass?: any;
+    filterable?: boolean;
     resizable?: boolean;
     headerCell: IKlesFieldConfig;
     cell: IKlesFieldConfig;

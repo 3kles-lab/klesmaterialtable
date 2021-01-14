@@ -19,7 +19,7 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
         super
             (
                 { super: KlesSelectionTableService, arguments: ['#select'] },
-                { super: KlesTextFilterTableService, arguments: ['#select'] }
+                { super: KlesTextFilterTableService }
             );
     }
     //Header 
