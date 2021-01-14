@@ -85,7 +85,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
         @Inject('tableService') public tableService: DefaultKlesTableService
-    ) { }
+    ) {
+        this.tableService.setTable(this);
+    }
 
     ngOnInit() {
         console.log('Table columns=', this.columns);
@@ -116,7 +118,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.setDataSourceAttributes();
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
         console.log('Table Service=', this.tableService);
-        this.tableService.setTable(this);
     }
 
     /** Form Header */
