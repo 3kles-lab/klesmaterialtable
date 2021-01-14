@@ -77,7 +77,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   initColumns() {
     this.columns = [
       {
-        columnDef: '#select', sticky: true, header: '', type: '', visible: true,
+        columnDef: '#select', sticky: true, visible: true,
         headerCell: {
           type: 'checkbox',
           name: '#select',
@@ -92,8 +92,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         } as IKlesFieldConfig,
       },
       {
-        columnDef: 'beginvalue', header: 'statusSettings.beginValue.text',
-        type: 'text', visible: true, sticky: true,
+        columnDef: 'beginvalue',
+        visible: true, sticky: true,
+        filterable:true,
         //resizable: true,
         headerCell: {
           type: 'input',
@@ -129,9 +130,9 @@ export class AppComponent implements OnInit, AfterViewInit {
         } as IKlesFieldConfig
       },
       {
-        columnDef: 'endvalue', header: 'statusSettings.endValue.text',
-        type: 'text', visible: true, sticky: true,
+        columnDef: 'endvalue', visible: true, sticky: true,
         //resizable: true,
+        filterable:true,
         headerCell: {
           type: 'input',
           name: 'endvalue',
@@ -165,9 +166,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
 
       {
-        columnDef: 'color', header: 'statusSettings.color.text',
-        type: 'text', visible: true, sticky: true,
+        columnDef: 'color', visible: true, sticky: true,
         //resizable: true,
+        filterable:true,
         headerCell: {
           type: 'input',
           name: 'color',
