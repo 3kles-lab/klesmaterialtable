@@ -95,7 +95,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         columnDef: 'beginvalue',
         visible: true, sticky: true,
         filterable:true,
-        //resizable: true,
+        resizable: true,
         headerCell: {
           type: 'input',
           name: 'beginvalue',
