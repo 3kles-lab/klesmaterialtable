@@ -90,18 +90,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
-        console.log('Table columns=', this.columns);
         this.formHeader = this.initFormHeader();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        console.log('Changes!!!!');
         if (changes.columns) {
-            console.warn('Changes Columns Table');
             this.columns = changes.columns.currentValue;
             this.formHeader = this.initFormHeader();
             this.formHeader.statusChanges.subscribe(s => {
-                console.log('Header Group table state=', s);
                 this._onStatusHeaderChange.emit(s)
             });
         }
@@ -117,7 +113,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     ngAfterViewInit() {
         this.setDataSourceAttributes();
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
-        console.log('Table Service=', this.tableService);
     }
 
     /** Form Header */
@@ -127,17 +122,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             column.headerCell.name = column.columnDef;
             const control = this.buildControlField(column.cell, column.headerCell.value || '');
             control.valueChanges.subscribe(e => {
-                console.log('Control headerCell change table=', e);
                 const group = control.parent;
                 this._onChangeHeaderCell.emit({ column, group });
                 this.tableService.onHeaderCellChange({ column, group });
             })
-            console.log('Control for column name', column.headerCell.name, "=", control);
             group.addControl(column.headerCell.name, control);
         });
 
         group.valueChanges.subscribe(e => {
-            console.log('Header Group table=', e);
             this.tableService.onHeaderChange(e);
         })
         return group;
@@ -161,12 +153,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const control = this.buildControlField(column.cell, row[column.cell.name]);
             listField.push({ ...column.cell });
             control.valueChanges.subscribe(e => {
-                console.log('Control Cell change table=', e);
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group });
                 this._onChangeCell.emit({ column, row, group });
             })
-            console.log('Control for column name', column.cell.name, "=", control);
             group.addControl(column.cell.name, control);
         });
         this.lineFields.push(listField);
@@ -175,8 +165,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         group.setAsyncValidators(this.lineAsyncValidations);
 
         group.valueChanges.subscribe(e => {
-            console.log('Line change table=', e);
-            console.log('Parent change line table=', group);
             this.tableService.onLineChange({ group, row, e });
         })
         return group;
@@ -189,7 +177,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             column.footerCell.name = column.columnDef;
             const control = this.buildControlField(column.cell, column.footerCell.value || '');
             control.valueChanges.subscribe(e => {
-                console.log('Control footerCell change table=', e);
                 const group = control.parent;
                 this._onChangeFooterCell.emit({ column, group });
             })

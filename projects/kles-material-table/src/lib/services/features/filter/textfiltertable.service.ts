@@ -22,8 +22,6 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
             const searchString = JSON.parse(filter);
             const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
             return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
-                console.log('Data key=', data[key]);
-                console.log('SearchString key=', searchString[key]);
                 if (!data[key] && searchString[key].length === 0) {
                     return true;
                 } else if (!data[key]) {
