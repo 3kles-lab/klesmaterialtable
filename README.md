@@ -1,27 +1,87 @@
-# KlesMaterialTable
+# @3kles/kles-material-table
+@3kles/kles-material-table is a angular library to create table.
+# How to install
+```
+npm install --save @3kles/kles-material-table
+```
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.0.
+# How to use
+In the module
+```javascript
+import { KlesMaterialTableModule } from '@3kles/kles-material-table';
+...
+@NgModule({
+    
+ imports: [
+    KlesMaterialTableModule,
+...
+ ]
 
-## Development server
+ ...
+})
+```
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+# List of components
 
-## Code scaffolding
+- KlesFormCheckboxComponent
+- KlesFormLabelComponent
+- KlesFormColorComponent
+- KlesFormButtonComponent
+- KlesFormButtonCheckerComponent
+- KlesFormDateComponent
+- KlesFormInputComponent
+- KlesFormRadioComponent
+- KlesFormSelectComponent
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+# Example
 
-## Build
+```html
+<ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines">
+        </ng-container>
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```typescript
+const columns = [
+      {
+        columnDef: '#select', sticky: true, visible: true,
+        headerCell: {
+          type: 'checkbox',
+          name: '#select',
+          component: KlesFormCheckboxComponent,
+          indeterminate: false,
+        } as IKlesFieldConfig,
+        cell: {
+          type: 'checkbox',
+          name: '#select',
+          component: KlesFormCheckboxComponent,
+          indeterminate: false,
+        } as IKlesFieldConfig,
+      },
+      {
+        columnDef: 'beginvalue',
+        visible: true, sticky: true,
+        filterable:true,
+        resizable: true,
+        headerCell: {
+          type: 'input',
+          name: 'beginvalue',
+          component: KlesFormLabelComponent,
+          value: 'Begin',
+          pipeTransform: [{
+            pipe: new UpperCasePipe
+          }]
+        } as IKlesFieldConfig
+      },
+      ...
+        
+];
 
-## Running unit tests
+const lines = [ { beginvalue: 1, },{ beginvalue: 10} ];
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+ const tableConfig = {
+      tableComponent: KlesTableComponent,
+      columns: this.columns,
+      tableService: new KlesTableService()
+}
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+```
