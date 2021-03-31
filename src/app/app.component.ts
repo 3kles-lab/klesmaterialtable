@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ref.detectChanges();
 
   }
-
+  
   loadData() {
     this.lines = [
       { beginvalue: 1, endvalue: 10, color: '#ff67' },

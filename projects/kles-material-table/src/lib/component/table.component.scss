@@ -1,3 +1,15 @@
+:host{
+  display: block;
+  overflow: auto;
+  height: inherit;
+  max-height: calc(100vh - 155px);
+}
+
+.mat-paginator{
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+}
 
 .mat-header-row {
     position: sticky;
