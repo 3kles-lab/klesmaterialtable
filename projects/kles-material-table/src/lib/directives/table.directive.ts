@@ -56,6 +56,11 @@ export class KlesTableDirective implements OnInit, OnChanges {
         const factory = this.resolver.resolveComponentFactory(
             this.tableConfig.tableComponent || KlesTableComponent
         );
+
+        if (this.componentRef) {
+            this.componentRef.destroy();
+        }
+
         this.componentRef = this.container.createComponent(factory, 0, injector);
         console.log(this.componentRef.instance.tableService);
         this.componentRef.instance.columns = this.tableConfig.columns;

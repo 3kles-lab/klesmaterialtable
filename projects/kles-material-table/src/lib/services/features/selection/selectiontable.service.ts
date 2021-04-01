@@ -20,9 +20,10 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     }
 
     changeSelectionLine(e: any) {
+        console.log(e)
         if (this.table) {
             if (e.column.columnDef === this.columnSelect && e.row) {
-                if (this.table.dataSource.filteredData.includes(e.row)) {
+                if (this.table.dataSource.filteredData.includes(e.row.value)) {
                     if ((e.group as FormGroup).controls[e.column.columnDef].value) {
                         this.table.selection.select(e.row);
                     } else {

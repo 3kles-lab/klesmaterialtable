@@ -14,8 +14,11 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
+import { Node } from '../models/node.model';
 import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import { DefaultKlesTableService } from '../services/defaulttable.service';
+
+import * as uuid from 'uuid';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -40,7 +43,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     /** Input Component */
-    @Input() _lines: any[] = [];
+    @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) { this.updateData(lines); }
 
     @Input() columns = [] as KlesColumnConfig[];
@@ -102,6 +105,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             });
         }
         if (changes.lines) {
+            console.log('on rentre là')
             this.updateData(changes.lines.currentValue);
         }
         if (changes.selectionMode) {
@@ -150,7 +154,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, row[column.cell.name]);
+            const control = this.buildControlField(column.cell, row.value[column.cell.name]);
             listField.push({ ...column.cell });
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
@@ -180,24 +184,21 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
                 const group = control.parent;
                 this._onChangeFooterCell.emit({ column, group });
             })
-            console.log('Control for column name', column.footerCell.name, "=", control);
             group.addControl(column.footerCell.name, control);
         });
 
         group.valueChanges.subscribe(e => {
-            console.log('Line change table=', e);
-            console.log('Parent change line table=', group);
+            // console.log('Line change table=', e);
+            // console.log('Parent change line table=', group);
         })
         return group;
     }
 
     /**Field and control */
     buildControlField(field: IKlesFieldConfig, value?: any): FormControl {
-        console.log('Column name=', field.name);
         if (field.type === 'button') {
             return;
         }
-        console.log('Row=', value, ' column=', field.name);
         if (!value) { value = '' };
         const control = this.fb.control(
             value,
@@ -242,17 +243,36 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        this.dataSource.data = this._lines;
+        this.dataSource.data = this._lines.map(l => l.value)
+        // .map(l => {
+        //     return this.columns.filter(c => c.visible).map(c => c.columnDef).reduce((a, b) => {
+        //         return {
+        //             ...a,
+        //             [b]: l[b]
+        //         }
+        //     }, {});
+        // });
         this.getFormArray().valueChanges.subscribe(e => {
-            console.log('Value change on rows in form table=', e);
+            // console.log('Value change on rows in form table=', e);
             //this.tableService.onLineChange(e);
-        })
+        });
         this._onLoaded.emit();
         this.tableService.onDataLoaded();
     }
 
     updateData(lines: any[]) {
-        this._lines = lines;
+        console.log('update data')
+        this._lines = lines.map(l => {
+            const data = { ...l };
+            const options = data.options;
+            delete data.options;
+            return {
+                _id: uuid.v4(),
+                ...options && { options },
+                value: data,
+
+            };
+        });
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
         //            this.showFooter = this.columns.some(column => column.total);
         this.setItems();
