@@ -4,14 +4,10 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
     table: KlesTableComponent;
     filteredValues = {};
 
-
     filterData() {
-        console.log('#FilterData Table=', this.table);
         if (this.table) {
             this.filteredValues = this.table.formHeader.value;
-            console.log('filterValue=', this.filteredValues);
             this.table.dataSource.filterPredicate = this.createFilter();
-            console.log('JSON filterValues=', JSON.stringify(this.filteredValues));
             this.table.dataSource.filter = JSON.stringify(this.filteredValues);
         }
     }

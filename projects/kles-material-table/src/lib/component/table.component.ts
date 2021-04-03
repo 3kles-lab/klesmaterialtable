@@ -105,7 +105,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             });
         }
         if (changes.lines) {
-            console.log('on rentre là')
             this.updateData(changes.lines.currentValue);
         }
         if (changes.selectionMode) {
@@ -261,7 +260,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     updateData(lines: any[]) {
-        console.log('update data')
         this._lines = lines.map(l => {
             const data = { ...l };
             const options = data.options;

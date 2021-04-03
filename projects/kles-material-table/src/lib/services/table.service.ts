@@ -6,9 +6,10 @@ import { KlesSelectionTableService } from './features/selection/selectiontable.s
 import { KlesTextFilterTableService } from './features/filter/textfiltertable.service';
 import { FormArray, FormGroup } from '@angular/forms';
 
-@Injectable({
-    providedIn: 'root'
-})
+// @Injectable({
+//     providedIn: 'root'
+// })
+@Injectable()
 export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesTextFilterTableService) {
 
     constructor() {

@@ -20,7 +20,6 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     }
 
     changeSelectionLine(e: any) {
-        console.log(e)
         if (this.table) {
             if (e.column.columnDef === this.columnSelect && e.row) {
                 if (this.table.dataSource.filteredData.includes(e.row.value)) {
@@ -29,7 +28,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
                     } else {
                         this.table.selection.deselect(e.row);
                     }
-
+                    console.log('emit', this.table.selection.selected)
                     this.table._onSelected.emit(this.table.selection.selected);
                 } else {
                     (e.group as FormGroup).controls[e.column.columnDef].patchValue(false, { onlySelf: true, emitEvent: false });

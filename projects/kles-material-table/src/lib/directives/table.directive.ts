@@ -95,5 +95,8 @@ export class KlesTableDirective implements OnInit, OnChanges {
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
         this.componentRef.instance._onChangeCell = this._onChangeCell;
         this.componentRef.instance._onChangeFooterCell = this._onChangeFooterCell;
+        this.componentRef.instance._onSelected = this._onSelected;
+        this.componentRef.instance._onLoaded = this._onLoaded;
+        this.componentRef.instance._onStatusHeaderChange = this._onStatusHeaderChange;
     }
 }
