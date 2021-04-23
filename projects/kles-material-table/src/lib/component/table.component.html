@@ -24,7 +24,7 @@
       </tr>
     </div>
   </table>
-  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
+  <mat-paginator *ngIf="!hidePaginator" #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
     [showFirstLastButtons]="true">
   </mat-paginator>
 </form>
