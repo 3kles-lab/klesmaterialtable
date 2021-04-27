@@ -14,7 +14,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
         if (e.column.columnDef === this.columnSelect) {
             const val = (e.group as FormGroup).controls[this.columnSelect].value;
             (this.table.form.get('rows') as FormArray).controls.forEach((e: FormGroup) => {
-                e.controls[this.columnSelect].patchValue(val);
+                e.controls[this.columnSelect]?.patchValue(val);
             })
         }
     }
@@ -22,27 +22,27 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     changeSelectionLine(e: any) {
         if (this.table) {
             if (e.column.columnDef === this.columnSelect && e.row) {
-                if (this.table.dataSource.filteredData.includes(e.row.value)) {
+                if (this.table.dataSource.filteredData.includes(e.group)) {
                     if ((e.group as FormGroup).controls[e.column.columnDef].value) {
-                        this.table.selection.select(e.row);
+                        this.table.selection.select(e.group);
                     } else {
-                        this.table.selection.deselect(e.row);
+                        this.table.selection.deselect(e.group);
                     }
                     console.log('emit', this.table.selection.selected)
                     this.table._onSelected.emit(this.table.selection.selected);
                 } else {
-                    (e.group as FormGroup).controls[e.column.columnDef].patchValue(false, { onlySelf: true, emitEvent: false });
+                    (e.group as FormGroup).controls[e.column.columnDef]?.patchValue(false, { onlySelf: true, emitEvent: false });
                     this.table.selection.deselect(e.row);
                 }
             }
             if (this.isAllSelected()) {
                 this.table.columns.filter(f => f.columnDef === this.columnSelect).map(m => m.headerCell.indeterminate = false);
-                this.table.formHeader.controls[this.columnSelect].patchValue(true, { onlySelf: true, emitEvent: false });
+                this.table.formHeader.controls[this.columnSelect]?.patchValue(true, { onlySelf: true, emitEvent: false });
 
             } else {
                 this.table.columns.filter(f => f.columnDef === this.columnSelect).map(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
                 if (this.table.selection.isEmpty()) {
-                    this.table.formHeader.controls[this.columnSelect].patchValue(false, { onlySelf: true, emitEvent: false });
+                    this.table.formHeader.controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
                 }
             }
         }

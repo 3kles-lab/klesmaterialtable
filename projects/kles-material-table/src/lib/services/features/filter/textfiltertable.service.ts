@@ -1,3 +1,5 @@
+import { FormArray, FormGroup } from "@angular/forms";
+import * as _ from "lodash";
 import { KlesTableComponent } from "../../../component/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
 export class KlesTextFilterTableService implements KlesTableBaseService {
@@ -14,18 +16,22 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
 
     /**Filter */
     protected createFilter() {
-        const myFilterPredicate = (data: any, filter: string): boolean => {
-            const searchString = JSON.parse(filter);
+        const myFilterPredicate = (data: FormGroup, filter: string): boolean => {
+            let searchString = JSON.parse(filter);
             const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
+
+            searchString = _.pick(searchString, filterableColumn);
+
             return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
-                if (!data[key] && searchString[key].length === 0) {
+                const keyValue = data?.controls[key]?.value;
+                if (!keyValue && searchString[key].length === 0) {
                     return true;
-                } else if (!data[key]) {
+                } else if (!keyValue) {
                     return false;
                 } else if (!searchString[key]) {
                     return true;
                 }
-                return data[key].toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
+                return keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
             });
         };
         return myFilterPredicate;
