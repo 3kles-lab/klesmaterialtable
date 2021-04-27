@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter } from '@angular/material/core';
-import { AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator } from "@angular/material/paginator"
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,6 +19,7 @@ import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicfo
 import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 import * as uuid from 'uuid';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -58,6 +59,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() hidePaginator: boolean = false;
     @Input() pageSize = 10;
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
+    @Input() showFooter: boolean = false;
 
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];
@@ -75,9 +77,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     form: FormGroup;
     lineFields: IKlesFieldConfig[][];
     formFooter: FormGroup;
-    @Input() showFooter: boolean = false;
-    dataSource = new MatTableDataSource<any>([]);
-    selection = new SelectionModel<any>(this.selectionMode);
+    dataSource = new MatTableDataSource<AbstractControl>([]);
+    selection = new SelectionModel<AbstractControl>(this.selectionMode);
 
     displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
 
@@ -214,6 +215,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         return (this.form.get('rows') as FormArray)
     }
 
+    getFilterFormArray(): FormArray {
+        const tempFormArray: FormArray = (this.form.get('rows') as FormArray);
+        tempFormArray.controls = this.dataSource.filteredData;
+        return tempFormArray;
+    }
+
     getActualIndex(index: number) {
         if (this.paginator && !this.hidePaginator) {
             return index + this.paginator.pageSize * this.paginator.pageIndex;
@@ -226,7 +233,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         //(this.form.get('rows') as FormArray).push
         //(this.form.get('rows') as FormArray).removeAt(index)
         //return (this.form.get('rows') as FormArray).controls[index];
-        return this.getFormArray().controls[this.getActualIndex(index)];
+        return this.getFilterFormArray().controls[this.getActualIndex(index)];
     }
 
     getLineFields(index, key) {
@@ -242,7 +249,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        this.dataSource.data = this._lines.map(l => l.value)
+        // this.dataSource.data = this._lines.map(l => l.value);
+        this.dataSource.data = this.getFormArray().controls;
+        this.dataSource.filteredData = this.getFormArray().controls;
+        // this.getFormArray();
         // .map(l => {
         //     return this.columns.filter(c => c.visible).map(c => c.columnDef).reduce((a, b) => {
         //         return {
@@ -287,7 +297,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
                 });
             }
             if (!this.sortDefault && this.sortConfig) {
-                console.log('Active default sort');
+                // console.log('Active default sort');
                 this.sort.active = this.sortConfig.active;
                 this.sort.direction = this.sortConfig.direction;
                 this.sort.sortChange.emit(this.sortConfig);
@@ -297,7 +307,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     public getSelectedLines(): any[] {
-        return (this._lines) ? this._lines.filter(line => this.selection.isSelected(line)) : [];
+        return this.getFormArray().controls.filter(f => this.selection.isSelected(f));
     }
 
     /** Table rendering */
@@ -346,5 +356,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
         }
         return null;
+    }
+
+    public isSortingDisabled(column: KlesColumnConfig): boolean {
+        return column.sortable || false;
     }
 }
