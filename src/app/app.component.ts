@@ -47,7 +47,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ref.detectChanges();
 
   }
-  
+
   loadData() {
     this.lines = [
       { beginvalue: 1, endvalue: 10, color: '#ff67' },
@@ -78,6 +78,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.columns = [
       {
         columnDef: '#select', sticky: true, visible: true,
+        filterable: false,
         headerCell: {
           type: 'checkbox',
           name: '#select',
@@ -94,13 +95,15 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'beginvalue',
         visible: true, sticky: true,
-        filterable:true,
+        filterable: true,
         resizable: true,
+        sortable: true,
         headerCell: {
           type: 'input',
           name: 'beginvalue',
           component: KlesFormLabelComponent,
           value: 'Begin',
+          class: 'mat-sort-header',
           pipeTransform: [{
             pipe: new UpperCasePipe
           }]
@@ -131,7 +134,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'endvalue', visible: true, sticky: true,
         //resizable: true,
-        filterable:true,
+        filterable: true,
         headerCell: {
           type: 'input',
           name: 'endvalue',
@@ -167,7 +170,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       {
         columnDef: 'color', visible: true, sticky: true,
         //resizable: true,
-        filterable:true,
+        filterable: true,
         headerCell: {
           type: 'input',
           name: 'color',
@@ -217,6 +220,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.tableConfig = {
       tableComponent: KlesTableComponent,
       columns: this.columns,
+      // hidePaginator: true,
       tableService: new KlesTableService()
     }
   }
