@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { KlesTableComponent } from '../component/table.component';
-import { FormArray } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
@@ -27,7 +27,14 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     getCellStyle(row: any, column: KlesColumnConfig): SafeStyle { return "" };
 
     //Sorting
-    getSortingDataAccessor = (item, property) => { return item[property] };
+    getSortingDataAccessor = (item: AbstractControl, property) => {
+        // console.log('SortingDataAccesor item=', item);
+        // console.log('SortingDataAccesor property=', property);
+        // console.log('SortingDataAccesor value=', item?.controls[property]?.value);
+        const value: any = item.value[property];
+        return typeof value === 'string' ? value.toLowerCase() : value;
+
+    };
 
     /**Util Table */
     //Manage Record
@@ -62,7 +69,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     deleteRecordById(id: string) {
         const rowIndex = this.table._lines.findIndex(line => line._id === id);
 
-        if(rowIndex>=0){
+        if (rowIndex >= 0) {
             this.table.lineFields = this.table.lineFields.filter(
                 (value, index) => {
                     return index !== rowIndex;
