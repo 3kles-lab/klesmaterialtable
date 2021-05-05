@@ -71,6 +71,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Output() _onChangeCell = new EventEmitter();
     @Output() _onChangeFooterCell = new EventEmitter();
     @Output() _onStatusHeaderChange = new EventEmitter();
+    @Output() _onStatusLineChange = new EventEmitter();
 
     // Table
     formHeader: FormGroup;
@@ -101,9 +102,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         if (changes.columns) {
             this.columns = changes.columns.currentValue;
             this.formHeader = this.initFormHeader();
-            this.formHeader.statusChanges.subscribe(s => {
-                this._onStatusHeaderChange.emit(s)
-            });
         }
         if (changes.lines) {
             this.updateData(changes.lines.currentValue);
@@ -135,7 +133,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
         group.valueChanges.subscribe(e => {
             this.tableService.onHeaderChange(e);
-        })
+        });
+        group.statusChanges.subscribe(e => {
+            this.tableService.onStatusHeaderChange(e);
+            this._onStatusHeaderChange.emit(e);
+        });
         return group;
     }
 
@@ -168,9 +170,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         group.setValidators(this.lineValidations);
         group.setAsyncValidators(this.lineAsyncValidations);
 
-        group.valueChanges.subscribe(e => {
-            this.tableService.onLineChange({ group, row, e });
-        })
+        group.valueChanges.subscribe(value => {
+            this.tableService.onLineChange({ group, row, value });
+        });
+
+        group.statusChanges.subscribe(status => {
+            this.tableService.onStatusLineChange({ group, row, status });
+            this._onStatusLineChange.emit({ group, row, status });
+        });
         return group;
     }
 

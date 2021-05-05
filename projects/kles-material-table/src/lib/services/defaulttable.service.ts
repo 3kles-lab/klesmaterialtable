@@ -12,10 +12,12 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     //Header
     onHeaderChange(e: any) { }
     onHeaderCellChange(e: any) { }
+    onStatusHeaderChange(e: any) { }
 
     //Line
     onCellChange(e: any) { }
     onLineChange(e: any) { }
+    onStatusLineChange(e: any) { }
 
     //Footer
     onFooterChange(e: any) { }
