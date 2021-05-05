@@ -18,8 +18,9 @@ export abstract class AbstractKlesTableService {
 
     //Line
     abstract onLineChange(e: any);
-    abstract onCellChange(e: any);
     abstract onStatusLineChange(e: any);
+    abstract onCellChange(e: any);
+    abstract onStatusCellChange(e: any);
 
     //Footer
     abstract onFooterChange(e: any);

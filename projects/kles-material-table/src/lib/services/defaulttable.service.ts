@@ -16,6 +16,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     //Line
     onCellChange(e: any) { }
+    onStatusCellChange(e: any) { }
     onLineChange(e: any) { }
     onStatusLineChange(e: any) { }
 

@@ -72,6 +72,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Output() _onChangeFooterCell = new EventEmitter();
     @Output() _onStatusHeaderChange = new EventEmitter();
     @Output() _onStatusLineChange = new EventEmitter();
+    @Output() _onStatusCellChange = new EventEmitter();
 
     // Table
     formHeader: FormGroup;
@@ -162,7 +163,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group });
                 this._onChangeCell.emit({ column, row, group });
-            })
+            });
+            control.statusChanges.subscribe(status => {
+                const group = control.parent;
+                this.tableService.onStatusCellChange({ cell: control, group, status });
+                this._onStatusCellChange.emit({ cell: control, group, status });
+            });
+
             group.addControl(column.cell.name, control);
         });
         this.lineFields.push(listField);
