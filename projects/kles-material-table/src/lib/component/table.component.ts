@@ -15,7 +15,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
 import { Node } from '../models/node.model';
-import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
+import { IKlesFieldConfig, IKlesValidator, KlesFormGroupComponent } from '@3kles/kles-material-dynamicforms';
 import { DefaultKlesTableService } from '../services/defaulttable.service';
 
 import * as uuid from 'uuid';
@@ -45,7 +45,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     /** Input Component */
     @Input() _lines: Node[] = [];
-    @Input() set lines(lines: any | any[]) { this.updateData(lines); }
+    @Input() set lines(lines: any | any[]) { 
+        this.updateData(lines); 
+    }
 
     @Input() columns = [] as KlesColumnConfig[];
     @Input() selectionMode = true;
@@ -209,20 +211,40 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     /**Field and control */
-    buildControlField(field: IKlesFieldConfig, value?: any): FormControl {
+    buildControlField(field: IKlesFieldConfig, value?: any): AbstractControl {
         if (field.type === 'button') {
             return;
         }
+
         if (!value) { value = '' };
-        const control = this.fb.control(
-            value,
-            this.bindValidations(field.validations || []),
-            this.bindAsyncValidations(field.asyncValidations || [])
-        );
-        if (field.disabled) {
-            control.disable();
+
+        if (field.type === 'group') {
+            const subGroup = this.fb.group({});
+            field.collections.forEach(subfield => {
+                const control = this.fb.control(
+                    subfield.value,
+                    this.bindValidations(subfield.validations || []),
+                    this.bindAsyncValidations(subfield.asyncValidations || [])
+                );
+                if (subfield.disabled) {
+                    control.disable();
+                }
+                subGroup.addControl(subfield.name, control);
+            });
+            return subGroup;
+
+        } else {
+            const control = this.fb.control(
+                value,
+                this.bindValidations(field.validations || []),
+                this.bindAsyncValidations(field.asyncValidations || [])
+            );
+            if (field.disabled) {
+                control.disable();
+            }
+
+            return control;
         }
-        return control;
     }
 
     getFormArray(): FormArray {
@@ -264,8 +286,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             rows: this.initFormArray()
         });
         // this.dataSource.data = this._lines.map(l => l.value);
+
         this.dataSource.data = this.getFormArray().controls;
         this.dataSource.filteredData = this.getFormArray().controls;
+
         // this.getFormArray();
         // .map(l => {
         //     return this.columns.filter(c => c.visible).map(c => c.columnDef).reduce((a, b) => {
