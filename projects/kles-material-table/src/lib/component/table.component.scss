@@ -127,9 +127,13 @@ table {
         padding: 0 10px;
       }
     }
+}
 
+// .mat-sort-header-container{
+//   justify-content: center;
+// }
 
-    .mat-sort-header-container{
-      justify-content: center;
-    }
+::ng-deep .mat-sort-header-container {
+  display:flex;
+  justify-content:center;
 }
