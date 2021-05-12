@@ -123,7 +123,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const group = this.fb.group({});
         this.columns.forEach(column => {
             column.headerCell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, column.headerCell.value || '');
+            const control = this.buildControlField(column.headerCell, column.headerCell.value || '');
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
                 this._onChangeHeaderCell.emit({ column, group });
