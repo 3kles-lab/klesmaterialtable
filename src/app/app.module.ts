@@ -9,7 +9,9 @@ import { MaterialModule } from './modules/material.module';
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-
+import { FakeApiService } from './services/fakemi.service';
+import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
+import { KlesMaterialDialogModule } from '@3kles/kles-material-dialog';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,8 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
     BrowserModule,
     AppRoutingModule,
     MaterialModule,
+    KlesMaterialDialogModule,
+    KlesMaterialDynamicformsModule,
     KlesMaterialTableModule,
     BrowserAnimationsModule,
     HttpClientModule,
@@ -32,7 +36,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
       }
     )
   ],
-  providers: [TranslateService],
+  providers: [TranslateService, FakeApiService],
   bootstrap: [AppComponent]
 })
 

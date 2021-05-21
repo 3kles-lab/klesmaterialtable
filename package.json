@@ -13,7 +13,8 @@
   },
   "private": true,
   "dependencies": {
-    "@3kles/kles-material-dynamicforms": "^1.0.0",
+    "@3kles/kles-material-dialog": "^1.0.0",
+    "@3kles/kles-material-dynamicforms": "^1.0.1",
     "@angular/animations": "^9.1.13",
     "@angular/cdk": "^9.0.0",
     "@angular/common": "^9.1.13",
@@ -25,6 +26,7 @@
     "@angular/platform-browser": "^9.1.13",
     "@angular/platform-browser-dynamic": "^9.1.13",
     "@angular/router": "^9.1.13",
+    "@infor-up/m3-odin": "^4.0.0",
     "@ngx-translate/core": "^12.1.2",
     "@ngx-translate/http-loader": "^4.0.0",
     "fp-ts": "^1.13.0",
