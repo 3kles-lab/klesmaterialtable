@@ -45,10 +45,11 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         const newRecord = {
             _id: uuid.v4(),
             value: record
-        }
+        };
+        console.log('New Record=', newRecord);
         this.table._lines.push(newRecord);
-        this.table.dataSource.data = this.table._lines.map(line => line.value);
-        (this.table.form.get('rows') as FormArray).push(this.table.addFormLine(newRecord));
+        this.table.getFormArray().push(this.table.addFormLine(newRecord));
+        this.updateDataSource();
     }
 
     deleteRecord(event: any) {
@@ -59,12 +60,12 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
                     return index !== rowIndex;
                 }
             );
-            (this.table.form.get('rows') as FormArray).removeAt(rowIndex);
+            this.table.getFormArray().removeAt(rowIndex);
             this.table._lines = this.table._lines.filter(f => f !== e);
         })
 
         console.log('List _lines=', this.table._lines);
-        this.table.dataSource.data = this.table._lines.map(line => line.value);
+        this.updateDataSource();
         this.table.selection.clear();
     }
 
@@ -78,12 +79,17 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
                     return index !== rowIndex;
                 }
             );
-            (this.table.form.get('rows') as FormArray).removeAt(rowIndex);
+            this.table.getFormArray().removeAt(rowIndex);
             this.table._lines = this.table._lines.filter(f => f._id !== id);
         }
-        this.table.dataSource.data = this.table._lines.map(line => line.value);
+        this.updateDataSource();
         this.table.selection.clear();
 
+    }
+
+    protected updateDataSource() {
+        this.table.dataSource.data = this.table.getFormArray().controls;
+        this.table.dataSource.filteredData = this.table.getFormArray().controls;
     }
 
     /**Setters */
