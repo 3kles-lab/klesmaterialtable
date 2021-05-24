@@ -424,11 +424,7 @@ export class FakeApiService {
                 ITDS: "AMB05 ITDS",
             }
         ];
-
-        console.log('Record STYN=', record.record.STYN);
-        console.log('List STYN=', items.map(m => m.STYN))
         const item = items.find(f => f?.STYN === record.record?.STYN);
-
         const answer: IMIResponse = {
             hasError: null,
             metadata: null,

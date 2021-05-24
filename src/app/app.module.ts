@@ -12,10 +12,12 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FakeApiService } from './services/fakemi.service';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { KlesMaterialDialogModule } from '@3kles/kles-material-dialog';
+import { AutocompleteComponent } from './components/autocomplete.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AutocompleteComponent
   ],
   imports: [
     BrowserModule,

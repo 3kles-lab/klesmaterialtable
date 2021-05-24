@@ -1,6 +1,6 @@
 import { KlesColumnConfig, KlesTableService } from 'kles-material-table';
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { SafeStyle } from '@angular/platform-browser';
 import { classes } from 'polytype';
 import * as _ from 'lodash'
@@ -19,9 +19,6 @@ export class TableService extends classes(KlesTableService) {
 
     onDataLoaded() {
         console.log('Data loaded=', this.table.getFormArray());
-        //Avoid to block observable on first value
-        this.table.getFormArray().disable();
-        this.table.getFormArray().enable();
         this.onLoaded.next(true);
 
     }
@@ -31,28 +28,27 @@ export class TableService extends classes(KlesTableService) {
             return 'text-align: center; background-color:lightcoral';
         }
         return super.getCellStyle(row, column);
-    }
+    };
 
     //Line
     onCellChange(e: any) {
-        console.warn('CellChange=', e);
-        console.warn('##Error=', this.allErrors(e.group));
-        console.warn('##Error Count=', this.countErrors(e.group));
+        // console.warn('CellChange=', e);
+        // console.warn('##Error=', this.allErrors(e.group));
+        // console.warn('##Error Count=', this.countErrors(e.group));
         super.onCellChange(e);
-
-        if (e.column.columnDef === '#checker') {
-            if (e.group.value['#checker'].event) {
-                console.warn('Button event!!!!');
-            }
-        }
+        // if (e.column.columnDef === '#checker') {
+        //     if (e.group.value['#checker'].event) {
+        //         console.warn('Button event!!!!');
+        //     }
+        // }
 
         this.checkError(e.group);
     }
 
     onLineChange(e: any) {
-        console.warn('##OnLineChange=', e);
+        // console.warn('##OnLineChange=', e);
         // if (e.row.error) {
-        console.warn('##Error=', this.allErrors(e.group));
+        // console.warn('##Error=', this.allErrors(e.group));
         // const checker = {
         //     busy: false,
         //     counter: e.row.error.length,
@@ -65,12 +61,12 @@ export class TableService extends classes(KlesTableService) {
     }
 
     onStatusLineChange(e: any) {
-        console.warn('Status line change=', e);
+        // console.warn('Status line change=', e);
         this.checkError(e.group);
     }
 
     onStatusCellChange(e: any) {
-        console.warn('Status cell change=', e);
+        // console.warn('Status cell change=', e);
     }
 
     checkError(form: FormGroup) {
@@ -78,7 +74,7 @@ export class TableService extends classes(KlesTableService) {
         if (form.pending) {
             checker = {
                 busy: true,
-                message:'Contrôle...'
+                message: 'Contrôle...'
             };
         } else {
             const listError = this.allErrors(form);
@@ -152,4 +148,5 @@ export class TableService extends classes(KlesTableService) {
 
         }
     }
+
 }
