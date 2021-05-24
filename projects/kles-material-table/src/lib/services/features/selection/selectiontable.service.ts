@@ -13,7 +13,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     changeSelectionHeader(e: any) {
         if (e.column.columnDef === this.columnSelect) {
             const val = (e.group as FormGroup).controls[this.columnSelect].value;
-            (this.table.form.get('rows') as FormArray).controls.forEach((e: FormGroup) => {
+            this.table.getFormArray().controls.forEach((e: FormGroup) => {
                 e.controls[this.columnSelect]?.patchValue(val);
             })
         }
@@ -28,7 +28,6 @@ export class KlesSelectionTableService implements KlesTableBaseService {
                     } else {
                         this.table.selection.deselect(e.group);
                     }
-                    console.log('emit', this.table.selection.selected)
                     this.table._onSelected.emit(this.table.selection.selected);
                 } else {
                     (e.group as FormGroup).controls[e.column.columnDef]?.patchValue(false, { onlySelf: true, emitEvent: false });
