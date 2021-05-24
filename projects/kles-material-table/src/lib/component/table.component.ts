@@ -162,6 +162,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     addFormLine(row): FormGroup {
         const group = this.fb.group({});
+        const idControl = this.fb.control(row._id);
+        group.addControl('_id', idControl);
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
@@ -258,10 +260,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     getFilterFormArray(): FormArray {
-        const tempFormArray: FormArray = (this.form.get('rows') as FormArray);
-        // tempFormArray.controls = this.dataSource.filteredData;
-        tempFormArray.controls = this.renderedData;
-        return tempFormArray;
+        return this.fb.array(this.renderedData);
     }
 
     getActualIndex(index: number) {
@@ -337,6 +336,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
         if (this.sort) {
             this.dataSource.sort = this.sort;
+            this.tableService.setTable(this);
             this.dataSource.sortingDataAccessor = this.tableService.getSortingDataAccessor;
             if (this.paginator) {
                 this.sort.sortChange.subscribe(() => {
