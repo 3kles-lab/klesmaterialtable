@@ -31,12 +31,16 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     //Sorting
     getSortingDataAccessor = (item: AbstractControl, property) => {
-        // console.log('SortingDataAccesor item=', item);
-        // console.log('SortingDataAccesor property=', property);
-        // console.log('SortingDataAccesor value=', item?.controls[property]?.value);
-        const value: any = item.value[property];
-        return typeof value === 'string' ? value.toLowerCase() : value;
-
+        let value: any = item.value[property];
+        if (typeof value === 'string') {
+            value = value.toLowerCase();
+        }
+        else if (typeof value === 'object') {
+            if (value.key) {
+                value = value.key;
+            }
+        }
+        return value;
     };
 
     /**Util Table */
@@ -46,46 +50,41 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
             _id: uuid.v4(),
             value: record
         };
-        console.log('New Record=', newRecord);
         this.table._lines.push(newRecord);
         this.table.getFormArray().push(this.table.addFormLine(newRecord));
         this.updateDataSource();
     }
 
-    deleteRecord(event: any) {
-        event.forEach(e => {
-            const rowIndex = this.table._lines.indexOf(e);
-            this.table.lineFields = this.table.lineFields.filter(
-                (value, index) => {
-                    return index !== rowIndex;
-                }
-            );
-            this.table.getFormArray().removeAt(rowIndex);
-            this.table._lines = this.table._lines.filter(f => f !== e);
-        })
-
-        console.log('List _lines=', this.table._lines);
-        this.updateDataSource();
-        this.table.selection.clear();
-    }
-
-
-    deleteRecordById(id: string) {
-        const rowIndex = this.table._lines.findIndex(line => line._id === id);
-
-        if (rowIndex >= 0) {
-            this.table.lineFields = this.table.lineFields.filter(
-                (value, index) => {
-                    return index !== rowIndex;
-                }
-            );
-            this.table.getFormArray().removeAt(rowIndex);
+    deleteRecord(event: AbstractControl[]) {
+        // console.log('Delete Record=', event);
+        event.forEach((e: FormGroup) => {
+            const id = e.controls['_id'].value;
+            const index = this.table.getFormArray().value.findIndex(f => f._id === id);
+            this.table.getFormArray().removeAt(index);
             this.table._lines = this.table._lines.filter(f => f._id !== id);
-        }
+        })
+        // console.log('List _lines=', this.table._lines);
         this.updateDataSource();
         this.table.selection.clear();
-
     }
+
+
+    // deleteRecordById(id: string) {
+    //     const rowIndex = this.table._lines.findIndex(line => line._id === id);
+
+    //     if (rowIndex >= 0) {
+    //         this.table.lineFields = this.table.lineFields.filter(
+    //             (value, index) => {
+    //                 return index !== rowIndex;
+    //             }
+    //         );
+    //         this.table.getFormArray().removeAt(rowIndex);
+    //         this.table._lines = this.table._lines.filter(f => f._id !== id);
+    //     }
+    //     this.updateDataSource();
+    //     this.table.selection.clear();
+
+    // }
 
     protected updateDataSource() {
         this.table.dataSource.data = this.table.getFormArray().controls;
