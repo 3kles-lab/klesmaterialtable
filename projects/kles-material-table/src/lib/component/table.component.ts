@@ -45,8 +45,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     /** Input Component */
     @Input() _lines: Node[] = [];
-    @Input() set lines(lines: any | any[]) { 
-        this.updateData(lines); 
+    @Input() set lines(lines: any | any[]) {
+        this.updateData(lines);
     }
 
     @Input() columns = [] as KlesColumnConfig[];
@@ -84,6 +84,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     dataSource = new MatTableDataSource<AbstractControl>([]);
     selection = new SelectionModel<AbstractControl>(this.selectionMode);
 
+    renderedData: any[]; // data from the datasource
+
     displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
 
     constructor(protected translate: TranslateService,
@@ -98,6 +100,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
+        this.dataSource.connect().subscribe(d => {
+            this.renderedData = d;
+        });
+
         this.formHeader = this.initFormHeader();
     }
 
@@ -206,7 +212,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         group.valueChanges.subscribe(e => {
             // console.log('Line change table=', e);
             // console.log('Parent change line table=', group);
-        })
+        });
         return group;
     }
 
@@ -253,7 +259,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     getFilterFormArray(): FormArray {
         const tempFormArray: FormArray = (this.form.get('rows') as FormArray);
-        tempFormArray.controls = this.dataSource.filteredData;
+        // tempFormArray.controls = this.dataSource.filteredData;
+        tempFormArray.controls = this.renderedData;
         return tempFormArray;
     }
 
@@ -269,7 +276,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         //(this.form.get('rows') as FormArray).push
         //(this.form.get('rows') as FormArray).removeAt(index)
         //return (this.form.get('rows') as FormArray).controls[index];
-        return this.getFilterFormArray().controls[this.getActualIndex(index)];
+        // return this.getFilterFormArray().controls[this.getActualIndex(index)];
+        return this.getFilterFormArray().controls[index];
     }
 
     getLineFields(index, key) {
@@ -326,6 +334,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     setDataSourceAttributes() {
         setTimeout(() => this.dataSource.paginator = this.paginator);
+
         if (this.sort) {
             this.dataSource.sort = this.sort;
             this.dataSource.sortingDataAccessor = this.tableService.getSortingDataAccessor;
