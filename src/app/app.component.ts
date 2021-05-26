@@ -240,7 +240,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator()
+              validator: autocompleteObjectValidator()
             }
           ]
         } as IKlesFieldConfig,
@@ -396,7 +396,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator(true)
+              validator: autocompleteObjectValidator(true)
             }
           ]
         } as IKlesFieldConfig,
@@ -429,7 +429,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator(true)
+              validator: autocompleteObjectValidator(true)
             }
           ]
         } as IKlesFieldConfig,
@@ -481,7 +481,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator(true)
+              validator: autocompleteObjectValidator(true)
             }
           ]
         } as IKlesFieldConfig,
@@ -514,7 +514,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator(true)
+              validator: autocompleteObjectValidator(true)
             }
           ]
         } as IKlesFieldConfig,
@@ -547,7 +547,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
               name: 'list',
               message: this.translate.instant('autocomplete.notInList'),
-              validator: this.autocompleteObjectValidator(true)
+              validator: autocompleteObjectValidator(true)
             }
           ]
         } as IKlesFieldConfig,
@@ -824,6 +824,9 @@ export class AppComponent implements OnInit, AfterViewInit {
       let item = s?.item;
       if (item) {
         if (item._id) {
+          // if (item) {
+          //   item['#select'] = false;
+          // }
           const updateForm = this.table.getFormArray().controls
             .find((f: FormGroup) => f.controls['_id'].value === '' + item._id);
           if (updateForm) {
@@ -831,9 +834,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           }
         } else {
           this.table.tableService.addRecord(item);
+          this.table.selection.clear();
+          this.table.ref.detectChanges();
         }
-        this.table.selection.clear();
-        this.table.ref.detectChanges();
       }
     })
     return dialogRef;
@@ -866,16 +869,6 @@ export class AppComponent implements OnInit, AfterViewInit {
       })
     });
     return data;
-  }
-
-  autocompleteObjectValidator(optional?): ValidatorFn {
-    return (control: AbstractControl): { [key: string]: any } | null => {
-      if (typeof control.value === 'string') {
-        if (control.value === '' && optional) return null;
-        return { 'invalidAutocompleteObject': { value: control.value } }
-      }
-      return null  /* valid option selected */
-    }
   }
 
   displayWithKeyLabel(value) {
