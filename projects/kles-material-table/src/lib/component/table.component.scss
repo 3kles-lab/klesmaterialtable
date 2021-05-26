@@ -1,5 +1,11 @@
 :host{
   display: block;
+  // overflow: auto;
+  height: inherit;
+  // max-height: calc(100vh - 155px);
+}
+
+form{
   overflow: auto;
   height: inherit;
   max-height: calc(100vh - 155px);
