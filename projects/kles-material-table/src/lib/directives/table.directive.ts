@@ -22,11 +22,11 @@ export class KlesTableDirective implements OnInit, OnChanges {
         private container: ViewContainerRef) { }
 
     ngOnInit() {
-        console.log('Directive KlesTable OnInit=', this.tableConfig);
-        if (this.tableConfig) {
-            console.log('Directive KlesTable OnInit BuildComp=', this.tableConfig);
-            this.buildComponent();
-        }
+        // console.log('Directive KlesTable OnInit=', this.tableConfig);
+        // if (this.tableConfig) {
+        //     console.log('Directive KlesTable OnInit BuildComp=', this.tableConfig);
+        //     this.buildComponent();
+        // }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -35,6 +35,10 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.tableConfig = changes.tableConfig.currentValue;
             if (this.tableConfig) {
                 this.buildComponent();
+                if (!changes.lines && !this.componentRef.instance.lines) {
+                    this.lines = [];
+                    this.componentRef.instance.lines = [];
+                }
             }
         }
 
@@ -62,7 +66,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
 
         this.componentRef = this.container.createComponent(factory, 0, injector);
-        console.log(this.componentRef.instance.tableService);
+
         this.componentRef.instance.columns = this.tableConfig.columns;
         if (this.tableConfig.options) {
             this.componentRef.instance.options = this.tableConfig.options;
@@ -90,7 +94,8 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.lineAsyncValidations) {
             this.componentRef.instance.lineAsyncValidations = this.tableConfig.lineAsyncValidations;
         }
-        this.componentRef.instance.lines = this.lines;
+
+        // this.componentRef.instance.lines = [...this.lines];
 
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
         this.componentRef.instance._onChangeCell = this._onChangeCell;
