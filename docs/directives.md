@@ -1,31 +1,17 @@
-# @3kles/kles-material-table
-@3kles/kles-material-table is a angular library to create table.
-## Changelog
+# Directives
+- [`KlesTableDirective`](#klestabledirective): Directive to build table with KlesTableConfig interface
+  
+#### KlesTableDirective
 
-Check out the [changelog](./CHANGELOG.md) to check all the latest changes.
+Directive to build table with [`KlesTableConfig`](./interfaces#KlesTableConfig) interface
 
-# How to install
-```
-npm install --save @3kles/kles-material-table
-```
+##### File
 
-# How to use
-In the module
-```javascript
-import { KlesMaterialTableModule } from '@3kles/kles-material-table';
-...
-@NgModule({
-    
- imports: [
-    KlesMaterialTableModule,
-...
- ]
-
- ...
-})
+```typescript
+import { KlesTableDirective } from 'kles-material-table';
 ```
 
-# Example
+##### Usage
 
 ```typescript
 const columns = [
@@ -76,15 +62,3 @@ const lines = [ { beginvalue: 1 },{ beginvalue: 10} ];
 ```html
 <ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines"></ng-container>
 ```
-
-Check the [`documentation`](./docs) to use component and directive.
-
-## Tests
-
-```
-npm install
-npm test
-```
-## License
-
-[`MIT`](./LICENSE.md)
