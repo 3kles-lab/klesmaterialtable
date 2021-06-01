@@ -7,24 +7,21 @@ import { startWith, map } from 'rxjs/operators';
     selector: 'kles-form-textheaderfilter',
     template: `
     <div><span>{{ field.label | translate}}</span></div>
-    
     <mat-form-field [formGroup]="group" class="form-element">
-               
         <ng-container *ngIf="field.autocomplete; else notAutoComplete">
-            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType"
+            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType"
             [matAutocomplete]="auto">
 
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let option of filteredOption | async" [value]="option">{{option}}</mat-option>
             </mat-autocomplete>
         </ng-container>
-        
         <ng-template #notAutoComplete>
-            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType">
+            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType">
         </ng-template>
 
         <button mat-button matSuffix mat-icon-button aria-label="Clear"
-                        (click)="group.controls[field.name].reset();">
+                        (click)="group.controls[field.name].reset(); stopPropagation($event)">
                         <mat-icon>close</mat-icon>
                      </button>
 
@@ -59,5 +56,10 @@ export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract impleme
     private filterData(value: any): any[] {
         const filterValue = value.toLowerCase();
         return this.field.options.filter(data => data.toLowerCase().indexOf(filterValue) === 0);
+    }
+
+
+    stopPropagation(event) {
+        event.stopPropagation();
     }
 }
