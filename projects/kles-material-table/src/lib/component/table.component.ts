@@ -251,20 +251,19 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const control = this.fb.control(
                 value,
                 this.bindValidations(field.validations || []),
-                // this.bindAsyncValidations(field.asyncValidations?.map(asyncValisation => {
-                //     const klesValidator = { ...asyncValisation };
-                //     const validatorFn = ((c: AbstractControl) => {
-                //         const validator$ = klesValidator.validator(c);
-                //         if (validator$ instanceof Promise) {
-                //             return validator$.finally(() => this.ref.markForCheck());
-                //         } else {
-                //             return validator$.pipe(tap(() => this.ref.markForCheck()));
-                //         }
-                //     });
-                //     asyncValisation.validator = validatorFn;
-                //     return asyncValisation;
-                // }) || [])
-                this.bindAsyncValidations(field.asyncValidations || [])
+                this.bindAsyncValidations(field.asyncValidations?.map(asyncValisation => {
+                    const klesValidator = { ...asyncValisation };
+                    const validatorFn = ((c: AbstractControl) => {
+                        const validator$ = klesValidator.validator(c);
+                        if (validator$ instanceof Promise) {
+                            return validator$.finally(() => this.ref.markForCheck());
+                        } else {
+                            return validator$.pipe(tap(() => this.ref.markForCheck()));
+                        }
+                    });
+                    asyncValisation.validator = validatorFn;
+                    return asyncValisation;
+                }) || [])
             );
 
             if (field.disabled) {
