@@ -1,19 +1,20 @@
 <form class="dynamic-form" [formGroup]="form">
-  <table mat-table matSort [dataSource]="dataSource" [ngClass]="formatElevation()" formArrayName="rows">
-    <ng-container *ngFor="let column of columns" [cdkColumnDef]="column.columnDef" [sticky]="isSticky(column)">
+  <table mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe" formArrayName="rows"
+    [trackBy]="trackById">
+    <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false">
 
       <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.class}}"
         [ngClass]="{'vertical-separator': options.verticalSeparator}" mat-sort-header [disabled]="!column.sortable">
         <div style="display: inline-flex;">
           <ng-container klesDynamicField [field]="column.headerCell" [group]="formHeader">
           </ng-container>
-          <!-- <span mat-sort-header [disabled]="!column.sortable" style="display: contents;"></span> -->
         </div>
       </th>
+      <!-- [style]="getCellStyle(row,column)" -->
       <div *ngIf="column.visible">
-        <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
+        <td mat-cell *cdkCellDef="let row;let index = index;" klesCellStyle [row]="row" [column]="column"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
-          <ng-container klesDynamicField [field]="getLineFields(index,column.cell.name)" [group]="getControls(index)">
+          <ng-container klesDynamicField [field]="column | fieldPipe:index" [group]="index | groupPipe">
           </ng-container>
         </td>
       </div>
@@ -29,6 +30,7 @@
   </table>
 
 </form>
-<mat-paginator *ngIf="!hidePaginator" #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions"
-  [showFirstLastButtons]="true">
-</mat-paginator>
+<div [hidden]="hidePaginator">
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true">
+  </mat-paginator>
+</div>

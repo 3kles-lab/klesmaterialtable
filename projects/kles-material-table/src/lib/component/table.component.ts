@@ -21,6 +21,7 @@ import { DefaultKlesTableService } from '../services/defaulttable.service';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { tap } from 'rxjs/operators';
+import { FieldPipe } from '../pipe/field.pipe';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -39,7 +40,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.setDataSourceAttributes();
     }
 
-    @ViewChild(MatPaginator, { static: false }) set matPaginator(mp: MatPaginator) {
+    @ViewChild(MatPaginator, { static: true }) set matPaginator(mp: MatPaginator) {
         this.paginator = mp;
         this.setDataSourceAttributes();
     }
@@ -123,8 +124,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.setDataSourceAttributes();
-        this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+        // this.setDataSourceAttributes();
+        // this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+    }
+
+
+    trackById(index: number, item: FormGroup): string {
+        return `${item.value._id}`;
     }
 
     /** Form Header */
@@ -154,7 +160,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     /** Form Array Line Table */
     initFormArray() {
         this.lineFields = [];
-        let cpt = 0;
         const array = this.fb.array(this._lines.map(row => {
             return this.addFormLine(row);
         }));
@@ -246,19 +251,20 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const control = this.fb.control(
                 value,
                 this.bindValidations(field.validations || []),
-                this.bindAsyncValidations(field.asyncValidations?.map(asyncValisation => {
-                    const klesValidator = { ...asyncValisation };
-                    const validatorFn = ((c: AbstractControl) => {
-                        const validator$ = klesValidator.validator(c);
-                        if (validator$ instanceof Promise) {
-                            return validator$.finally(() => this.ref.markForCheck());
-                        } else {
-                            return validator$.pipe(tap(() => this.ref.markForCheck()));
-                        }
-                    });
-                    asyncValisation.validator = validatorFn;
-                    return asyncValisation;
-                }) || [])
+                // this.bindAsyncValidations(field.asyncValidations?.map(asyncValisation => {
+                //     const klesValidator = { ...asyncValisation };
+                //     const validatorFn = ((c: AbstractControl) => {
+                //         const validator$ = klesValidator.validator(c);
+                //         if (validator$ instanceof Promise) {
+                //             return validator$.finally(() => this.ref.markForCheck());
+                //         } else {
+                //             return validator$.pipe(tap(() => this.ref.markForCheck()));
+                //         }
+                //     });
+                //     asyncValisation.validator = validatorFn;
+                //     return asyncValisation;
+                // }) || [])
+                this.bindAsyncValidations(field.asyncValidations || [])
             );
 
             if (field.disabled) {
@@ -273,8 +279,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         return (this.form.get('rows') as FormArray)
     }
 
-    getFilterFormArray(): FormArray {
-        return this.fb.array(this.renderedData);
+    getFilterFormArray(): FormGroup[] {
+        // return this.fb.array(this.renderedData);
+        return this.renderedData;
     }
 
     getActualIndex(index: number) {
@@ -290,7 +297,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         //(this.form.get('rows') as FormArray).removeAt(index)
         //return (this.form.get('rows') as FormArray).controls[index];
         // return this.getFilterFormArray().controls[this.getActualIndex(index)];
-        return this.getFilterFormArray().controls[index];
+        // return this.getFilterFormArray().controls[index];
+        return this.getFilterFormArray()[index];
     }
 
     getLineFields(index, key) {
@@ -346,13 +354,17 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     setDataSourceAttributes() {
-        setTimeout(() => this.dataSource.paginator = this.paginator);
+        if (!this.hidePaginator) {
+            this.dataSource.paginator = this.paginator;
+        } else {
+            this.dataSource.paginator = null;
+        }
 
         if (this.sort) {
             this.dataSource.sort = this.sort;
             this.tableService.setTable(this);
             this.dataSource.sortingDataAccessor = this.tableService.getSortingDataAccessor;
-            if (this.paginator) {
+            if (this.paginator && !this.hidePaginator) {
                 this.sort.sortChange.subscribe(() => {
                     this.paginator.pageIndex = 0;
                 });
@@ -386,9 +398,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
      * Method to check if column is sticky
      * @param column
      */
-    isSticky(column: KlesColumnConfig): boolean {
-        return column.sticky || false;
-    }
+    // isSticky(column: KlesColumnConfig): boolean {
+    //     console.log('isSticky')
+    //     return column.sticky || false;
+    // }
 
     formatElevation(): string {
         return `mat-elevation-z${this.options.elevation}`;
