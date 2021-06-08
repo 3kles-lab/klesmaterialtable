@@ -58,7 +58,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
         const injector: Injector = Injector.create(options);
         const factory = this.resolver.resolveComponentFactory(
-            this.tableConfig.tableComponent || KlesTableComponent
+            this.tableConfig.tableComponent
         );
 
         if (this.componentRef) {

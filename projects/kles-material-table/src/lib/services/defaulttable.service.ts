@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { KlesTableComponent } from '../component/table.component';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
@@ -92,7 +91,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     }
 
     /**Setters */
-    public setTable(table: KlesTableComponent) {
+    public setTable(table: any) {
         this.table = table;
     }
 
