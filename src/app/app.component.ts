@@ -862,7 +862,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const columnAutocomplete = this.columns.filter(f => f.cell.autocomplete && f.cell.options && f.cell.property);
     data.forEach(e => {
       columnAutocomplete.forEach(c => {
-        const findValue = c.cell.options.find(f => f[c.cell.property] === e[c.columnDef]);
+        const findValue = (c.cell.options as any).find(f => f[c.cell.property] === e[c.columnDef]);
         if (findValue) {
           e[c.columnDef] = findValue;
         }

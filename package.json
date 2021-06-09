@@ -32,6 +32,7 @@
     "fp-ts": "^1.13.0",
     "lodash": "^4.17.21",
     "ngx-color-picker": "^10.1.0",
+    "ngx-mat-select-search": "^3.3.0",
     "polytype": "^0.11.0",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",

@@ -1,7 +1,7 @@
 import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { startWith, map, switchMap } from 'rxjs/operators';
 
 @Component({
     selector: 'kles-form-textheaderfilter',
@@ -40,12 +40,19 @@ import { startWith, map } from 'rxjs/operators';
 export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
 
     filteredOption: Observable<any[]>;
+    options$: Observable<any[]>;
 
     ngOnInit(): void {
+        if (this.field.options instanceof Observable) {
+            this.options$ = this.field.options;
+        } else {
+            this.options$ = of(this.field.options);
+        }
+
         this.filteredOption = this.group.get(this.field.name).valueChanges
             .pipe(
                 startWith(''),
-                map(data => data ? this.filterData(data) : this.field.options.slice())
+                switchMap(data => data ? this.filterData(data) : this.options$)
             );
     }
 
@@ -53,9 +60,20 @@ export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract impleme
         return this.group.controls[this.field.name].pending;
     }
 
-    private filterData(value: any): any[] {
-        const filterValue = value.toLowerCase();
-        return this.field.options.filter(data => data.toLowerCase().indexOf(filterValue) === 0);
+    private filterData(value: any): Observable<any[]> {
+        let filterValue;
+
+        if (typeof value === 'string' && Object.prototype.toString.call(value) === '[object String]') {
+            filterValue = value.toLowerCase();
+        } else {
+            filterValue = value[this.field.property].toLowerCase();
+        }
+
+        if (this.field.property) {
+            return this.options$
+                .pipe(map(options => options.filter(option => option[this.field.property].toLowerCase().indexOf(filterValue) === 0)));
+        }
+        return this.options$.pipe(map(options => options.filter(option => option.toLowerCase().indexOf(filterValue) === 0)));
     }
 
 
