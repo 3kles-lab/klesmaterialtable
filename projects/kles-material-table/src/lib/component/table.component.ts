@@ -140,14 +140,15 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     initFormHeader() {
         const group = this.fb.group({});
         this.columns.forEach(column => {
-            column.headerCell.name = column.columnDef;
-            const control = this.buildControlField(column.headerCell, column.headerCell.value || '');
+            const colCellHeader = _.cloneDeep(column.headerCell);
+            colCellHeader.name = column.columnDef;
+            const control = this.buildControlField(colCellHeader, colCellHeader.value || '');
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
                 this._onChangeHeaderCell.emit({ column, group });
                 this.tableService.onHeaderCellChange({ column, group });
             })
-            group.addControl(column.headerCell.name, control);
+            group.addControl(colCellHeader.name, control);
         });
 
         group.valueChanges.subscribe(e => {
@@ -176,8 +177,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, row.value[column.cell.name]);
-            listField.push({ ...column.cell });
+            const colCell = _.cloneDeep(column.cell);
+            const control = this.buildControlField(colCell, row.value[colCell.name]);
+            listField.push(colCell);
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group });
@@ -211,15 +213,16 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     initFormFooter() {
         const group = this.fb.group({});
         this.columns.forEach(column => {
-            column.footerCell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, column.footerCell.value || '');
+            const colCellFooter = column.footerCell;
+            colCellFooter.name = column.columnDef;
+            const control = this.buildControlField(colCellFooter, colCellFooter.value || '');
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
                 const change: IChangeHeaderFooterCell = { column, group };
                 this._onChangeFooterCell.emit(change);
                 this.tableService.onFooterCellChange(change)
             })
-            group.addControl(column.footerCell.name, control);
+            group.addControl(colCellFooter.name, control);
         });
 
         group.valueChanges.subscribe(e => {
