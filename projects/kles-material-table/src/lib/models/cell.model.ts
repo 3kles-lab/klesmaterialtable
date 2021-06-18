@@ -1,5 +1,5 @@
 import { FormArray, FormGroup } from "@angular/forms";
-import { KlesColumnConfig } from "dist/kles-material-table/public-api";
+import { KlesColumnConfig } from "./columnconfig.model";
 
 export interface IChangeHeaderFooterCell {
     column: KlesColumnConfig
