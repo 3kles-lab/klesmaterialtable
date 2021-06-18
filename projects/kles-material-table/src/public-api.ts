@@ -3,6 +3,8 @@
  */
 
 /**MODEL */
+export * from './lib/models/cell.model';
+export * from './lib/models/node.model';
 export * from './lib/models/options.model';
 export * from './lib/models/columnconfig.model';
 export * from './lib/models/tableconfig.model';

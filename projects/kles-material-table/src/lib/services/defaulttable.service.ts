@@ -4,23 +4,25 @@ import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
 import * as uuid from 'uuid';
+import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
 @Injectable({
     providedIn: 'root'
 })
 export class DefaultKlesTableService extends AbstractKlesTableService {
     //Header
     onHeaderChange(e: any) { }
-    onHeaderCellChange(e: any) { }
+    onHeaderCellChange(e: IChangeHeaderFooterCell) { }
     onStatusHeaderChange(e: any) { }
 
     //Line
-    onCellChange(e: any) { }
+    onCellChange(e: IChangeCell) { }
     onStatusCellChange(e: any) { }
-    onLineChange(e: any) { }
+    onLineChange(e: IChangeLine) { }
     onStatusLineChange(e: any) { }
 
     //Footer
     onFooterChange(e: any) { }
+    onFooterCellChange(e: IChangeHeaderFooterCell) { }
 
     //Data
     onDataLoaded() { }

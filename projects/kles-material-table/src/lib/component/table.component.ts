@@ -22,6 +22,8 @@ import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { tap } from 'rxjs/operators';
 import { FieldPipe } from '../pipe/field.pipe';
+import { IChangeCell, IChangeHeaderFooterCell } from '../models/cell.model';
+import { AbstractKlesTableService } from '../services/abstracttable.service';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -70,10 +72,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
-    @Output() _onSelected = new EventEmitter();
-    @Output() _onChangeHeaderCell = new EventEmitter();
-    @Output() _onChangeCell = new EventEmitter();
-    @Output() _onChangeFooterCell = new EventEmitter();
+    @Output() _onSelected = new EventEmitter<AbstractControl[]>();
+    @Output() _onChangeHeaderCell = new EventEmitter<IChangeHeaderFooterCell>();
+    @Output() _onChangeCell = new EventEmitter<IChangeCell>();
+    @Output() _onChangeFooterCell = new EventEmitter<IChangeHeaderFooterCell>();
     @Output() _onStatusHeaderChange = new EventEmitter();
     @Output() _onStatusLineChange = new EventEmitter();
     @Output() _onStatusCellChange = new EventEmitter();
@@ -96,7 +98,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
-        @Inject('tableService') public tableService: DefaultKlesTableService
+        //@Inject('tableService') public tableService: DefaultKlesTableService
+        @Inject('tableService') public tableService: AbstractKlesTableService
     ) {
         this.tableService.setTable(this);
     }
@@ -212,14 +215,15 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const control = this.buildControlField(column.cell, column.footerCell.value || '');
             control.valueChanges.subscribe(e => {
                 const group = control.parent;
-                this._onChangeFooterCell.emit({ column, group });
+                const change: IChangeHeaderFooterCell = { column, group };
+                this._onChangeFooterCell.emit(change);
+                this.tableService.onFooterCellChange(change)
             })
             group.addControl(column.footerCell.name, control);
         });
 
         group.valueChanges.subscribe(e => {
-            // console.log('Line change table=', e);
-            // console.log('Parent change line table=', group);
+            this.tableService.onFooterChange(e);
         });
         return group;
     }
