@@ -35,32 +35,66 @@ export class FakeApiService {
     }
 
     listWarehouse(record: IMIRequest): Observable<IMIResponse> {
+        // const items = [
+        //     {
+        //         WHLO: '101',
+        //         WHNM: 'WHLO 101',
+        //     },
+        //     {
+        //         WHLO: '200',
+        //         WHNM: 'WHLO 200',
+        //     },
+        //     {
+        //         WHLO: '220',
+        //         WHNM: 'WHLO 220',
+        //     },
+        //     {
+        //         WHLO: '943',
+        //         WHNM: 'WHLO 943',
+        //     },
+        //     {
+        //         WHLO: 'A01',
+        //         WHNM: 'WHLO A01',
+        //     },
+        //     {
+        //         WHLO: 'BBB',
+        //         WHNM: 'WHLO BBB',
+        //     }
+        // ];
+
         const items = [
             {
                 WHLO: '101',
                 WHNM: 'WHLO 101',
+                FACI: 'A01',
             },
             {
                 WHLO: '200',
                 WHNM: 'WHLO 200',
+                FACI: 'A01',
             },
             {
                 WHLO: '220',
                 WHNM: 'WHLO 220',
+                FACI: 'A01',
             },
             {
                 WHLO: '943',
                 WHNM: 'WHLO 943',
+                FACI: 'B01',
             },
             {
                 WHLO: 'A01',
                 WHNM: 'WHLO A01',
+                FACI: 'A01',
             },
             {
                 WHLO: 'BBB',
                 WHNM: 'WHLO BBB',
+                FACI: 'B01',
             }
         ];
+
         const answer: IMIResponse = {
             hasError: null,
             metadata: null,

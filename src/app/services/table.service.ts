@@ -5,12 +5,14 @@ import { SafeStyle } from '@angular/platform-browser';
 import { classes } from 'polytype';
 import * as _ from 'lodash'
 import { BehaviorSubject } from 'rxjs';
+import { IChangeCell, IChangeLine } from 'projects/kles-material-table/src/public-api';
 
 @Injectable()
 export class TableService extends classes(KlesTableService) {
-    private listColumnPO = ["Style", "Color", "Size"];
 
     public onLoaded: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private listFacility = [];
+    private listWarehouse = [];
 
     constructor() {
         super();
@@ -31,21 +33,27 @@ export class TableService extends classes(KlesTableService) {
     };
 
     //Line
-    onCellChange(e: any) {
-        // console.warn('CellChange=', e);
-        // console.warn('##Error=', this.allErrors(e.group));
-        // console.warn('##Error Count=', this.countErrors(e.group));
+    onCellChange(e: IChangeCell) {
         super.onCellChange(e);
-        // if (e.column.columnDef === '#checker') {
-        //     if (e.group.value['#checker'].event) {
-        //         console.warn('Button event!!!!');
-        //     }
-        // }
+        // console.warn('##OnCellLineChange=', e);
+        // if (e.column.columnDef === 'Warehouse') {
+        //     let warehouse = (e.group as FormGroup).controls[e.column.columnDef].value;
+        //     console.log('Change Warehouse=', warehouse);
 
-        this.checkError(e.group);
+        //     if (typeof warehouse === 'string' && Object.prototype.toString.call(warehouse) === '[object String]') {
+        //         console.log('Warehouse string=', warehouse);
+        //         warehouse = (this.listWarehouse.find(f => f.WHLO === warehouse)) ? this.listWarehouse.find(f => f.WHLO === warehouse) : warehouse;
+        //         (e.group as FormGroup).controls['Warehouse'].patchValue(warehouse, { onlySelf: true, emitEvent: false });
+        //     }
+
+        //     const facility = this.listFacility.find(f => f.FACI === warehouse?.FACI);
+        //     console.log('Find Facility=', facility);
+        //     (e.group as FormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
+        // }
+        this.checkError(e.group as FormGroup);
     }
 
-    onLineChange(e: any) {
+    onLineChange(e: IChangeLine) {
         // console.warn('##OnLineChange=', e);
         // if (e.row.error) {
         // console.warn('##Error=', this.allErrors(e.group));
@@ -69,6 +77,14 @@ export class TableService extends classes(KlesTableService) {
         // console.warn('Status cell change=', e);
     }
 
+    setListFacility(list: any[]) {
+        this.listFacility = list;
+    }
+
+    setListWarehouse(list: any[]) {
+        this.listWarehouse = list;
+    }
+
     checkError(form: FormGroup) {
         let checker = {};
         if (form.pending) {
@@ -77,7 +93,7 @@ export class TableService extends classes(KlesTableService) {
                 message: 'Contrôle...'
             };
         } else {
-            const listError = this.allErrors(form);
+            const listError = TableService.allErrors(form);
             checker = {
                 busy: false,
                 error: (listError.length > 0) ? listError : null
@@ -87,11 +103,11 @@ export class TableService extends classes(KlesTableService) {
         this.table.ref.detectChanges();
     }
 
-    private isFormGroup(control: AbstractControl): control is FormGroup {
+    static isFormGroup(control: AbstractControl): control is FormGroup {
         return !!(<FormGroup>control).controls;
     }
 
-    allErrors(control: AbstractControl): any[] {
+    static allErrors(control: AbstractControl): any[] {
         let arr = [];
         const allControlErrors = this.allControlErrors(control);
         if (allControlErrors) {
@@ -103,7 +119,7 @@ export class TableService extends classes(KlesTableService) {
         return arr;
     }
 
-    allControlErrors(control: AbstractControl): any {
+    static allControlErrors(control: AbstractControl): any {
         if (this.isFormGroup(control)) {
             const childErrors = _.mapValues(control.controls, (childControl) => {
                 return this.allControlErrors(childControl);
@@ -115,7 +131,7 @@ export class TableService extends classes(KlesTableService) {
         return control.errors;
     }
 
-    countControls(control: AbstractControl): number {
+    static countControls(control: AbstractControl): number {
         if (control instanceof FormControl) {
             return 1;
         }
@@ -132,7 +148,7 @@ export class TableService extends classes(KlesTableService) {
         }
     }
 
-    countErrors(control: AbstractControl): number {
+    static countErrors(control: AbstractControl): number {
         if (control instanceof FormControl) {
             return (control as FormControl)?.errors?.length;
         }

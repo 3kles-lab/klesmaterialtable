@@ -5,13 +5,16 @@ import {
   IKlesFieldConfig, IKlesValidator, KlesDynamicFormComponent, KlesFormButtonCheckerComponent, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormColorComponent,
   KlesFormDateComponent,
   KlesFormInputComponent, KlesFormLabelComponent, KlesFormTextComponent,
-  autocompleteObjectValidator
+  autocompleteObjectValidator,
+  KlesFormButtonFileComponent
 } from '@3kles/kles-material-dynamicforms';
 import {
   KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
   KlesFormTextHeaderFilterComponent
 } from 'kles-material-table';
 import * as _ from 'lodash';
+import * as XLSX from 'xlsx';
+import * as moment from 'moment';
 import { Observable, of, timer } from 'rxjs';
 import { switchMap, catchError, map } from 'rxjs/operators';
 import { FakeApiService } from './services/fakemi.service';
@@ -23,6 +26,8 @@ import { MMS005MI_LstWarehouses, CRS912MI_LstSeason, PMS120MI_LstOrderType, MNS1
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IKlesDynamicFormDataDialog, KlesDynamicFormDialogComponent } from '@3kles/kles-material-dialog';
 import { AutocompleteComponent } from './components/autocomplete.component';
+import { BehaviorSubject } from 'rxjs';
+import { isArray } from 'lodash';
 
 @Component({
   selector: 'app-root',
@@ -32,8 +37,36 @@ import { AutocompleteComponent } from './components/autocomplete.component';
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
-  @ViewChild(KlesDynamicFormComponent, { static: false }) form: KlesDynamicFormComponent;
-  fields: IKlesFieldConfig[] = [
+  @ViewChild('formFile', { static: false }) formFile: KlesDynamicFormComponent;
+  fieldsFile: IKlesFieldConfig[] = [
+    {
+      name: 'file',
+      color: 'accent',
+      label: 'Choisir fichier',
+      ngClass: 'mat-raised-button',
+      iconSvg: 'excel',
+      disabled: false,
+      component: KlesFormButtonFileComponent
+    },
+    {
+      name: 'message',
+      component: KlesFormTextComponent
+    }
+  ];
+
+  formValidatorsFile: IKlesValidator<ValidatorFn>[] = [];
+  isLoadingFile = false;
+
+  @ViewChild('formTable', { static: false }) formTable: KlesDynamicFormComponent;
+  fieldsTable: IKlesFieldConfig[] = [
+    {
+      name: 'error',
+      color: 'primary',
+      label: 'Voir Erreur',
+      ngClass: 'mat-raised-button',
+      disabled: false,
+      component: KlesFormButtonComponent
+    },
     {
       name: 'load',
       icon: 'update',
@@ -76,7 +109,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
   ];
 
-  formValidators: IKlesValidator<ValidatorFn>[] = [];
+  formValidatorsTable: IKlesValidator<ValidatorFn>[] = [];
 
   @ViewChild(KlesTableDirective, { static: false }) tableContainer: KlesTableDirective;
   table: KlesTableComponent;
@@ -89,7 +122,8 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   lines: any[] = [];
 
-  listWarehouse: any = [];
+  listFacility = [];
+  listWarehouse = [];
   listSeason = [];
   listOrderType = [];
   listStandardRouting = [];
@@ -97,6 +131,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   listResponsible = [];
 
   isLoading = false;
+  errorView = false;
 
   constructor(
     private ref: ChangeDetectorRef,
@@ -120,6 +155,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     this.listWarehouse = await (this.miService.execute(MMS005MI_LstWarehouses).pipe(map(m => m.items))).toPromise();
     console.log('ListWarehouse=', this.listWarehouse);
+    this.listFacility = this.listWarehouse.filter((item, i, arr) => {
+      return arr.indexOf(arr.find(t => t.FACI === item.FACI)) === i;
+    }).map(m => { return { FACI: m.FACI } });
+    console.log('ListFacility=', this.listFacility);
     this.listSeason = await (this.miService.execute(CRS912MI_LstSeason).pipe(map(m => m.items))).toPromise();
     console.log('ListSeason=', this.listSeason);
     this.listOrderType = await (this.miService.execute(PMS120MI_LstOrderType).pipe(map(m => m.items))).toPromise();
@@ -211,7 +250,33 @@ export class AppComponent implements OnInit, AfterViewInit {
         cell: {
           type: 'text',
           name: 'Facility',
-          component: KlesFormTextComponent,
+          // component: KlesFormTextComponent,
+          component: KlesFormInputComponent,
+          autocomplete: true,
+          options: this.listFacility,
+          displayWith: ((value: any) => {
+            return this.displayWithKeyLabel(value);
+          }),
+          property: 'FACI',
+          validations: [
+            {
+              name: 'list',
+              message: this.translate.instant('autocomplete.notInList'),
+              validator: autocompleteObjectValidator(true)
+            }
+          ],
+          valueChanges: (field, group, siblingFields) => {
+            if (group.controls[field.name].value) {
+              // const listWarehouse = _.cloneDeep(this.listWarehouse.filter(f => f.FACI === group.controls[field.name].value.FACI));
+              const listWarehouse = this.listWarehouse.filter(f => f.FACI === group.controls[field.name].value.FACI);
+              console.log('New list Warehouse=', listWarehouse);
+              // siblingFields.find(sibling => sibling.name === 'Warehouse').options = listWarehouse;
+              (siblingFields.find(sibling => sibling.name === 'Warehouse').options as BehaviorSubject<any[]>).next(listWarehouse);
+              const warehouse = this.listWarehouse.find(f => f.WHLO === group.controls[field.name].value.WHLO);
+              (group as FormGroup).controls['Warehouse'].patchValue(warehouse, { onlySelf: true, emitEvent: false });
+              (group as FormGroup).controls['Warehouse'].markAsTouched({ onlySelf: true });
+            }
+          }
         } as IKlesFieldConfig,
       },
       {
@@ -230,7 +295,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           inputType: 'text',
           component: KlesFormInputComponent,
           autocomplete: true,
-          options: this.listWarehouse,//.map(m => m.WHLO)
+          options: new BehaviorSubject<any[]>(this.listWarehouse),
           autocompleteComponent: AutocompleteComponent,
           displayWith: ((value: any) => {
             return this.displayWithKeyLabel(value);
@@ -242,7 +307,16 @@ export class AppComponent implements OnInit, AfterViewInit {
               message: this.translate.instant('autocomplete.notInList'),
               validator: autocompleteObjectValidator()
             }
-          ]
+          ],
+          valueChanges: (field, group, siblingFields) => {
+            if (group.controls[field.name].value) {
+              // console.log('Search Facility=', group.controls[field.name].value.FACI, ' in ', this.listFacility);
+              console.log('Search Facility=', group, ' in ', this.listFacility);
+              const facility = this.listFacility.find(f => f.FACI === group.controls[field.name].value.FACI);
+              console.log('Find Facility=', facility);
+              (group as FormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
+            }
+          }
         } as IKlesFieldConfig,
       },
       {
@@ -554,11 +628,14 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     ];
 
+    const tableService: TableService = new TableService();
+    tableService.setListFacility(this.listFacility);
+    tableService.setListWarehouse(this.listWarehouse);
     this.tableConfig = {
       tableComponent: KlesTableComponent,
       columns: this.columns,
       // hidePaginator: true,
-      tableService: new TableService(),
+      tableService: tableService,
       //lineAsyncValidations: [this.checkLine()]
     };
     this.setTable();
@@ -574,17 +651,40 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     console.log('ListFormField=', this.listFormField);
 
-    this.form.form.statusChanges.subscribe(s => {
+    this.formFile.form.valueChanges.subscribe(s => {
+      console.log('Button=', s);
+
+      const valChange = Object.keys(s).find(f => s[f]);
+      console.log(valChange);
+
+      switch (valChange) {
+        case 'file':
+          this.formFile.form.controls['message'].patchValue('Chargement en cours...', { onlySelf: true, emitEvent: false });
+          const fileContent = s[valChange]?.fileContent;
+          console.log('File switch=', fileContent);
+          const data = this.loadFile(fileContent);
+          this.lines = [...this.transformData(data)];
+          break;
+      }
+      // if (valChange) {
+      //   this.formFile.form.reset();
+      // }
+    });
+
+    this.formTable.form.statusChanges.subscribe(s => {
       // console.log('Status form=', s);
     })
 
-    this.form.form.valueChanges.subscribe(s => {
+    this.formTable.form.valueChanges.subscribe(s => {
       // console.log('Button=', s);
 
       const val = Object.keys(s).find(f => s[f]);
       console.log(val);
 
       switch (val) {
+        case 'error':
+          this.showError();
+          break;
         case 'add':
           this.openDynamicFormDialog();
           break;
@@ -599,11 +699,81 @@ export class AppComponent implements OnInit, AfterViewInit {
           break;
       }
       if (val) {
-        this.form.form.reset();
+        this.formTable.form.reset();
       }
     });
 
   }
+
+  loadFile(file): any[] {
+    try {
+      console.log('File=', file);
+      if (isArray(file)) {
+        file = file[0];
+      }
+      const workbook: XLSX.WorkBook = XLSX.read(file, { type: 'array', cellDates: true, dateNF: 'dd/mm/yyyy;@' });
+      const firstSheetName: string = workbook.SheetNames[0];
+      const worksheet: XLSX.WorkSheet = workbook.Sheets[firstSheetName];
+      const listCSV = XLSX.utils.sheet_to_csv(worksheet);
+      const list = XLSX.utils.sheet_to_json(worksheet, { defval: '', header: 1 });
+      //Object.keys(list).forEach(e => list[e] = formatDataFromType(list[e], this.columns));
+      console.log('ListCSV parseData=', listCSV);
+      console.log('List parseData=', list);
+      return list.slice(1)
+        .filter((values: any[]) => {
+          return values.some(value => value && value.length > 0);
+        }).map(values => {
+          const warehouse = this.listWarehouse.find(w => w.WHLO.toLowerCase() === ('' + values[0])?.toLowerCase());
+          return {
+            Warehouse: '' + values[0],
+            Style: '' + values[1],
+            Color: '' + values[2],
+            Size: '' + values[3],
+            Quantity: values[5],
+            OrderType: '' + values[6],
+            ProjectNumber: '' + values[7],
+            PlannedDate: values[8] ? moment(values[8], 'YYYYMMDD').toDate() : null,
+            Responsible: '' + values[9],
+            ItemNumber: values[4],
+            StandardRouting: null,
+            WorkCenter: null,
+            PlanNumberExist: false,
+            Company: warehouse?.CONO || null,
+            Division: warehouse?.DIVI || null,
+            Facility: warehouse?.FACI || null,
+            Api: null,
+            Action: null,
+            PlanNumberNew: null
+          };
+        });
+    } catch (e) {
+      console.log('Error XLS=', e);
+      //this._onError.emit(e);
+    }
+    return null;
+  }
+
+  showError() {
+    if (!this.table) return;
+    this.errorView = !this.errorView;
+    const buttonError = this.fieldsTable.find(f => f.name === 'error');
+    if (this.errorView) {
+      buttonError.label = 'Voir tout';
+      const formGroupError = this.table.getFormArray().controls
+        .filter((formGroup: FormGroup) => {
+          const nbError = TableService.allErrors(formGroup);
+          // console.log('FormGroup ', formGroup, ' = ', nbError);
+          return nbError.length !== 0
+        });
+      console.log('FormGroup Total=', this.table.getFormArray());
+      console.log('FormGroup Error=', formGroupError);
+      this.table.dataSource.data = formGroupError;
+    } else {
+      buttonError.label = 'Voir error';
+      this.table.dataSource.data = this.table.getFormArray().controls;
+    }
+  }
+
 
   setTable() {
     if (!this.table && this.tableContainer) {
@@ -614,12 +784,13 @@ export class AppComponent implements OnInit, AfterViewInit {
           if (this.table.selection.isEmpty()) {
             this.table.formHeader.controls['#select']?.patchValue(false, { onlySelf: true, emitEvent: false });
           }
-          (this.table.selection.selected.length > 0) ? this.form.form.controls['delete'].enable() : this.form.form.controls['delete'].disable();
-          (this.table.selection.selected.length === 1) ? this.form.form.controls['update'].enable() : this.form.form.controls['update'].disable();
+          (this.table.selection.selected.length > 0) ? this.formTable.form.controls['delete'].enable() : this.formTable.form.controls['delete'].disable();
+          (this.table.selection.selected.length === 1) ? this.formTable.form.controls['update'].enable() : this.formTable.form.controls['update'].disable();
         });
         (this.table.tableService as TableService).onLoaded.subscribe(s => {
           console.log('Subscribe loading!!!');
           this.isLoading = !s;
+          this.formFile.form.controls['message'].patchValue(null, { onlySelf: true, emitEvent: false });
         });
         console.warn('Table=', this.table);
       }
@@ -847,14 +1018,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.setTable();
     this.table.ref.detectChanges();
-    // this.lines = [...this.transformData(data)];
-    const listData = [...this.transformData(data)];
-    listData.forEach(e => {
-      //this.table.tableService.addRecord(e);
-      this.table.tableService.addRecord({});
-      const lastRecord = this.table.getFormArray().controls[this.table.getFormArray().controls.length - 1];
-      lastRecord.patchValue(e);
-    });
+    this.lines = [...this.transformData(data)];
+    // const listData = [...this.transformData(data)];
+    // listData.forEach(e => {
+    //   //this.table.tableService.addRecord(e);
+    //   this.table.tableService.addRecord({});
+    //   const lastRecord = this.table.getFormArray().controls[this.table.getFormArray().controls.length - 1];
+    //   lastRecord.patchValue(e);
+    // });
     this.isLoading = false;
   }
 
@@ -862,7 +1033,14 @@ export class AppComponent implements OnInit, AfterViewInit {
     const columnAutocomplete = this.columns.filter(f => f.cell.autocomplete && f.cell.options && f.cell.property);
     data.forEach(e => {
       columnAutocomplete.forEach(c => {
-        const findValue = (c.cell.options as any).find(f => f[c.cell.property] === e[c.columnDef]);
+        let findValue = null;
+        if (c.cell.options instanceof BehaviorSubject) {
+          const listSubject = (c.cell.options as BehaviorSubject<any>).getValue();
+          console.log('listSubject=', listSubject);
+          findValue = (c.cell.options as BehaviorSubject<any>).getValue().find(f => f[c.cell.property] === e[c.columnDef]);
+        } else {
+          findValue = (c.cell.options as any).find(f => f[c.cell.property] === e[c.columnDef]);
+        }
         if (findValue) {
           e[c.columnDef] = findValue;
         }
@@ -872,6 +1050,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   displayWithKeyLabel(value) {
+    if (!value) return;
     const temp = _.cloneDeep(value);
     if (!temp.key && typeof temp !== 'string') {
       if (Object.keys(temp).length > 0) {
@@ -936,7 +1115,7 @@ const data = [
     WorkCenter: 'PLGF'
   },
   {
-    Warehouse: '101',
+    Warehouse: '943',
     Style: 'AMB01',
     Color: 'YY02',
     Size: 'X00',
@@ -949,7 +1128,7 @@ const data = [
     WorkCenter: 'PLG1'
   },
   {
-    Warehouse: '101',
+    Warehouse: 'BBB',
     Style: 'AMB01',
     Color: 'YY09',
     Size: 'X008',
@@ -962,7 +1141,7 @@ const data = [
     WorkCenter: 'PLG1'
   },
   {
-    Warehouse: '101',
+    Warehouse: '943',
     Style: 'AMB01',
     Color: 'YY02',
     Size: 'X008',
@@ -976,7 +1155,7 @@ const data = [
   }
   ,
   {
-    Warehouse: '101',
+    Warehouse: '220',
     Style: 'AMB01',
     Color: 'YY02',
     Size: 'X008',
@@ -1132,4 +1311,3 @@ const data = [
     WorkCenter: 'PLG1'
   }
 ];
-

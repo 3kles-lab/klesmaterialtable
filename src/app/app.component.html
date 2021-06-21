@@ -1,8 +1,14 @@
 <main class="content" fxLayout="column">
-  <!-- <div style="overflow:auto"> -->
-  <!-- <div style="height: inherit;"> -->
+  <div fxLayout="row" style="display: inline-flex; align-self: center;">
+    <app-kles-dynamic-form #formFile direction="column" [fields]="fieldsFile" [validators]="formValidatorsFile">
+    </app-kles-dynamic-form>
+    <span *ngIf="isLoadingFile">
+      <mat-spinner diameter="30">
+      </mat-spinner>
+    </span>
+  </div>
   <div fxLayout="row" style="display: inline-flex;">
-    <app-kles-dynamic-form #form direction="row" [fields]="fields" [validators]="formValidators">
+    <app-kles-dynamic-form #formTable direction="row" [fields]="fieldsTable" [validators]="formValidatorsTable">
     </app-kles-dynamic-form>
     <span *ngIf="isLoading">
       <mat-spinner diameter="30">
@@ -12,5 +18,5 @@
 
   <ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines">
   </ng-container>
-  <!-- </div> -->
+
 </main>
