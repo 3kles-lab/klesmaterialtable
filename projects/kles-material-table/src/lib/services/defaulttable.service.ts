@@ -78,6 +78,8 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
             .find((f: FormGroup) => f.controls._id.value === '' + record._id);
         if (updateForm) {
             updateForm.patchValue(record);
+            this.updateDataSource();
+            this.table.ref.detectChanges();
         }
     }
 
