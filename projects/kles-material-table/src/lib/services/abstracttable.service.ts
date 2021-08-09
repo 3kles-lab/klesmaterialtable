@@ -36,6 +36,7 @@ export abstract class AbstractKlesTableService {
     //Manage Record
     abstract addRecord(record);
     abstract deleteRecord(record);
+    abstract updateRecord(record);
 
     /**Setters */
     public setTable(table: any) {

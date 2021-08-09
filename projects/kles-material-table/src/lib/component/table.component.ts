@@ -282,7 +282,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     getFormArray(): FormArray {
-        return (this.form.get('rows') as FormArray)
+        return (this.form.get('rows') as FormArray);
     }
 
     getFilterFormArray(): FormGroup[] {
@@ -346,9 +346,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this._lines = lines.map(l => {
             const data = { ...l };
             const options = data.options;
+            const _id = l._id || uuid.v4();
+
+            delete data._id;
             delete data.options;
             return {
-                _id: uuid.v4(),
+                _id,
                 ...options && { options },
                 value: data,
 

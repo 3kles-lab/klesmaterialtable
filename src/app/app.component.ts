@@ -692,6 +692,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.loadData();
           break;
         case 'delete':
+          console.log(this.table.selection.selected)
           this.table.tableService.deleteRecord(this.table.selection.selected);
           break;
         case 'update':
@@ -995,14 +996,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       let item = s?.item;
       if (item) {
         if (item._id) {
-          // if (item) {
-          //   item['#select'] = false;
-          // }
-          const updateForm = this.table.getFormArray().controls
-            .find((f: FormGroup) => f.controls['_id'].value === '' + item._id);
-          if (updateForm) {
-            updateForm.patchValue(item);
-          }
+          this.table.tableService.updateRecord(item);
         } else {
           this.table.tableService.addRecord(item);
           this.table.selection.clear();

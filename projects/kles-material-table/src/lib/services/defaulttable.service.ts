@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
@@ -47,8 +47,11 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     /**Util Table */
     //Manage Record
     addRecord(record) {
+        const _id = record._id || uuid.v4();
+        delete record._id;
+
         const newRecord = {
-            _id: uuid.v4(),
+            _id,
             value: record
         };
         this.table._lines.push(newRecord);
@@ -67,6 +70,15 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         // console.log('List _lines=', this.table._lines);
         this.updateDataSource();
         this.table.selection.clear();
+    }
+
+
+    updateRecord(record) {
+        const updateForm = this.table.getFormArray().controls
+            .find((f: FormGroup) => f.controls._id.value === '' + record._id);
+        if (updateForm) {
+            updateForm.patchValue(record);
+        }
     }
 
 
