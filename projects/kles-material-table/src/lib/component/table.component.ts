@@ -5,7 +5,8 @@ import {
     ChangeDetectorRef, Inject, ViewEncapsulation
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
-import { DateAdapter } from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator } from "@angular/material/paginator"
@@ -15,8 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
 import { Node } from '../models/node.model';
-import { IKlesFieldConfig, IKlesValidator, KlesFormGroupComponent } from '@3kles/kles-material-dynamicforms';
-import { DefaultKlesTableService } from '../services/defaulttable.service';
+import { IKlesFieldConfig, IKlesValidator} from '@3kles/kles-material-dynamicforms';
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
@@ -29,6 +29,15 @@ import { AbstractKlesTableService } from '../services/abstracttable.service';
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
+    providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+        {
+          provide: DateAdapter,
+          useClass: MomentDateAdapter,
+          deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+      ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -98,6 +107,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
+        public _adapter: DateAdapter<any>,
         //@Inject('tableService') public tableService: DefaultKlesTableService
         @Inject('tableService') public tableService: AbstractKlesTableService
     ) {
