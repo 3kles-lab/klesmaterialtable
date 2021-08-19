@@ -1,36 +1,4 @@
-stages:
-  - install
-  - build
-  - deploy
-
-image: 192.168.111.61:5005/docker/node-internal
-
-variables:
-  DOCKER_DRIVER: overlay2
-  REGISTRY: 192.168.111.61:5005
-  CONTAINER_IMAGE: $REGISTRY/$CI_PROJECT_PATH
-  LIBRARY_NG: $(ls projects | head -n 1)
-  
-before_script:
-  # Ensure that node works correctly
-  - npm -v
-  - node -v
-  - npm cache verify
-  - npm get registry
-  
-build:
-  stage: build
-  script:
-    # Install @angular/cli globally
-    - npm i
-    - npm i @angular/cli
-    - npm run build:lib
-  artifacts:
-    expire_in: 1 hour
-    paths:
-        - dist
-    
-deploy:
-  stage: deploy
-  script:
-    - npm run publish:lib
+include:
+  - project: '3kles/template/gitlab-ci'
+    ref: main
+    file: '/lib-npm/.gitlab-ci.yml'
