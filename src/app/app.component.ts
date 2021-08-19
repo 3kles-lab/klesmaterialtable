@@ -28,11 +28,22 @@ import { IKlesDynamicFormDataDialog, KlesDynamicFormDialogComponent } from '@3kl
 import { AutocompleteComponent } from './components/autocomplete.component';
 import { BehaviorSubject } from 'rxjs';
 import { isArray } from 'lodash';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  // providers: [
+  //   { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+  //   {
+  //     provide: DateAdapter,
+  //     useClass: MomentDateAdapter,
+  //     deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+  //   },
+  //   { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+  // ],
   //encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -106,6 +117,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       ngClass: 'mat-mini-fab',
       disabled: false,
       component: KlesFormButtonComponent
+    },
+    {
+      name: 'date',
+      component: KlesFormDateComponent,
+      value: new Date()
     }
   ];
 
@@ -139,7 +155,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     protected translate: TranslateService,
     protected miService: FakeApiService,
     private matIconRegistry: MatIconRegistry,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private _adapter: DateAdapter<any>
   ) {
     this.matIconRegistry.addSvgIcon(
       'excel',
@@ -1065,6 +1082,11 @@ export class AppComponent implements OnInit, AfterViewInit {
       }
     }
     return label;
+  }
+
+  french() {
+    this._adapter.setLocale('fr');
+    this.table._adapter.setLocale('fr')
   }
 }
 
