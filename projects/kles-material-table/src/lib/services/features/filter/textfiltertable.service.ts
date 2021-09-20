@@ -23,13 +23,20 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
             searchString = _.pick(searchString, filterableColumn);
 
             return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
-                const keyValue = data?.controls[key]?.value;
+
+                let keyValue = data?.controls[key]?.value;
                 if (!keyValue && searchString[key].length === 0) {
                     return true;
                 } else if (!keyValue) {
                     return false;
                 } else if (!searchString[key]) {
                     return true;
+                }
+
+                const column = this.table.columns.find(col => col.columnDef === key);
+
+                if (column.cell.property) {
+                    keyValue = data?.controls[key]?.value[column.cell.property];
                 }
                 return keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
             });
