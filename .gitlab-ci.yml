@@ -1,4 +1,4 @@
 include:
   - project: '3kles/template/gitlab-ci'
     ref: main
-    file: '/lib-npm/.gitlab-ci.yml'
+    file: '/lib-npm-angular/.gitlab-ci.yml'

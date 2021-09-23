@@ -1,5 +1,5 @@
 {
-  "name": "kles-material-table",
+  "name": "@3kles/kles-material-table",
   "version": "1.0.3",
   "scripts": {
     "build:lib": "ng build kles-material-table --prod",
