@@ -18,4 +18,5 @@ export interface KlesTableConfig {
     pageSizeOptions?: number[];
     lineValidations?: ValidatorFn[];
     lineAsyncValidations?: AsyncValidatorFn[];
+    showFooter?: boolean;
 }

@@ -8,6 +8,7 @@ import { KlesTableConfig } from '../models/tableconfig.model';
 export class KlesTableDirective implements OnInit, OnChanges {
     @Input() tableConfig: KlesTableConfig;
     @Input() lines: any[];
+    @Input() footer: any;
 
     @Output() _onLoaded = new EventEmitter();
     @Output() _onSelected = new EventEmitter();
@@ -46,6 +47,11 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.lines = changes.lines.currentValue;
             this.componentRef.instance.lines = this.lines;
         }
+
+        if (changes.footer && this.componentRef) {
+            this.footer = changes.footer.currentValue;
+            this.componentRef.instance.footer = this.footer;
+        }
     }
 
     buildComponent() {
@@ -55,7 +61,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
                 provide: 'tableService',
                 useValue: this.tableConfig.tableService
             }]
-        }
+        };
         const injector: Injector = Injector.create(options);
         const factory = this.resolver.resolveComponentFactory(
             this.tableConfig.tableComponent
@@ -93,6 +99,10 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
         if (this.tableConfig.lineAsyncValidations) {
             this.componentRef.instance.lineAsyncValidations = this.tableConfig.lineAsyncValidations;
+        }
+        //FOOTER
+        if (this.tableConfig.showFooter) {
+            this.componentRef.instance.showFooter = this.tableConfig.showFooter;
         }
 
         // this.componentRef.instance.lines = [...this.lines];

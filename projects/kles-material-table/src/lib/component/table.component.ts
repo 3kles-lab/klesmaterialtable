@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, ViewEncapsulation
+    ChangeDetectorRef, Inject, ViewEncapsulation, OnDestroy
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -16,14 +16,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Options } from '../models/options.model';
 import { Node } from '../models/node.model';
-import { IKlesFieldConfig, IKlesValidator} from '@3kles/kles-material-dynamicforms';
+import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import { tap } from 'rxjs/operators';
+import { takeUntil, tap } from 'rxjs/operators';
 import { FieldPipe } from '../pipe/field.pipe';
 import { IChangeCell, IChangeHeaderFooterCell } from '../models/cell.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -32,19 +33,21 @@ import { AbstractKlesTableService } from '../services/abstracttable.service';
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
         {
-          provide: DateAdapter,
-          useClass: MomentDateAdapter,
-          deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
         },
         { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-      ],
+    ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
+export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     protected paginator: MatPaginator;
     protected sort: MatSort;
     private sortDefault = false;
+
+    private _onDestroy = new Subject<void>();
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
         this.sort = ms;
@@ -60,6 +63,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) {
         this.updateData(lines);
+    }
+
+    @Input() _footer: any = {};
+    @Input() set footer(footer: any) {
+        if (footer) {
+            this.updateFooter(footer);
+        }
     }
 
     @Input() columns = [] as KlesColumnConfig[];
@@ -92,8 +102,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     // Table
     formHeader: FormGroup;
     form: FormGroup;
-    lineFields: IKlesFieldConfig[][];
     formFooter: FormGroup;
+
+    lineFields: IKlesFieldConfig[][];
     dataSource = new MatTableDataSource<AbstractControl>([]);
     selection = new SelectionModel<AbstractControl>(this.selectionMode);
 
@@ -114,12 +125,18 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         this.tableService.setTable(this);
     }
 
+    ngOnDestroy(): void {
+        this._onDestroy.next();
+    }
+
     ngOnInit() {
         this.dataSource.connect().subscribe(d => {
             this.renderedData = d;
         });
 
         this.formHeader = this.initFormHeader();
+        this.formFooter = this.initFormFooter();
+
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -133,6 +150,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         if (changes.selectionMode) {
             this.selectionMode = changes.selectionMode.currentValue;
             this.selection = new SelectionModel<any>(this.selectionMode);
+        }
+        if (changes.footer) {
+
         }
     }
 
@@ -153,15 +173,15 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const colCellHeader = _.cloneDeep(column.headerCell);
             colCellHeader.name = column.columnDef;
             const control = this.buildControlField(colCellHeader, colCellHeader.value || '');
-            control.valueChanges.subscribe(e => {
+            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
                 const group = control.parent;
                 this._onChangeHeaderCell.emit({ column, group });
                 this.tableService.onHeaderCellChange({ column, group });
-            })
+            });
             group.addControl(colCellHeader.name, control);
         });
 
-        group.valueChanges.subscribe(e => {
+        group.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
             this.tableService.onHeaderChange(e);
         });
         group.statusChanges.subscribe(e => {
@@ -190,12 +210,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, row.value[colCell.name]);
             listField.push(colCell);
-            control.valueChanges.subscribe(e => {
+            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group });
                 this._onChangeCell.emit({ column, row, group });
             });
-            control.statusChanges.subscribe(status => {
+            control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });
                 this._onStatusCellChange.emit({ cell: control, group, status });
@@ -208,7 +228,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         group.setValidators(this.lineValidations);
         group.setAsyncValidators(this.lineAsyncValidations);
 
-        group.valueChanges.subscribe(value => {
+        group.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(value => {
             this.tableService.onLineChange({ group, row, value });
         });
 
@@ -222,20 +242,22 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
     /** Form Footer */
     initFormFooter() {
         const group = this.fb.group({});
-        this.columns.forEach(column => {
-            const colCellFooter = column.footerCell;
-            colCellFooter.name = column.columnDef;
-            const control = this.buildControlField(colCellFooter, colCellFooter.value || '');
-            control.valueChanges.subscribe(e => {
-                const group = control.parent;
-                const change: IChangeHeaderFooterCell = { column, group };
-                this._onChangeFooterCell.emit(change);
-                this.tableService.onFooterCellChange(change)
-            })
-            group.addControl(colCellFooter.name, control);
-        });
+        this.columns
+            .filter((column) => column.footerCell)
+            .forEach(column => {
+                const colCellFooter = column.footerCell;
+                colCellFooter.name = column.columnDef;
+                const control = this.buildControlField(colCellFooter, this._footer[colCellFooter.name]);
+                control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
+                    const parent = control.parent;
+                    const change: IChangeHeaderFooterCell = { column, group: parent };
+                    this._onChangeFooterCell.emit(change);
+                    this.tableService.onFooterCellChange(change);
+                });
+                group.addControl(colCellFooter.name, control);
+            });
 
-        group.valueChanges.subscribe(e => {
+        group.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
             this.tableService.onFooterChange(e);
         });
         return group;
@@ -344,12 +366,17 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit {
         //         }
         //     }, {});
         // });
-        this.getFormArray().valueChanges.subscribe(e => {
+        this.getFormArray().valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
             // console.log('Value change on rows in form table=', e);
             //this.tableService.onLineChange(e);
         });
         this._onLoaded.emit();
         this.tableService.onDataLoaded();
+    }
+
+    updateFooter(footer: any) {
+        this._footer = { ...footer };
+        this.formFooter = this.initFormFooter();
     }
 
     updateData(lines: any[]) {
