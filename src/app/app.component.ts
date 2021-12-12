@@ -137,6 +137,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'KlesMaterialTable';
 
   lines: any[] = [];
+  footer: any;
 
   listFacility = [];
   listWarehouse = [];
@@ -186,7 +187,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.columns = [
       {
         //Selection column
-        columnDef: '#select', sticky: true, visible: true,
+        columnDef: '#select', sticky: false, visible: true,
         headerCell: {
           type: 'checkbox',
           name: '#select',
@@ -198,10 +199,14 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: '#select',
           component: KlesFormCheckboxComponent,
         } as IKlesFieldConfig,
+        footerCell: {
+          component: KlesFormTextComponent,
+          name: 'total'
+        }
       },
       {
         //Column to view result API
-        columnDef: 'Api', sticky: true, visible: false,
+        columnDef: 'Api', sticky: false, visible: false,
         headerCell: {
           name: 'Api',
           type: 'input',
@@ -218,7 +223,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       },
       {
         //Check column to view error
-        columnDef: '#checker', sticky: true, visible: true,
+        columnDef: '#checker', sticky: false, visible: true,
         headerCell: {
           inputType: 'text',
           name: '#checker',
@@ -252,6 +257,10 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'Division',
           component: KlesFormTextComponent,
         } as IKlesFieldConfig,
+        footerCell: {
+          name: 'Division',
+          component: KlesFormTextComponent,
+        }
       },
       {
         columnDef: 'Facility', sticky: false, visible: true,
@@ -653,8 +662,15 @@ export class AppComponent implements OnInit, AfterViewInit {
       columns: this.columns,
       // hidePaginator: true,
       tableService: tableService,
+      showFooter: true
       //lineAsyncValidations: [this.checkLine()]
     };
+
+    this.footer = {
+      '#select': 'Total',
+      'Division': 500
+    }
+
     this.setTable();
     this.listFormField = this.columns.map(m => m.cell)
       .filter(f => f.component !== KlesFormTextComponent)
