@@ -10,8 +10,7 @@
           </ng-container>
         </div>
       </th>
-      <!-- [style]="getCellStyle(row,column)" -->
-      <div *ngIf="column.visible">
+      <div>
         <!-- <td mat-cell *cdkCellDef="let row;let index = index;" klesCellStyle [row]="row" [column]="column" -->
         <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
@@ -25,7 +24,6 @@
           </ng-container>
         </td>
       </div>
-
 
     </ng-container>
 

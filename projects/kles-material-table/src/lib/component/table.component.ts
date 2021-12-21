@@ -2,14 +2,14 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, ViewEncapsulation, OnDestroy
+    ChangeDetectorRef, Inject, OnDestroy
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MatPaginator } from "@angular/material/paginator"
+import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -21,7 +21,6 @@ import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicfo
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { takeUntil, tap } from 'rxjs/operators';
-import { FieldPipe } from '../pipe/field.pipe';
 import { IChangeCell, IChangeHeaderFooterCell } from '../models/cell.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
 import { Subject } from 'rxjs';
@@ -480,5 +479,15 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public isSortingDisabled(column: KlesColumnConfig): boolean {
         return column.sortable || false;
+    }
+
+
+    public setVisible(name: string, visible: boolean): void {
+        const column = this.columns.find(col => col.columnDef === name);
+        if (column) {
+            column.visible = visible;
+        }
+        this.displayedColumns = this.columns.filter(c => c.visible).map(c => c.columnDef);
+        this.ref.markForCheck();
     }
 }
