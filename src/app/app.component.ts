@@ -6,7 +6,9 @@ import {
   KlesFormDateComponent,
   KlesFormInputComponent, KlesFormLabelComponent, KlesFormTextComponent,
   autocompleteObjectValidator,
-  KlesFormButtonFileComponent
+  KlesFormButtonFileComponent,
+  KlesFormButtonToogleGroupComponent,
+  KlesFormSlideToggleComponent
 } from '@3kles/kles-material-dynamicforms';
 import {
   KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
@@ -122,6 +124,18 @@ export class AppComponent implements OnInit, AfterViewInit {
       name: 'date',
       component: KlesFormDateComponent,
       value: new Date()
+    },
+    {
+      name: 'FACI',
+      component: KlesFormSlideToggleComponent,
+      label: 'FACI column',
+      value: true
+    },
+    {
+      name: 'DIVI',
+      component: KlesFormSlideToggleComponent,
+      label: 'DIVI column',
+      value: true
     }
   ];
 
@@ -711,6 +725,18 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.formTable.form.valueChanges.subscribe(s => {
       // console.log('Button=', s);
 
+      if (s.DIVI) {
+        this.tableContainer.componentRef.instance.setVisible('Division', true);
+      } else {
+        this.tableContainer.componentRef.instance.setVisible('Division', false);
+      }
+      if (s.FACI) {
+        this.tableContainer.componentRef.instance.setVisible('Facility', true);
+      } else {
+        this.tableContainer.componentRef.instance.setVisible('Facility', false);
+      }
+
+
       const val = Object.keys(s).find(f => s[f]);
       console.log(val);
 
@@ -732,9 +758,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           this.openDynamicFormDialog(this.table.selection.selected[0].value);
           break;
       }
-      if (val) {
-        this.formTable.form.reset();
-      }
+      // if (val) {
+      //   this.formTable.form.reset();
+      // }
     });
 
   }
