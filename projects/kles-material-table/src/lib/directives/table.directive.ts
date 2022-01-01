@@ -31,7 +31,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        console.log('Directive KlesTable OnChanges=', changes);
         if (changes.tableConfig) {
             this.tableConfig = changes.tableConfig.currentValue;
             if (this.tableConfig) {
@@ -55,7 +54,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
     }
 
     buildComponent() {
-        console.log('Directive KlesTable BuildComp=', this.tableConfig);
         const options = {
             providers: [{
                 provide: 'tableService',

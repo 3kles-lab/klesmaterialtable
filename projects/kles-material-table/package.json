@@ -1,6 +1,6 @@
 {
   "name": "@3kles/kles-material-table",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "peerDependencies": {
     "@3kles/kles-material-dynamicforms": "^1.0.0",
     "@angular/animations": "~9.1.0",

@@ -18,7 +18,6 @@ export class KlesResizeColumnDirective implements OnInit {
     }
 
     ngOnInit() {
-        console.warn('Resizable=', this.resizable);
         if (this.resizable) {
             const row = this.renderer.parentNode(this.column);
             const thead = this.renderer.parentNode(row);

@@ -16,11 +16,9 @@ export class TableService extends classes(KlesTableService) {
 
     constructor() {
         super();
-        console.log('TableService Table=', this.table);
     }
 
     onDataLoaded() {
-        console.log('Data loaded=', this.table.getFormArray());
         this.onLoaded.next(true);
 
     }
