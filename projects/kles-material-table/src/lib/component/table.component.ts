@@ -238,28 +238,19 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return group;
     }
 
-    public updateFormCell(index: number, cell: IKlesFieldConfig, value?: any) {
+    public updateFormCell(index: number, cell: IKlesFieldConfig) {
 
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
-        const column = this.columns.find(col => col.columnDef === cell.name);
-        const row = this._lines[index];
 
         if (cellIndex >= 0) {
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
 
-            const control = this.buildControlField(cell, value);
-            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
-                const group = control.parent;
-                this.tableService.onCellChange({ column, row, group });
-                this._onChangeCell.emit({ column, row, group });
-            });
-            control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
-                const group = control.parent;
-                this.tableService.onStatusCellChange({ cell: control, group, status });
-                this._onStatusCellChange.emit({ cell: control, group, status });
-            });
+            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).controls[cell.name]
+                .setValidators(this.bindValidations(cell.validations || []));
+            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).controls[cell.name]
+                .setAsyncValidators(this.bindAsyncValidations(cell.asyncValidations || []));
 
-            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
+
             this.ref.markForCheck();
         }
     }
