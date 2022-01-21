@@ -238,7 +238,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return group;
     }
 
-    public updateFormCell(index: number, cell: IKlesFieldConfig) {
+    public updateFormCell(index: number, cell: IKlesFieldConfig, value?: any) {
 
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
         const column = this.columns.find(col => col.columnDef === cell.name);
@@ -247,7 +247,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         if (cellIndex >= 0) {
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
 
-            const control = this.buildControlField(cell, null);
+            const control = this.buildControlField(cell, value);
             control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group });
