@@ -1,10 +1,9 @@
-import { ChangeDetectorRef, EmbeddedViewRef, Optional, Pipe, PipeTransform, Self, Type } from '@angular/core';
-import { KlesTableComponent } from '../component/table.component';
+import { ChangeDetectorRef, EmbeddedViewRef, Pipe, PipeTransform, Type } from '@angular/core';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 
 @Pipe({
     name: 'fieldPipe',
-    pure: true
+    pure: false
 })
 export class FieldPipe implements PipeTransform {
 
