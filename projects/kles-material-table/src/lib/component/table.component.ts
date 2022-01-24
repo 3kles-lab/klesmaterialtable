@@ -248,7 +248,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         if (cellIndex >= 0 && column) {
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
             const colCell = _.cloneDeep(cell);
-            const control = this.buildControlField(colCell, ((this.form.controls.rows as FormArray).controls[index] as FormGroup).value);
+            const control = this.buildControlField(colCell,
+                ((this.form.controls.rows as FormArray).controls[index] as FormGroup).value[cell.name] || cell.value);
 
             ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
 
