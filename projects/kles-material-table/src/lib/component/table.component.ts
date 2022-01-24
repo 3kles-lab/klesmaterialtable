@@ -193,7 +193,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Form Array Line Table */
     initFormArray() {
         this.lineFields = [];
-        const array = this.fb.array(this._lines.map(row => {
+        const array = this.fb.array(this._lines.map((row) => {
             return this.addFormLine(row);
         }));
         return array;
@@ -202,7 +202,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     addFormLine(row): FormGroup {
         const group = this.fb.group({});
         const idControl = this.fb.control(row._id);
+        const indexControl = this.fb.control(row._index);
         group.addControl('_id', idControl);
+        group.addControl('_index', indexControl);
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
@@ -211,8 +213,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             listField.push(colCell);
             control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
                 const group = control.parent;
-                this.tableService.onCellChange({ column, row, group });
-                this._onChangeCell.emit({ column, row, group });
+                this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e }, group });
+                this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e }, group });
             });
             control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
                 const group = control.parent;
@@ -241,16 +243,26 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     public updateFormCell(index: number, cell: IKlesFieldConfig) {
 
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
+        const column = this.columns.find(col => col.columnDef === cell.name);
 
-        if (cellIndex >= 0) {
+        if (cellIndex >= 0 && column) {
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
+            const colCell = _.cloneDeep(cell);
+            const control = this.buildControlField(colCell, ((this.form.controls.rows as FormArray).controls[index] as FormGroup).value);
 
-            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).controls[cell.name]
-                .setValidators(this.bindValidations(cell.validations || []));
-            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).controls[cell.name]
-                .setAsyncValidators(this.bindAsyncValidations(cell.asyncValidations || []));
+            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
 
+            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
+                const group = control.parent;
+                this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e }, group });
+                this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e }, group });
+            });
 
+            control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
+                const group = control.parent;
+                this.tableService.onStatusCellChange({ cell: control, group, status });
+                this._onStatusCellChange.emit({ cell: control, group, status });
+            });
             this.ref.markForCheck();
         }
     }
@@ -396,15 +408,17 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     updateData(lines: any[]) {
-        this._lines = lines.map(l => {
+        this._lines = lines.map((l, index) => {
             const data = { ...l };
             const options = data.options;
             const _id = l._id || uuid.v4();
+            const _index = index;
 
             delete data._id;
             delete data.options;
             return {
                 _id,
+                _index,
                 ...options && { options },
                 value: data,
 
