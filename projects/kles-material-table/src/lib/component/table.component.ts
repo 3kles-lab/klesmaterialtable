@@ -302,9 +302,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
         if (field.type === 'group') {
             const subGroup = this.fb.group({});
+            console.log('value', value);
             field.collections.forEach(subfield => {
                 const control = this.fb.control(
-                    subfield.value,
+                    value[subfield.name],
                     this.bindValidations(subfield.validations || []),
                     this.bindAsyncValidations(subfield.asyncValidations || [])
                 );
