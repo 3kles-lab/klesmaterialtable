@@ -305,7 +305,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             console.log('value', value);
             field.collections.forEach(subfield => {
                 const control = this.fb.control(
-                    value[subfield.name],
+                    value ? value[subfield.name] : null,
                     this.bindValidations(subfield.validations || []),
                     this.bindAsyncValidations(subfield.asyncValidations || [])
                 );
