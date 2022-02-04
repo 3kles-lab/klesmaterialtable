@@ -24,6 +24,9 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     onFooterChange(e: any) { }
     onFooterCellChange(e: IChangeHeaderFooterCell) { }
 
+    //Paginator
+    onPageChange(e: any) { }
+
     //Data
     onDataLoaded() { }
 
@@ -32,15 +35,22 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     //Sorting
     getSortingDataAccessor = (item: AbstractControl, property) => {
-        let value: any = item.value[property];
-        if (typeof value === 'string') {
-            value = value.toLowerCase();
+        if (!item.value) {
+            return item.value;
         }
-        else if (typeof value === 'object') {
-            if (value.key) {
-                value = value.key;
+        let value: any = item.value[property];
+
+        if (value) {
+            if (typeof value === 'string') {
+                value = value.toLowerCase();
+            }
+            else if (typeof value === 'object') {
+                if (value.key) {
+                    value = value.key;
+                }
             }
         }
+
         return value;
     };
 

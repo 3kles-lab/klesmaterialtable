@@ -15,7 +15,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
             const val = (e.group as FormGroup).controls[this.columnSelect].value;
             this.table.getFormArray().controls.forEach((e: FormGroup) => {
                 e.controls[this.columnSelect]?.patchValue(val);
-            })
+            });
         }
     }
 

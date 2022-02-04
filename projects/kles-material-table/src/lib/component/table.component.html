@@ -38,6 +38,6 @@
 
 </form>
 <div [hidden]="hidePaginator">
-  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true">
+  <mat-paginator #paginator [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" [showFirstLastButtons]="true" (page)="pageChanged($event)">
   </mat-paginator>
 </div>

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AbstractKlesTableService } from './abstracttable.service';
 import { classes } from 'polytype';
 import { DefaultKlesTableService } from './defaulttable.service';
 import { KlesSelectionTableService } from './features/selection/selectiontable.service';
 import { KlesTextFilterTableService } from './features/filter/textfiltertable.service';
-import { FormArray, FormGroup } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 
 // @Injectable({
 //     providedIn: 'root'
@@ -13,14 +12,10 @@ import { FormArray, FormGroup } from '@angular/forms';
 export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesTextFilterTableService) {
 
     constructor() {
-        // super();
-        // this.columnExclude = '#select';
-        // this.columnSelect = '#select';
-
         super
             (
                 { super: KlesSelectionTableService, arguments: ['#select'] },
-                { super: KlesTextFilterTableService }
+                { super: KlesTextFilterTableService },
             );
     }
     //Header 
@@ -40,4 +35,6 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
 
     //Footer
     onFooterChange(e: any) { }
+
+    onPageChange(event: PageEvent) { }
 }

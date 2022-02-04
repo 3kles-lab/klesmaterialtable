@@ -9,7 +9,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -302,7 +302,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
         if (field.type === 'group') {
             const subGroup = this.fb.group({});
-            console.log('value', value);
             field.collections.forEach(subfield => {
                 const control = this.fb.control(
                     value ? value[subfield.name] : null,
@@ -522,5 +521,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         }
         this.displayedColumns = this.columns.filter(c => c.visible).map(c => c.columnDef);
         this.ref.markForCheck();
+    }
+
+    public pageChanged(event: PageEvent) {
+        this.tableService.onPageChange(event);
     }
 }

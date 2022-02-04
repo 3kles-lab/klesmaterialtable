@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { SafeStyle } from '@angular/platform-browser';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
 import { KlesColumnConfig } from '../models/columnconfig.model';
@@ -33,6 +34,9 @@ export abstract class AbstractKlesTableService {
     //Sorting
     abstract getSortingDataAccessor(item: AbstractControl, property);
 
+    //Pagination
+    abstract onPageChange(e: PageEvent);
+
     //Manage Record
     abstract addRecord(record);
     abstract deleteRecord(record);
@@ -42,5 +46,4 @@ export abstract class AbstractKlesTableService {
     public setTable(table: any) {
         this.table = table;
     }
-
 }
