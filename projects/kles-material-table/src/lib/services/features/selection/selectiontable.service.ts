@@ -1,5 +1,5 @@
-import { FormArray, FormGroup } from "@angular/forms";
-import { KlesTableComponent } from "../../../component/table.component";
+import { FormGroup } from "@angular/forms";
+import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
 
 export class KlesSelectionTableService implements KlesTableBaseService {

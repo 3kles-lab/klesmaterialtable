@@ -1,5 +1,5 @@
-import { KlesTableComponent } from '../../component/table.component';
+import { KlesTableComponent } from '../../component/table/table.component';
 
-export interface KlesTableBaseService{
-    table:KlesTableComponent
+export interface KlesTableBaseService {
+    table: KlesTableComponent
 }

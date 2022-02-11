@@ -4,7 +4,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { SafeStyle } from '@angular/platform-browser';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
 import { KlesColumnConfig } from '../models/columnconfig.model';
-
 @Injectable({
     providedIn: 'root'
 })

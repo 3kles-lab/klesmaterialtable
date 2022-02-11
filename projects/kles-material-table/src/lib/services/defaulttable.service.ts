@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';

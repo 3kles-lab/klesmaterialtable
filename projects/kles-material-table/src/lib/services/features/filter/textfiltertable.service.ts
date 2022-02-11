@@ -1,6 +1,6 @@
-import { FormArray, FormGroup } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import * as _ from "lodash";
-import { KlesTableComponent } from "../../../component/table.component";
+import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
 export class KlesTextFilterTableService implements KlesTableBaseService {
     table: KlesTableComponent;

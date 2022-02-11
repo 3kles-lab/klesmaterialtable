@@ -1,7 +1,4 @@
 import { Pipe, PipeTransform, ChangeDetectorRef, EmbeddedViewRef, Type } from '@angular/core';
-import { KlesColumnConfig } from '../models/columnconfig.model';
-
-
 @Pipe({
     name: 'groupPipe',
     pure: true

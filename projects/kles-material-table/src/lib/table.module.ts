@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-
 import { NgModule } from '@angular/core';
-import { KlesTableComponent } from './component/table.component';
+import { KlesTableComponent } from './component/table/table.component';
+import { KlesLazyTableComponent } from './component/lazytable/lazytable.component';
 import { MaterialModule } from './modules/material.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +15,7 @@ import { FieldPipe } from './pipe/field.pipe';
 import { GroupPipe } from './pipe/group.pipe';
 import { ElevationPipe } from './pipe/elevation.pipe';
 import { KlesCellStyleDirective } from './directives/cellstyle.directive';
-const components = [KlesTableComponent, KlesFormTextHeaderFilterComponent];
+const components = [KlesTableComponent, KlesLazyTableComponent, KlesFormTextHeaderFilterComponent];
 const directives = [KlesTableDirective, KlesResizeColumnDirective, KlesCellStyleDirective];
 const services = [AbstractKlesTableService, KlesTableService];
 const pipes = [FieldPipe, GroupPipe, ElevationPipe];

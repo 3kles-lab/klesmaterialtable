@@ -13,16 +13,16 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
-import { KlesColumnConfig } from '../models/columnconfig.model';
-import { Options } from '../models/options.model';
-import { Node } from '../models/node.model';
+import { KlesColumnConfig } from '../../models/columnconfig.model';
+import { Options } from '../../models/options.model';
+import { Node } from '../../models/node.model';
 import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { takeUntil, tap } from 'rxjs/operators';
-import { IChangeCell, IChangeHeaderFooterCell } from '../models/cell.model';
-import { AbstractKlesTableService } from '../services/abstracttable.service';
+import { IChangeCell, IChangeHeaderFooterCell } from '../../models/cell.model';
+import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -42,11 +42,11 @@ import { Subject } from 'rxjs';
 })
 
 export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    protected paginator: MatPaginator;
-    protected sort: MatSort;
-    private sortDefault = false;
+    public paginator: MatPaginator;
+    public sort: MatSort;
+    protected sortDefault = false;
 
-    private _onDestroy = new Subject<void>();
+    protected _onDestroy = new Subject<void>();
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
         this.sort = ms;
@@ -113,7 +113,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        private fb: FormBuilder,
+        protected fb: FormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,

@@ -8,6 +8,7 @@ export * from './lib/models/node.model';
 export * from './lib/models/options.model';
 export * from './lib/models/columnconfig.model';
 export * from './lib/models/tableconfig.model';
+export * from './lib/interfaces/pagination.interface';
 
 /**DIRECTIVE */
 export * from './lib/directives/table.directive';
@@ -15,13 +16,16 @@ export * from './lib/directives/resizecolumn.directive';
 export * from './lib/directives/cellstyle.directive';
 
 /**COMPONENT */
-export * from './lib/component/table.component';
+export * from './lib/component/table/table.component';
+export * from './lib/component/lazytable/lazytable.component';
 export * from './lib/component/header/textheaderfilter.component';
 
 /**SERVICES */
 export * from './lib/services/abstracttable.service';
 export * from './lib/services/defaulttable.service';
 export * from './lib/services/table.service';
+export * from './lib/services/lazy/abstractlazytable.service';
+export * from './lib/services/lazy/lazytable.service';
 
 /**FEATURES */
 export * from './lib/services/features/filter/textfiltertable.service';

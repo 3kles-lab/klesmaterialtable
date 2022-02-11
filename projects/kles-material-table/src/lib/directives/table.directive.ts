@@ -1,5 +1,4 @@
-import { ViewContainerRef, Component, Injector, ComponentFactoryResolver, ComponentRef, ReflectiveInjector, Directive, Input, Type, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { KlesTableComponent } from '../component/table.component';
+import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { KlesTableConfig } from '../models/tableconfig.model';
 
 @Directive({
