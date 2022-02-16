@@ -56,7 +56,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     /**Util Table */
     //Manage Record
-    addRecord(record) {
+    addRecord(record, index?: number) {
         const _id = record._id || uuid.v4();
         delete record._id;
 
@@ -64,8 +64,14 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
             _id,
             value: record
         };
-        this.table._lines.push(newRecord);
-        this.table.getFormArray().push(this.table.addFormLine(newRecord));
+        if (typeof index !== 'undefined') {
+            this.table._lines.splice(index, 0, newRecord);
+            this.table.getFormArray().insert(index, this.table.addFormLine(newRecord));
+        } else {
+            this.table._lines.push(newRecord);
+            this.table.getFormArray().push(this.table.addFormLine(newRecord));
+        }
+
         this.updateDataSource();
     }
 

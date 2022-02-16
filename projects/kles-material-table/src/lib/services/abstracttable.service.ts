@@ -37,7 +37,7 @@ export abstract class AbstractKlesTableService {
     abstract onPageChange(e: PageEvent);
 
     //Manage Record
-    abstract addRecord(record);
+    abstract addRecord(record, index?: number);
     abstract deleteRecord(record);
     abstract updateRecord(record);
 
