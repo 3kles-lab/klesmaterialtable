@@ -25,6 +25,7 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
             return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
 
                 let keyValue = data?.controls[key]?.value;
+
                 if (!keyValue && searchString[key].length === 0) {
                     return true;
                 } else if (!keyValue) {
@@ -38,7 +39,7 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
                 if (column.cell.property) {
                     keyValue = data?.controls[key]?.value[column.cell.property];
                 }
-                return keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
+                return keyValue && keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
             });
         };
         return myFilterPredicate;

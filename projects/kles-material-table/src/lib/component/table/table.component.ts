@@ -298,7 +298,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             return;
         }
 
-        if (value === null) { value = ''; }
+        // if (value === null) { value = ''; }
 
         if (field.type === 'group') {
             const subGroup = this.fb.group({});
