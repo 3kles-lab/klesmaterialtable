@@ -8,11 +8,14 @@ import {
   autocompleteObjectValidator,
   KlesFormButtonFileComponent,
   KlesFormButtonToogleGroupComponent,
-  KlesFormSlideToggleComponent
+  KlesFormSlideToggleComponent,
+  KlesFormInputClearableComponent,
+  KlesFormSelectSearchComponent
 } from '@3kles/kles-material-dynamicforms';
 import {
   KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
-  KlesFormTextHeaderFilterComponent
+  KlesFormTextHeaderFilterComponent,
+  KlesFormDynamicHeaderFilterComponent
 } from 'kles-material-table';
 import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
@@ -203,13 +206,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         //Selection column
         columnDef: '#select', sticky: false, visible: true,
         headerCell: {
-          type: 'checkbox',
           name: '#select',
           component: KlesFormCheckboxComponent,
           indeterminate: false,
         } as IKlesFieldConfig,
         cell: {
-          type: 'checkbox',
           name: '#select',
           component: KlesFormCheckboxComponent,
         } as IKlesFieldConfig,
@@ -223,7 +224,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         columnDef: 'Api', sticky: false, visible: false,
         headerCell: {
           name: 'Api',
-          type: 'input',
           label: 'result.text',
           component: KlesFormTextComponent,
           value: 'result.text',//this.translate.instant('result.text'),
@@ -368,7 +368,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'Style',
           label: this.translate.instant('style.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormInputClearableComponent
         } as IKlesFieldConfig,
         cell: {
           type: 'text',
@@ -390,7 +391,8 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'Color',
           label: this.translate.instant('color.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormInputClearableComponent
         } as IKlesFieldConfig,
         cell: {
           type: 'text',
@@ -448,15 +450,34 @@ export class AppComponent implements OnInit, AfterViewInit {
         } as IKlesFieldConfig,
       },
       {
-        columnDef: 'Quantity', sticky: false, visible: true,
+        columnDef: 'BgColor', sticky: false, visible: true,
         filterable: true,
         sortable: true,
         headerCell: {
           type: 'text',
+          name: 'BgColor',
+          label: this.translate.instant('color.text'),
+          placeholder: this.translate.instant('filter.text'),
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormColorComponent
+        } as IKlesFieldConfig,
+        cell: {
+          type: 'text',
+          name: 'BgColor',
+          component: KlesFormColorComponent
+        } as IKlesFieldConfig,
+      },
+      {
+        columnDef: 'Quantity', sticky: false, visible: true,
+        filterable: true,
+        sortable: true,
+        headerCell: {
+          inputType: 'number',
           name: 'Quantity',
           label: this.translate.instant('quantity.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormInputClearableComponent
         } as IKlesFieldConfig,
         cell: {
           inputType: 'number',
@@ -493,7 +514,16 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'OrderType',
           label: this.translate.instant('orderType.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          multiple: true,
+          options: new BehaviorSubject<any[]>(this.listOrderType),
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormSelectSearchComponent,
+          autocomplete: true,
+          autocompleteComponent: AutocompleteComponent,
+          displayWith: ((value: any) => {
+            return this.displayWithKeyLabel(value);
+          }),
+          property: 'ORTY',
         } as IKlesFieldConfig,
         cell: {
           type: 'text',
@@ -559,7 +589,9 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'PlannedDate',
           label: this.translate.instant('plannedDate.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          component: KlesFormDynamicHeaderFilterComponent,
+          // autocompleteComponent: KlesFormDateComponent,
+          filterComponent: KlesFormDateComponent,
         } as IKlesFieldConfig,
         cell: {
           inputType: 'text',
@@ -1139,6 +1171,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A01',
     ProjectNumber: 'SUMMER',
@@ -1152,6 +1185,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 5,
     OrderType: 'A03',
     ProjectNumber: 'WINTER',
@@ -1165,6 +1199,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB02-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 14,
     OrderType: 'A04',
     ProjectNumber: 'ff',
@@ -1178,6 +1213,7 @@ const data = [
     Color: 'YY02',
     Size: 'X00',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A01',
     ProjectNumber: 'SUMMER',
@@ -1191,6 +1227,7 @@ const data = [
     Color: 'YY09',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A01',
     ProjectNumber: 'SUMMER',
@@ -1204,6 +1241,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1218,6 +1256,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1231,6 +1270,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1244,6 +1284,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1257,6 +1298,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1270,6 +1312,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1283,6 +1326,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1296,6 +1340,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1309,6 +1354,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1322,6 +1368,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1335,6 +1382,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1348,6 +1396,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
@@ -1361,6 +1410,7 @@ const data = [
     Color: 'YY02',
     Size: 'X008',
     ItemNumber: 'AMB01-Y02-008',
+    BgColor: '#FFFFFF',
     Quantity: 10,
     OrderType: 'A05',
     ProjectNumber: 'SUMMER',
