@@ -15,8 +15,10 @@ import { FieldPipe } from './pipe/field.pipe';
 import { GroupPipe } from './pipe/group.pipe';
 import { ElevationPipe } from './pipe/elevation.pipe';
 import { KlesCellStyleDirective } from './directives/cellstyle.directive';
-const components = [KlesTableComponent, KlesLazyTableComponent, KlesFormTextHeaderFilterComponent];
-const directives = [KlesTableDirective, KlesResizeColumnDirective, KlesCellStyleDirective];
+import { KlesFormDynamicHeaderFilterComponent } from './component/header/dynamic-headerfilter.component';
+import { KlesComponentHeaderDirective } from './directives/dynamic-component.directive';
+const components = [KlesTableComponent, KlesLazyTableComponent, KlesFormTextHeaderFilterComponent, KlesFormDynamicHeaderFilterComponent];
+const directives = [KlesTableDirective, KlesResizeColumnDirective, KlesCellStyleDirective,KlesComponentHeaderDirective];
 const services = [AbstractKlesTableService, KlesTableService];
 const pipes = [FieldPipe, GroupPipe, ElevationPipe];
 

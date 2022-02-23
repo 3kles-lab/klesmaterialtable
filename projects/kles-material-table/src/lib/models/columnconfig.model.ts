@@ -1,4 +1,5 @@
 import { IKlesFieldConfig } from '@3kles/kles-material-dynamicforms';
+import { IKlesHeaderFieldConfig } from './header-field.config.model';
 
 export interface KlesColumnConfig {
     columnDef: string;
@@ -10,7 +11,7 @@ export interface KlesColumnConfig {
     filterable?: boolean;
     sortable?: boolean;
     resizable?: boolean;
-    headerCell: IKlesFieldConfig;
+    headerCell: IKlesHeaderFieldConfig;
     cell: IKlesFieldConfig;
     footerCell?: IKlesFieldConfig;
 }
