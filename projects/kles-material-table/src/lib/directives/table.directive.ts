@@ -70,7 +70,12 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
         this.componentRef = this.container.createComponent(factory, 0, injector);
 
-        this.componentRef.instance.columns = this.tableConfig.columns;
+        this.componentRef.instance.columns = this.tableConfig.columns.map(m => {
+            const obj = { ...m };
+            obj.headerCell.filterable = obj.filterable;
+            obj.headerCell.sortable = obj.sortable;
+            return obj;
+        });
         if (this.tableConfig.options) {
             this.componentRef.instance.options = this.tableConfig.options;
         }
