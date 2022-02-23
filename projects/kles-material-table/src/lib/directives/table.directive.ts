@@ -1,4 +1,7 @@
+import { EnumType, KlesFormColorComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormSelectSearchComponent } from '@3kles/kles-material-dynamicforms';
 import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
 
 @Directive({
@@ -74,6 +77,35 @@ export class KlesTableDirective implements OnInit, OnChanges {
             const obj = { ...m };
             obj.headerCell.filterable = obj.filterable;
             obj.headerCell.sortable = obj.sortable;
+
+            if ((obj.filterable || obj.headerCell.filterable) && !obj.headerCell.component && obj.headerCell.type) {
+                obj.headerCell.component = KlesFormDynamicHeaderFilterComponent;
+                switch (obj.headerCell.type) {
+                    case EnumType.date:
+                        obj.headerCell.filterComponent = KlesFormDateComponent;
+                        break;
+                    case EnumType.color:
+                        obj.headerCell.filterComponent = KlesFormColorComponent;
+                        break;
+                    case EnumType.list:
+                        obj.headerCell.filterComponent = KlesFormInputClearableComponent;
+                        obj.headerCell.autocomplete = true;
+                        obj.headerCell.options = new BehaviorSubject<any[]>([]);
+                        break;
+                    case EnumType.multi:
+                        obj.headerCell.filterComponent = KlesFormSelectSearchComponent;
+                        obj.headerCell.autocomplete = true;
+                        obj.headerCell.options = new BehaviorSubject<any[]>([]);
+                        obj.headerCell.multiple = true;
+                        break;
+                    default:
+                        obj.headerCell.filterComponent = KlesFormInputClearableComponent;
+                        obj.headerCell.inputType = obj.headerCell.type;
+                        break;
+
+                }
+            }
+
             return obj;
         });
         if (this.tableConfig.options) {
