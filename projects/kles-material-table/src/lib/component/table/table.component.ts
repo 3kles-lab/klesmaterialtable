@@ -16,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { Options } from '../../models/options.model';
 import { Node } from '../../models/node.model';
-import { IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
+import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
@@ -294,13 +294,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     /**Field and control */
     buildControlField(field: IKlesFieldConfig, value?: any): AbstractControl {
-        if (field.type === 'button') {
+        if (field.type === EnumType.button) {
             return;
         }
 
-        // if (value === null) { value = ''; }
-
-        if (field.type === 'group') {
+        if (field.type === EnumType.group) {
             const subGroup = this.fb.group({});
             field.collections.forEach(subfield => {
                 const control = this.fb.control(
@@ -337,7 +335,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             if (field.disabled) {
                 control.disable();
             }
-
             return control;
         }
     }
