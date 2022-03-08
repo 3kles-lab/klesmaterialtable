@@ -5,9 +5,9 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 @Component({
     selector: 'kles-form-textheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>    
-    <div (click)="stopPropagation($event)">
-            <ng-container klesComponentHeader [component]="field.filterComponent" [group]="group" [field]="field" >        
+    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
+    <div (click)="stopPropagation($event)" *ngIf="field.filterComponent">
+            <ng-container klesComponentHeader [component]="field.filterComponent" [group]="group" [field]="field" >
             </ng-container>
     </div>
     `,
