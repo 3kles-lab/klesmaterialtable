@@ -47,6 +47,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     protected sortDefault = false;
 
     protected _onDestroy = new Subject<void>();
+    protected _onLinesChanges = new Subject<void>();
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
         this.sort = ms;
@@ -125,7 +126,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     ngOnDestroy(): void {
+        this._onLinesChanges.next();
         this._onDestroy.next();
+        this._onLinesChanges.complete();
+        this._onDestroy.complete();
     }
 
     ngOnInit() {
@@ -193,6 +197,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Form Array Line Table */
     initFormArray() {
         this.lineFields = [];
+        this._onLinesChanges.next();
         const array = this.fb.array(this._lines.map((row) => {
             return this.addFormLine(row);
         }));
@@ -211,12 +216,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, row.value[colCell.name]);
             listField.push(colCell);
-            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
+            control.valueChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e }, group });
                 this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e }, group });
             });
-            control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
+            control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });
                 this._onStatusCellChange.emit({ cell: control, group, status });
@@ -229,7 +234,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         group.setValidators(this.lineValidations);
         group.setAsyncValidators(this.lineAsyncValidations);
 
-        group.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(value => {
+        group.valueChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(value => {
             this.tableService.onLineChange({ group, row, value });
         });
 
@@ -253,13 +258,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
             ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
 
-            control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
+            control.valueChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e }, group });
                 this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e }, group });
             });
 
-            control.statusChanges.pipe(takeUntil(this._onDestroy)).subscribe(status => {
+            control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });
                 this._onStatusCellChange.emit({ cell: control, group, status });
