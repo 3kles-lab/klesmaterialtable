@@ -2,11 +2,12 @@ import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { startWith, map, switchMap } from 'rxjs/operators';
+import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 
 @Component({
     selector: 'kles-form-textheaderfilter',
     template: `
-    <div><span>{{ field.label | translate}}</span></div>
+    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
     <mat-form-field [formGroup]="group" class="form-element">
         <ng-container *ngIf="field.autocomplete; else notAutoComplete">
             <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType"
@@ -21,7 +22,7 @@ import { startWith, map, switchMap } from 'rxjs/operators';
         </ng-template>
 
         <button mat-button matSuffix mat-icon-button aria-label="Clear"
-                        (click)="group.controls[field.name].reset(); stopPropagation($event)">
+                        (click)="group.controls[field.name].reset(''); stopPropagation($event)">
                         <mat-icon>close</mat-icon>
                      </button>
 
@@ -39,6 +40,7 @@ import { startWith, map, switchMap } from 'rxjs/operators';
 })
 export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
 
+    field: IKlesHeaderFieldConfig;
     filteredOption: Observable<any[]>;
     options$: Observable<any[]>;
 
