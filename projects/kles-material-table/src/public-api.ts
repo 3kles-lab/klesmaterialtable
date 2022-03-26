@@ -20,6 +20,7 @@ export * from './lib/directives/dynamic-component.directive';
 /**COMPONENT */
 export * from './lib/component/table/table.component';
 export * from './lib/component/lazytable/lazytable.component';
+export * from './lib/component/header/textheader.component';
 export * from './lib/component/header/textheaderfilter.component';
 export * from './lib/component/header/dynamic-headerfilter.component';
 
@@ -31,6 +32,7 @@ export * from './lib/services/lazy/abstractlazytable.service';
 export * from './lib/services/lazy/lazytable.service';
 
 /**FEATURES */
+export * from './lib/services/features/tableservice.interface';
 export * from './lib/services/features/filter/textfiltertable.service';
 export * from './lib/services/features/filter/headerfilter-table.service';
 export * from './lib/services/features/selection/selectiontable.service';
