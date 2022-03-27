@@ -10,12 +10,15 @@ import {
   KlesFormButtonToogleGroupComponent,
   KlesFormSlideToggleComponent,
   KlesFormInputClearableComponent,
-  KlesFormSelectSearchComponent
+  KlesFormSelectSearchComponent,
+  EnumType
 } from '@3kles/kles-material-dynamicforms';
 import {
   KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
   KlesFormTextHeaderFilterComponent,
-  KlesFormDynamicHeaderFilterComponent
+  KlesFormDynamicHeaderFilterComponent,
+  KlesFormTextHeaderComponent,
+  IKlesHeaderFieldConfig
 } from 'kles-material-table';
 import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
@@ -285,7 +288,7 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'Facility',
           label: this.translate.instant('facility.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
+          component: KlesFormTextHeaderComponent,
         } as IKlesFieldConfig,
         cell: {
           type: 'text',
@@ -328,8 +331,10 @@ export class AppComponent implements OnInit, AfterViewInit {
           name: 'Warehouse',
           label: this.translate.instant('warehouse.text'),
           placeholder: this.translate.instant('filter.text'),
-          component: KlesFormTextHeaderFilterComponent,
-        } as IKlesFieldConfig,
+          component: KlesFormDynamicHeaderFilterComponent,
+          filterComponent: KlesFormInputComponent,
+          filterClearable: true,
+        } as IKlesHeaderFieldConfig,
         cell: {
           name: 'Warehouse',
           inputType: 'text',
@@ -585,14 +590,15 @@ export class AppComponent implements OnInit, AfterViewInit {
         filterable: true,
         sortable: true,
         headerCell: {
-          inputType: 'text',
+          type:EnumType.date,
           name: 'PlannedDate',
           label: this.translate.instant('plannedDate.text'),
           placeholder: this.translate.instant('filter.text'),
           component: KlesFormDynamicHeaderFilterComponent,
           // autocompleteComponent: KlesFormDateComponent,
           filterComponent: KlesFormDateComponent,
-        } as IKlesFieldConfig,
+          filterClearable:true
+        } as IKlesHeaderFieldConfig,
         cell: {
           inputType: 'text',
           name: 'PlannedDate',
