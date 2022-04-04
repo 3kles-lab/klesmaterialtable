@@ -1,13 +1,13 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
-import { FormBuilder } from "@angular/forms";
-import { DateAdapter } from "@angular/material/core";
-import { MatDialog } from "@angular/material/dialog";
-import { DomSanitizer } from "@angular/platform-browser";
-import { TranslateService } from "@ngx-translate/core";
-import { merge, of } from "rxjs";
-import { catchError, startWith, switchMap, tap } from "rxjs/operators";
-import { AbstractKlesLazyTableService } from "../../services/lazy/abstractlazytable.service";
-import { KlesTableComponent } from "../table/table.component";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { DateAdapter } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { DomSanitizer } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
+import { BehaviorSubject, merge, of } from 'rxjs';
+import { catchError, startWith, switchMap, tap } from 'rxjs/operators';
+import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
+import { KlesTableComponent } from '../table/table.component';
 
 @Component({
     selector: 'app-kles-lazytable',
@@ -19,6 +19,8 @@ import { KlesTableComponent } from "../table/table.component";
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     loading: boolean;
+
+    filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
@@ -36,18 +38,19 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         super.ngOnInit();
     }
     ngOnChanges(changes: SimpleChanges): void {
-        super.ngOnChanges(changes)
+        super.ngOnChanges(changes);
     }
     ngAfterViewInit(): void {
         super.ngAfterViewInit();
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page)
+        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$)
             .pipe(
                 startWith({}),
                 switchMap(() => {
                     this.loading = true;
-                    return this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize)
+                    return this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
+                        this.filteredValues$.getValue());
                 }),
                 tap(() => this.loading = false),
                 catchError(() => {

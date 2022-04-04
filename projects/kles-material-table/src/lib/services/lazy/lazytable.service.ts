@@ -1,23 +1,21 @@
-import { PageEvent } from "@angular/material/paginator";
-import { classes } from "polytype";
-import { Observable } from "rxjs";
-import { IPagination } from "../../interfaces/pagination.interface";
-import { DefaultKlesTableService } from "../defaulttable.service";
-import { KlesTextFilterTableService } from "../features/filter/textfiltertable.service";
-import { KlesSelectionTableService } from "../features/selection/selectiontable.service";
+import { PageEvent } from '@angular/material/paginator';
+import { classes } from 'polytype';
+import { Observable } from 'rxjs';
+import { IPagination } from '../../interfaces/pagination.interface';
+import { DefaultKlesTableService } from '../defaulttable.service';
+import { KlesSelectionTableService } from '../features/selection/selectiontable.service';
 
-export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesTextFilterTableService) {
+export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableService) {
 
     constructor(private data: IPagination) {
         super
             (
                 { super: KlesSelectionTableService, arguments: ['#select'] },
-                { super: KlesTextFilterTableService },
             );
     }
     //Header 
     onHeaderChange(e: any) {
-        this.filterData();
+        this.table.filteredValues$.next(this.table.formHeader.value);
     }
     onHeaderCellChange(e: any) {
         this.changeSelectionHeader(e);
@@ -38,8 +36,9 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
 
     }
 
-    load(sort: string, order: string, page: number, perPage: number): Observable<{ lines: any[], totalCount: number }> {
-        return this.data.list(sort, order, page, perPage);
+    load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):
+        Observable<{ lines: any[], totalCount: number }> {
+        return this.data.list(sort, order, page, perPage, filter);
     }
 
 }
