@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, merge, of } from 'rxjs';
-import { catchError, startWith, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, startWith, switchMap, tap } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 
@@ -44,7 +44,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         super.ngAfterViewInit();
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$)
+        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(200)))
             .pipe(
                 startWith({}),
                 switchMap(() => {
