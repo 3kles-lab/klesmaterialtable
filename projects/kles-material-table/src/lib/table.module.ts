@@ -18,9 +18,41 @@ import { KlesCellStyleDirective } from './directives/cellstyle.directive';
 import { KlesFormDynamicHeaderFilterComponent } from './component/header/dynamic-headerfilter.component';
 import { KlesComponentHeaderDirective } from './directives/dynamic-component.directive';
 import { KlesFormTextHeaderComponent } from './component/header/textheader.component';
-const components = [KlesTableComponent, KlesLazyTableComponent,KlesFormTextHeaderComponent, KlesFormTextHeaderFilterComponent, KlesFormDynamicHeaderFilterComponent];
-const directives = [KlesTableDirective, KlesResizeColumnDirective, KlesCellStyleDirective,KlesComponentHeaderDirective];
-const services = [AbstractKlesTableService, KlesTableService];
+import { KlesLeafComponent } from './component/treetable/cell/leaf.component';
+import { KlesNodeComponent } from './component/treetable/cell/node.component';
+import { KlesTreetableComponent } from './component/treetable/treetable.component';
+import { KlesDynamicCellDirective } from './directives/dynamic-cell.directive';
+import { KlesTreetableDirective } from './directives/treetable.directive';
+import { DefaultKlesTreetableService } from './services/treetable/defaulttreetable.service';
+import { ConverterService } from './services/treetable/converter.service';
+import { TreeService } from './services/treetable/tree.service';
+import { KlesTreetableService } from './services/treetable/treetable.service';
+const components = [
+    KlesTableComponent,
+    KlesLazyTableComponent,
+    KlesFormTextHeaderComponent,
+    KlesFormTextHeaderFilterComponent,
+    KlesFormDynamicHeaderFilterComponent,
+    KlesLeafComponent,
+    KlesNodeComponent,
+    KlesTreetableComponent
+];
+const directives = [
+    KlesTableDirective,
+    KlesResizeColumnDirective,
+    KlesCellStyleDirective,
+    KlesComponentHeaderDirective,
+    KlesDynamicCellDirective,
+    KlesTreetableDirective,
+];
+const services = [
+    AbstractKlesTableService,
+    KlesTableService,
+    DefaultKlesTreetableService, 
+    ConverterService, 
+    TreeService, 
+    KlesTreetableService
+];
 const pipes = [FieldPipe, GroupPipe, ElevationPipe];
 
 @NgModule({
