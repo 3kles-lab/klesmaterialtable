@@ -1,6 +1,8 @@
 import { FormArray, FormGroup } from "@angular/forms";
 import { KlesTreetableComponent } from "../../../component/treetable/treetable.component";
 import { KlesSelectionTableService } from "./selectiontable.service";
+import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
 
 export class KlesSelectionTreetableService extends KlesSelectionTableService {
     table: KlesTreetableComponent<any>;
@@ -96,25 +98,51 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
     }
 
     updateParent(column, group: FormGroup) {
-        const node = this.table.searchableTree.map(st => this.table.treeService.searchById(st, group.value._id)).find(st => st.isSome()).getOrElse(null);
-
+        // const node = this.table.searchableTree.map(st => this.table.treeService.searchById(st, group.value._id)).find(st => st.isSome()).getOrElse(null);
+        const node = this.table.searchableTree
+            .map(st => this.table.treeService.searchById(st, group.value._id))
+            .find(st =>
+                pipe(
+                    O.isSome(st)
+                )
+            );
         if (node) {
-            node.pathToRoot.forEach(parent => {
-                const parentGroup = this.table.dataSource.data.find(row => row.value._id === parent._id) as FormGroup;
+            // node.pathToRoot.forEach(parent => {
+            //     const parentGroup = this.table.dataSource.data.find(row => row.value._id === parent._id) as FormGroup;
 
-                const index = this.table.dataSource.data.findIndex(row => row.value._id === parent._id);
-                this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = false;
+            //     const index = this.table.dataSource.data.findIndex(row => row.value._id === parent._id);
+            //     this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = false;
 
-                if (this.childrenIsAllSelected(column, parentGroup)) {
-                    parentGroup.controls[column.columnDef].patchValue(true, { emitEvent: false });
-                } else if (this.childrenAtLeastOneSelected(column, parentGroup)) {
-                    this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = true;
-                    parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
-                } else {
-                    parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
-                }
+            //     if (this.childrenIsAllSelected(column, parentGroup)) {
+            //         parentGroup.controls[column.columnDef].patchValue(true, { emitEvent: false });
+            //     } else if (this.childrenAtLeastOneSelected(column, parentGroup)) {
+            //         this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = true;
+            //         parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+            //     } else {
+            //         parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+            //     }
 
-            })
+            // })
+            pipe(
+                node,
+                O.map(m => m.pathToRoot.forEach(parent => {
+                    const parentGroup = this.table.dataSource.data.find(row => row.value._id === parent._id) as FormGroup;
+
+                    const index = this.table.dataSource.data.findIndex(row => row.value._id === parent._id);
+                    this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = false;
+
+                    if (this.childrenIsAllSelected(column, parentGroup)) {
+                        parentGroup.controls[column.columnDef].patchValue(true, { emitEvent: false });
+                    } else if (this.childrenAtLeastOneSelected(column, parentGroup)) {
+                        this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = true;
+                        parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+                    } else {
+                        parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+                    }
+
+                })
+                )
+            );
         }
     }
 }

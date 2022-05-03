@@ -18,13 +18,15 @@ import {
   KlesFormTextHeaderFilterComponent,
   KlesFormDynamicHeaderFilterComponent,
   KlesFormTextHeaderComponent,
-  IKlesHeaderFieldConfig
+  IKlesHeaderFieldConfig,
+  KlesTreetableComponent,
+  KlesTreetableService
 } from 'kles-material-table';
 import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
 import * as moment from 'moment';
 import { Observable, of, timer } from 'rxjs';
-import { switchMap, catchError, map } from 'rxjs/operators';
+import { switchMap, catchError, map, delay } from 'rxjs/operators';
 import { FakeApiService } from './services/fakemi.service';
 import { IMIResponse } from '@infor-up/m3-odin';
 import { TableService } from './services/table.service';
@@ -157,6 +159,9 @@ export class AppComponent implements OnInit, AfterViewInit {
   title = 'KlesMaterialTable';
 
   lines: any[] = [];
+  lines$: Observable<any[]>;
+  treeTableConfig: KlesTableConfig;
+
   footer: any;
 
   listFacility = [];
@@ -203,6 +208,13 @@ export class AppComponent implements OnInit, AfterViewInit {
     console.log('ListOrderType=', this.listOrderType);
     this.listResponsible = await (this.miService.execute(MNS150MI_LstUserData).pipe(map(m => m.items))).toPromise();
     console.log('ListResponsible=', this.listResponsible);
+
+    this.lines$ = of(data).pipe(
+      map(m => {
+        return m.map(t => { return { value: t } });
+      }),
+      delay(1000)
+    );
 
     this.columns = [
       {
@@ -590,14 +602,14 @@ export class AppComponent implements OnInit, AfterViewInit {
         filterable: true,
         sortable: true,
         headerCell: {
-          type:EnumType.date,
+          type: EnumType.date,
           name: 'PlannedDate',
           label: this.translate.instant('plannedDate.text'),
           placeholder: this.translate.instant('filter.text'),
           component: KlesFormDynamicHeaderFilterComponent,
           // autocompleteComponent: KlesFormDateComponent,
           filterComponent: KlesFormDateComponent,
-          filterClearable:true
+          filterClearable: true
         } as IKlesHeaderFieldConfig,
         cell: {
           inputType: 'text',
@@ -718,6 +730,13 @@ export class AppComponent implements OnInit, AfterViewInit {
       //lineAsyncValidations: [this.checkLine()]
     };
 
+    this.treeTableConfig = {
+      columns: this.columns,
+      tableComponent: KlesTreetableComponent,
+      tableService: new KlesTreetableService(),
+      hidePaginator: true,
+    } as KlesTableConfig
+
     this.footer = {
       '#select': 'Total',
       'Division': 500
@@ -801,6 +820,10 @@ export class AppComponent implements OnInit, AfterViewInit {
       // }
     });
 
+  }
+
+  onSelected(event) {
+    console.log(event)
   }
 
   loadFile(file): any[] {

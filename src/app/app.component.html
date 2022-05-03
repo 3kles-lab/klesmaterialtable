@@ -22,4 +22,12 @@
   <ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines" [footer]="footer">
   </ng-container>
 
+  <ng-container *ngIf="lines$ | async as treeLines else loading" #treetable klesTreetable
+    [tableConfig]="treeTableConfig" [lines]="treeLines" (_onSelected)="onSelected($event)">
+  </ng-container>
+  <ng-template #loading>
+    <div>
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
 </main>

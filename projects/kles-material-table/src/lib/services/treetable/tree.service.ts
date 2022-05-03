@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
-import { Option, some, none } from 'fp-ts/lib/Option';
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from "fp-ts/lib/function";
 import { NodeInTree, SearchableNode, Node } from '../../models/node.model';
 
 @Injectable({
@@ -27,7 +28,7 @@ export class TreeService {
      * @param root the tree to be searched
      * @param id the id of the node to be retrieved
      */
-    searchById<T, K extends SearchableNode<T>>(root: K, id: string): Option<NodeInTree<T>> {
+    searchById<T, K extends SearchableNode<T>>(root: K, id: string): O.Option<NodeInTree<T>> {
         let matchingNode: K;
         const pathToRoot: { [k: string]: K } = {};
         this._traverse(root, (node: K) => {
@@ -39,12 +40,12 @@ export class TreeService {
             }
             return node._id !== id;
         });
-        return matchingNode ? some({
+        return matchingNode ? O.some({
             _id: matchingNode._id,
             value: matchingNode.value,
             children: matchingNode.children,
             pathToRoot: this.buildPath(id, pathToRoot)
-        }) : none;
+        }) : O.none;
     }
 
     /**
@@ -66,7 +67,10 @@ export class TreeService {
      * @param node the node we want to calculate the depth of
      */
     getNodeDepth<T, K extends SearchableNode<T>>(root: K, node: K): number {
-        return this.searchById(root, node._id).fold(-1, n => n.pathToRoot.length);
+        return pipe(
+            this.searchById(root, node._id),
+            O.fold(() => -1, n => n.pathToRoot.length)
+        )
     }
 
     /**
