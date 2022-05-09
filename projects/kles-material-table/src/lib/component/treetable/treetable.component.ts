@@ -15,6 +15,7 @@ import { ConverterService } from '../../services/treetable/converter.service';
 import { DefaultKlesTreetableService } from '../../services/treetable/defaulttreetable.service';
 import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTableComponent } from '../table/table.component';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -115,11 +116,20 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
             console.log('TreeTable Row=', row);
             const control = this.buildControlField(column.cell, row.value[column.cell.name]);
             listField.push({ ...column.cell });
-            control.valueChanges.subscribe(e => {
-                const group = control.parent;
-                this.tableService.onCellChange({ column, row, group });
-                this._onChangeCell.emit({ column, row, group });
-            });
+            control.valueChanges
+                .pipe(
+                    debounceTime(500),
+                    distinctUntilChanged((prev, curr) => {
+                        if (column.cell?.property && prev && curr) {
+                            return prev[column.cell.property] === curr[column.cell.property];
+                        }
+                        return prev === curr;
+                    }))
+                .subscribe(e => {
+                    const group = control.parent;
+                    this.tableService.onCellChange({ column, row, group });
+                    this._onChangeCell.emit({ column, row, group });
+                });
             control.statusChanges.subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });

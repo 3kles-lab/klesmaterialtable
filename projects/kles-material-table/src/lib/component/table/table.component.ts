@@ -20,10 +20,11 @@ import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import { takeUntil, tap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
 import { IChangeCell, IChangeHeaderFooterCell } from '../../models/cell.model';
 import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { Subject } from 'rxjs';
+import { property } from 'lodash';
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -216,7 +217,16 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, row.value[colCell.name]);
             listField.push(colCell);
-            control.valueChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(e => {
+            control.valueChanges.pipe(
+                takeUntil(this._onLinesChanges),
+                debounceTime(500),
+                distinctUntilChanged((prev, curr) => {
+                    if (column.cell?.property && prev && curr) {
+                        return prev[column.cell.property] === curr[column.cell.property];
+                    }
+                    return prev === curr;
+                })
+            ).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e }, group });
                 this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e }, group });
@@ -258,11 +268,18 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
             ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
 
-            control.valueChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(e => {
-                const group = control.parent;
-                this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e }, group });
-                this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e }, group });
-            });
+            control.valueChanges.pipe(takeUntil(this._onLinesChanges),
+                debounceTime(500),
+                distinctUntilChanged((prev, curr) => {
+                    if (column.cell?.property && prev && curr) {
+                        return prev[column.cell.property] === curr[column.cell.property];
+                    }
+                    return prev === curr;
+                })).subscribe(e => {
+                    const group = control.parent;
+                    this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e }, group });
+                    this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e }, group });
+                });
 
             control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
                 const group = control.parent;
