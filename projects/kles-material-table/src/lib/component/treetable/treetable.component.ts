@@ -120,8 +120,17 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
                 .pipe(
                     debounceTime(500),
                     distinctUntilChanged((prev, curr) => {
-                        if (column.cell?.property && prev && curr) {
-                            return prev[column.cell.property] === curr[column.cell.property];
+                        if (Array.isArray(prev) && Array.isArray(curr)) {
+                            if (column.cell?.property) {
+                                return prev.length === curr.length
+                                    && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
+                            } else {
+                                return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
+                            }
+                        } else {
+                            if (column.cell?.property && prev && curr) {
+                                return prev[column.cell.property] === curr[column.cell.property];
+                            }
                         }
                         return prev === curr;
                     }))
