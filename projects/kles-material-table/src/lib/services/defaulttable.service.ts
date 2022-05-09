@@ -5,6 +5,7 @@ import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
 import * as uuid from 'uuid';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
+import { boolean } from 'fp-ts';
 @Injectable({
     providedIn: 'root'
 })
@@ -82,18 +83,18 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
             const index = this.table.getFormArray().value.findIndex(f => f._id === id);
             this.table.getFormArray().removeAt(index);
             this.table._lines = this.table._lines.filter(f => f._id !== id);
-        })
+        });
         // console.log('List _lines=', this.table._lines);
         this.updateDataSource();
         this.table.selection.clear();
     }
 
 
-    updateRecord(record) {
+    updateRecord(record, options?: { emitEvent: boolean, onlySelf: boolean }) {
         const updateForm = this.table.getFormArray().controls
             .find((f: FormGroup) => f.controls._id.value === '' + record._id);
         if (updateForm) {
-            updateForm.patchValue(record);
+            updateForm.patchValue(record, options);
             this.updateDataSource();
             this.table.ref.detectChanges();
         }
