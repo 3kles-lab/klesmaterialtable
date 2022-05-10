@@ -166,8 +166,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
 
-    trackById(index: number, item: FormGroup): string {
-        return `${item.value._id}`;
+    trackById(index: number, item: FormGroup): any {
+        // return `${item.value._id}`;
+        return item;
     }
 
     /** Form Header */
@@ -220,21 +221,21 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             control.valueChanges.pipe(
                 takeUntil(this._onLinesChanges),
                 debounceTime(500),
-                distinctUntilChanged((prev, curr) => {
-                    if (Array.isArray(prev) && Array.isArray(curr)) {
-                        if (column.cell?.property) {
-                            return prev.length === curr.length
-                                && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
-                        } else {
-                            return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
-                        }
-                    } else {
-                        if (column.cell?.property && prev && curr) {
-                            return prev[column.cell.property] === curr[column.cell.property];
-                        }
-                    }
-                    return prev === curr;
-                })
+                // distinctUntilChanged((prev, curr) => {
+                //     if (Array.isArray(prev) && Array.isArray(curr)) {
+                //         if (column.cell?.property) {
+                //             return prev.length === curr.length
+                //                 && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
+                //         } else {
+                //             return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
+                //         }
+                //     } else {
+                //         if (column.cell?.property && prev && curr) {
+                //             return prev[column.cell.property] === curr[column.cell.property];
+                //         }
+                //     }
+                //     return prev === curr;
+                // })
             ).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e }, group });
