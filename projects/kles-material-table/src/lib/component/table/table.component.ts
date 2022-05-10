@@ -220,7 +220,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             listField.push(colCell);
             control.valueChanges.pipe(
                 takeUntil(this._onLinesChanges),
-                debounceTime(500),
+                debounceTime(colCell.debounceTime || 0),
                 // distinctUntilChanged((prev, curr) => {
                 //     if (Array.isArray(prev) && Array.isArray(curr)) {
                 //         if (column.cell?.property) {
