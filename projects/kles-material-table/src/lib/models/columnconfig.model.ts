@@ -1,4 +1,5 @@
 import { IKlesFieldConfig } from '@3kles/kles-material-dynamicforms';
+import { IKlesCellFieldConfig } from './cell.model';
 import { IKlesHeaderFieldConfig } from './header-field.config.model';
 
 export interface KlesColumnConfig {
@@ -12,8 +13,8 @@ export interface KlesColumnConfig {
     sortable?: boolean;
     resizable?: boolean;
     headerCell: IKlesHeaderFieldConfig;
-    cell: IKlesFieldConfig;
-    footerCell?: IKlesFieldConfig;
+    cell: IKlesCellFieldConfig;
+    footerCell?: IKlesCellFieldConfig;
 }
 export interface KlesTreeColumnConfig extends KlesColumnConfig {
     canExpand?: boolean;

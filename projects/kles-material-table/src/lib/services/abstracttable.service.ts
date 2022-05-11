@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { SafeStyle } from '@angular/platform-browser';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
@@ -37,9 +37,9 @@ export abstract class AbstractKlesTableService {
     abstract onPageChange(e: PageEvent);
 
     //Manage Record
-    abstract addRecord(record, index?: number);
+    abstract addRecord(record, index?: number): FormGroup;
     abstract deleteRecord(record);
-    abstract updateRecord(record);
+    abstract updateRecord(record, options?: { emitEvent: boolean, onlySelf: boolean });
 
     /**Setters */
     public setTable(table: any) {

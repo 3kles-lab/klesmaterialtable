@@ -20,11 +20,11 @@ import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material
 
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import { debounceTime, distinctUntilChanged, takeUntil, tap } from 'rxjs/operators';
-import { IChangeCell, IChangeHeaderFooterCell } from '../../models/cell.model';
+import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { IChangeCell, IChangeHeaderFooterCell, IKlesCellFieldConfig } from '../../models/cell.model';
 import { AbstractKlesTableService } from '../../services/abstracttable.service';
-import { Subject } from 'rxjs';
-import { property } from 'lodash';
+import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+
 
 @Component({
     selector: 'app-kles-dynamictable',
@@ -221,6 +221,26 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             control.valueChanges.pipe(
                 takeUntil(this._onLinesChanges),
                 debounceTime(colCell.debounceTime || 0),
+                switchMap((value) => {
+                    if (colCell.executeAfterChange) {
+                        colCell.pending = true;
+                        this.ref.markForCheck();
+                        return (colCell.executeAfterChange(value) as Observable<any>)
+                            .pipe(
+                                take(1),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of(null);
+                                }),
+                                map((response) => ({ value, response })),
+                                tap(() => {
+                                    colCell.pending = false;
+                                    this.ref.markForCheck();
+                                })
+                            );
+                    }
+                    return of({ value, response: null });
+                })
                 // distinctUntilChanged((prev, curr) => {
                 //     if (Array.isArray(prev) && Array.isArray(curr)) {
                 //         if (column.cell?.property) {
@@ -238,8 +258,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                 // })
             ).subscribe(e => {
                 const group = control.parent;
-                this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e }, group });
-                this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e }, group });
+                this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
+                this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
             });
             control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
                 const group = control.parent;
@@ -265,7 +285,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return group;
     }
 
-    public updateFormCell(index: number, cell: IKlesFieldConfig) {
+    public updateFormCell(index: number, cell: IKlesCellFieldConfig) {
 
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
         const column = this.columns.find(col => col.columnDef === cell.name);
@@ -279,16 +299,37 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
 
             control.valueChanges.pipe(takeUntil(this._onLinesChanges),
-                debounceTime(500),
-                distinctUntilChanged((prev, curr) => {
-                    if (column.cell?.property && prev && curr) {
-                        return prev[column.cell.property] === curr[column.cell.property];
+                debounceTime(colCell.debounceTime || 0),
+                switchMap((value) => {
+                    if (colCell.executeAfterChange) {
+                        colCell.pending = true;
+                        this.ref.markForCheck();
+                        return (colCell.executeAfterChange(value) as Observable<any>)
+                            .pipe(
+                                take(1),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of(null);
+                                }),
+                                map((response) => ({ value, response })),
+                                tap(() => {
+                                    colCell.pending = false;
+                                    this.ref.markForCheck();
+                                })
+                            );
                     }
-                    return prev === curr;
-                })).subscribe(e => {
+                    return of({ value, response: null });
+                }))
+                // distinctUntilChanged((prev, curr) => {
+                //     if (column.cell?.property && prev && curr) {
+                //         return prev[column.cell.property] === curr[column.cell.property];
+                //     }
+                //     return prev === curr;
+                // }))
+                .subscribe(e => {
                     const group = control.parent;
-                    this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e }, group });
-                    this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e }, group });
+                    this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e.value }, group, response: e.response });
+                    this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e.value }, group, response: e.response });
                 });
 
             control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
