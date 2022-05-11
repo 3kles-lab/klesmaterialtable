@@ -225,7 +225,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                     if (colCell.executeAfterChange) {
                         colCell.pending = true;
                         this.ref.markForCheck();
-                        return (colCell.executeAfterChange(value) as Observable<any>)
+                        return (colCell.executeAfterChange(colCell.name, value) as Observable<any>)
                             .pipe(
                                 take(1),
                                 catchError((err) => {
@@ -304,7 +304,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                     if (colCell.executeAfterChange) {
                         colCell.pending = true;
                         this.ref.markForCheck();
-                        return (colCell.executeAfterChange(value) as Observable<any>)
+                        return (colCell.executeAfterChange(colCell.name, value) as Observable<any>)
                             .pipe(
                                 take(1),
                                 catchError((err) => {

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { KlesColumnConfig } from './columnconfig.model';
 
 export interface IKlesCellFieldConfig extends IKlesFieldConfig {
-    executeAfterChange?: (value: any) => Observable<any>;
+    executeAfterChange?: (field: string, value: any) => Observable<any>;
 }
 export interface IChangeHeaderFooterCell {
     column: KlesColumnConfig;
