@@ -116,7 +116,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
             listField.push({ ...column.cell });
             control.valueChanges
                 .pipe(
-                    debounceTime(500),
+                    debounceTime(column.cell.debounceTime || 0),
                     distinctUntilChanged((prev, curr) => {
                         if (Array.isArray(prev) && Array.isArray(curr)) {
                             if (column.cell?.property) {
