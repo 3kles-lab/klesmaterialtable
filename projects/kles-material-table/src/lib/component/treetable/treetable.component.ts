@@ -112,8 +112,6 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            console.log('TreeTable Column=', column);
-            console.log('TreeTable Row=', row);
             const control = this.buildControlField(column.cell, row.value[column.cell.name]);
             listField.push({ ...column.cell });
             control.valueChanges
