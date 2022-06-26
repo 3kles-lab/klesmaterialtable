@@ -5,7 +5,6 @@ import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
 import * as uuid from 'uuid';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
-import { boolean } from 'fp-ts';
 @Injectable({
     providedIn: 'root'
 })

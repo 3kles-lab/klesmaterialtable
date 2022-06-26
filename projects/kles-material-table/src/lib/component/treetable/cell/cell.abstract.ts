@@ -1,6 +1,6 @@
-import { KlesFieldAbstract } from "@3kles/kles-material-dynamicforms";
-import { FormGroup } from "@angular/forms";
-import { KlesTreeColumnConfig } from "../../../models/columnconfig.model";
+import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
+import { FormGroup } from '@angular/forms';
+import { KlesTreeColumnConfig } from '../../../models/columnconfig.model';
 
 export abstract class AbstractCell {
     column: KlesTreeColumnConfig;

@@ -1,7 +1,9 @@
-import { Injectable } from "@angular/core";
-import { AbstractControl, FormGroup } from "@angular/forms";
-import { DefaultKlesTableService } from "../defaulttable.service";
-
+import { Injectable } from '@angular/core';
+import { AbstractControl, FormGroup } from '@angular/forms';
+import { DefaultKlesTableService } from '../defaulttable.service';
+import * as uuid from 'uuid';
+import { ConverterService } from './converter.service';
+import { flatMap } from 'lodash';
 @Injectable({
     providedIn: 'root'
 })
@@ -28,7 +30,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
 
     getSortingDataAccessor = (item: AbstractControl, property) => {
         let value: any = item.value[property];
-        if(value){
+        if (value) {
             if (typeof value === 'string') {
                 value = value.toLowerCase();
             }
@@ -61,4 +63,34 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
             }
         });
     }
+
+    addRecord(record, index?: number): FormGroup {
+
+        const searchableNode = this.table.converterService.toSearchableTree(record);
+        const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
+
+        const treeTable = flatMap([treeNode], this.table.treeService.flatten);
+
+        const groups = treeTable.map((t) => {
+            return this.table.addFormLine(t);
+        });
+
+        if (typeof index !== 'undefined') {
+            this.table._lines.splice(index, 0, record);
+            groups.forEach((group, i) => {
+                this.table.getFormArray().insert(index + i, group);
+            })
+        } else {
+            this.table._lines.push(record);
+            groups.forEach((group) => {
+                this.table.getFormArray().push(group);
+            });
+        }
+        this.table.searchableTree = this.table._lines.map(t => this.table.converterService.toSearchableTree(t));
+
+        this.updateDataSource();
+
+        return groups[0];
+    }
+
 }

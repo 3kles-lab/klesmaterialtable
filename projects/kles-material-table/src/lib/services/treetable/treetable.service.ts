@@ -4,7 +4,7 @@ import { KlesSelectionTreetableService } from "../features/selection/selectiontr
 import { DefaultKlesTreetableService } from "./defaulttreetable.service";
 
 @Injectable()
-export class KlesTreetableService extends classes(DefaultKlesTreetableService,KlesSelectionTreetableService) {
+export class KlesTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTreetableService) {
 
     constructor() {
         super

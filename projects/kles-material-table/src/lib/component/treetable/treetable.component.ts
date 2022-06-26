@@ -51,9 +51,9 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         public sanitizer: DomSanitizer,
         public _adapter: DateAdapter<any>,
         public treeService: TreeService,
-        private converterService: ConverterService,
+        public converterService: ConverterService,
         @Inject('tableService') public tableService: DefaultKlesTreetableService) {
-        super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService)
+        super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService);
     }
 
 
@@ -168,37 +168,4 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         this.dataSource.deptDataAccessor = this.tableService.getDepthDataAccessor;
         this.dataSource.parentDataAccessor = this.tableService.getParentDataAccessor;
     }
-
-
-
-    private updateChildrensVisibility(group?: FormGroup, visible?: boolean) {
-        // this.searchableTree.forEach(st => {
-        //     const node = this.treeService.searchById(st, group.value._id)
-        //     if (node.isSome()) {
-        //         node.value.children?.forEach(child => {
-        //             const childGroup = this.getFormArray().controls.find(control => control.value._id === child._id) as FormGroup;
-        //             if (childGroup) {
-        //                 childGroup.controls._status.patchValue({
-        //                     isVisible: visible,
-        //                     isExpanded: false,
-        //                 });
-        //             }
-        //         });
-        //     }
-        // })
-
-        // this.getFormArray().controls.forEach((group: FormGroup) => {
-
-        //     const isVisible = this.searchableTree.every(st => {
-        //         return this.treeService.searchById(st, group.value._id).fold([], n => n.pathToRoot)
-        //             .every(p => this.getFormArray().controls.find(x => x.value._id === p._id).value._status.isExpanded);
-        //     });
-
-        //     group.controls._status.patchValue({
-        //         isVisible: isVisible,
-        //     });
-        // });
-
-    }
-
 }
