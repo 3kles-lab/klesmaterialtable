@@ -27,6 +27,13 @@ import { DefaultKlesTreetableService } from './services/treetable/defaulttreetab
 import { ConverterService } from './services/treetable/converter.service';
 import { TreeService } from './services/treetable/tree.service';
 import { KlesTreetableService } from './services/treetable/treetable.service';
+import { KlesLazyTreetableComponent } from './component/lazytreetable/lazytreetable.component';
+import { AbstractKlesLazyTableService } from './services/lazy/abstractlazytable.service';
+import { AbstractKlesTreeTableService } from './services/treetable/abstracttreetable.service';
+import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytreetable.service';
+import { KlesLazyTableService } from './services/lazy/lazytable.service';
+import { KlesLazyTreetableService } from './services/lazy/lazytreetable.service';
+
 const components = [
     KlesTableComponent,
     KlesLazyTableComponent,
@@ -35,7 +42,8 @@ const components = [
     KlesFormDynamicHeaderFilterComponent,
     KlesLeafComponent,
     KlesNodeComponent,
-    KlesTreetableComponent
+    KlesTreetableComponent,
+    KlesLazyTreetableComponent,
 ];
 const directives = [
     KlesTableDirective,
@@ -47,11 +55,16 @@ const directives = [
 ];
 const services = [
     AbstractKlesTableService,
+    AbstractKlesLazyTableService,
     KlesTableService,
+    // KlesLazyTableService,
+    AbstractKlesTreeTableService,
+    AbstractKlesLazyTreetableService,
+    // KlesTreetableService,
     DefaultKlesTreetableService, 
+    // KlesLazyTreetableService,
     ConverterService, 
-    TreeService, 
-    KlesTreetableService
+    TreeService
 ];
 const pipes = [FieldPipe, GroupPipe, ElevationPipe];
 

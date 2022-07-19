@@ -30,13 +30,16 @@ export * from './lib/component/treetable/cell/leaf.component';
 export * from './lib/component/treetable/cell/node.component';
 export * from './lib/component/treetable/mat-treetable-datasource';
 export * from './lib/component/treetable/treetable.component';
+export * from './lib/component/lazytreetable/lazytreetable.component';
 
 /**SERVICES */
 export * from './lib/services/abstracttable.service';
 export * from './lib/services/defaulttable.service';
 export * from './lib/services/table.service';
 export * from './lib/services/lazy/abstractlazytable.service';
+export * from './lib/services/lazy/abstractlazytreetable.service';
 export * from './lib/services/lazy/lazytable.service';
+export * from './lib/services/lazy/lazytreetable.service';
 export * from './lib/services/treetable/abstracttreetable.service';
 export * from './lib/services/treetable/converter.service';
 export * from './lib/services/treetable/defaulttreetable.service';

@@ -17,7 +17,6 @@ import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { Options } from '../../models/options.model';
 import { Node } from '../../models/node.model';
 import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
-
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';

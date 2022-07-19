@@ -12,10 +12,10 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FOR
 import { flatMap } from 'lodash';
 import { SearchableNode, TreeTableNode } from '../../models/node.model';
 import { ConverterService } from '../../services/treetable/converter.service';
-import { DefaultKlesTreetableService } from '../../services/treetable/defaulttreetable.service';
 import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTableComponent } from '../table/table.component';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { AbstractKlesTreeTableService } from '../../services/treetable/abstracttreetable.service';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -45,14 +45,14 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        private formBuilder: FormBuilder,
+        protected formBuilder: FormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
         public _adapter: DateAdapter<any>,
         public treeService: TreeService,
         public converterService: ConverterService,
-        @Inject('tableService') public tableService: DefaultKlesTreetableService) {
+        @Inject('tableService') public tableService: AbstractKlesTreeTableService) {
         super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService);
     }
 
