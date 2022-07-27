@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AbstractControl, FormGroup } from '@angular/forms';
 import { DefaultKlesTableService } from '../defaulttable.service';
-import * as uuid from 'uuid';
-import { ConverterService } from './converter.service';
 import { flatMap } from 'lodash';
+import { isSome, fold } from 'fp-ts/lib/Option';
+import { pipe } from 'fp-ts/lib/function';
 @Injectable({
     providedIn: 'root'
 })
@@ -15,9 +15,14 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
 
     getParentDataAccessor(item: FormGroup, property: string): AbstractControl {
         const [parent] = this.table.searchableTree.map(st => this.table.treeService.searchById(st, item.value._id))
-            .filter(node => node.isSome())
+            .filter(node => {
+                return isSome(node);
+            })
             .flatMap(node => {
-                return node.fold([], n => n.pathToRoot).slice(0, 1);
+                return pipe(
+                    node,
+                    fold(() => -1, (n: any) => n.pathToRoot.length)
+                );
             })
             .map(node => this.table.dataSource.data.find(row => row.value._id === node._id));
         return parent || null;
