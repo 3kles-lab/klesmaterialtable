@@ -44,7 +44,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
         if (this.selection?.select) {
             if (e.column.columnDef === this.columnSelect && e.row) {
                 const val = (e.group as FormGroup).controls[e.column.columnDef].value;
-                this.selection.select(val)
+                this.selection.select(val, e.group)
                     .pipe(
                         take(1),
                         map((response) => {
