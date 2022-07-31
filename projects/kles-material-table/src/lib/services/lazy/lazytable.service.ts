@@ -1,21 +1,33 @@
 import { PageEvent } from '@angular/material/paginator';
+import * as _ from 'lodash';
 import { classes } from 'polytype';
 import { Observable } from 'rxjs';
 import { IPagination } from '../../interfaces/pagination.interface';
+import { ISelection } from '../../interfaces/selection.interface';
 import { DefaultKlesTableService } from '../defaulttable.service';
-import { KlesSelectionTableService } from '../features/selection/selectiontable.service';
+import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
 
-export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableService) {
+export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableLazyService) {
 
-    constructor(private data: IPagination) {
+    constructor(private pagination: IPagination, selection?: ISelection) {
         super
             (
-                { super: KlesSelectionTableService, arguments: ['#select'] },
+                { super: KlesSelectionTableLazyService, arguments: ['#select', selection] },
             );
     }
     //Header 
     onHeaderChange(e: any) {
-        this.table.filteredValues$.next(this.table.formHeader.value);
+        const value = { ...this.table.formHeader.value };
+
+        this.table.columns.forEach(column => {
+            if (!column.filterable) {
+                delete value[column.columnDef];
+            }
+        });
+
+        if (!_.isEqual(this.table.filteredValues$.getValue(), value)) {
+            this.table.filteredValues$.next(value);
+        }
     }
     onHeaderCellChange(e: any) {
         this.changeSelectionHeader(e);
@@ -38,7 +50,7 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
 
     load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):
         Observable<{ lines: any[], totalCount: number }> {
-        return this.data.list(sort, order, page, perPage, filter);
+        return this.pagination.list(sort, order, page, perPage, filter);
     }
 
 }

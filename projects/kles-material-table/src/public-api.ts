@@ -10,6 +10,7 @@ export * from './lib/models/columnconfig.model';
 export * from './lib/models/tableconfig.model';
 export * from './lib/models/header-field.config.model';
 export * from './lib/interfaces/pagination.interface';
+export * from './lib/interfaces/selection.interface';
 
 /**DIRECTIVE */
 export * from './lib/directives/table.directive';
@@ -47,6 +48,7 @@ export * from './lib/services/treetable/tree.service';
 export * from './lib/services/treetable/treetable.service';
 export * from './lib/services/features/treetableservice.interface';
 export * from './lib/services/features/selection/selectiontreetable.service';
+export * from './lib/services/features/selection/selectiontablelazy.service';
 
 /**FEATURES */
 export * from './lib/services/features/tableservice.interface';
