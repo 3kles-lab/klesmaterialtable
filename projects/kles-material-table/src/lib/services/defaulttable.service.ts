@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
@@ -62,12 +62,25 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
         const newRecord = {
             _id,
+            _index: typeof index === 'undefined' ? this.table._lines.length : index,
             value: record
         };
 
         const group: FormGroup = this.table.addFormLine(newRecord);
 
         if (typeof index !== 'undefined') {
+
+            (this.table.getFormArray() as FormArray).controls.forEach((row: FormGroup) => {
+                if (row.value._index >= index) {
+                    row.patchValue({ _index: row.value._index + 1 }, { emitEvent: false });
+                }
+            });
+            this.table._lines.forEach((line) => {
+                if (line._index >= index) {
+                    line._index = line._index + 1;
+                }
+            });
+
             this.table._lines.splice(index, 0, newRecord);
             this.table.getFormArray().insert(index, group);
         } else {
