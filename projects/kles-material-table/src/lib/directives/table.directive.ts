@@ -111,7 +111,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.options) {
             this.componentRef.instance.options = this.tableConfig.options;
         }
-        if (this.tableConfig.selectionMode) {
+        if (this.tableConfig.selectionMode !== undefined) {
             this.componentRef.instance.selectionMode = this.tableConfig.selectionMode;
         }
         if (this.tableConfig.sortConfig) {

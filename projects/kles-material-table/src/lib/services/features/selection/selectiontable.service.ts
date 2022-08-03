@@ -24,7 +24,16 @@ export class KlesSelectionTableService implements KlesTableBaseService {
             if (e.column.columnDef === this.columnSelect && e.row) {
                 if (this.table.dataSource.filteredData.includes(e.group)) {
                     if ((e.group as FormGroup).controls[e.column.columnDef].value) {
+                        if (!this.table.selection.isMultipleSelection()) {
+                            this.table.getFormArray().controls
+                                .filter((row: FormGroup) => row.value._id !== e.group.value._id)
+                                .forEach((row: FormGroup) => {
+                                    row.controls[this.columnSelect]?.patchValue(false, { emitEvent: false });
+                                });
+                        }
+
                         this.table.selection.select(e.group);
+
                     } else {
                         this.table.selection.deselect(e.group);
                     }

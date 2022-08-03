@@ -62,6 +62,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Input Component */
     @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) {
+        console.log('set lines');
         this.updateData(lines);
     }
 
@@ -73,7 +74,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     @Input() columns = [] as KlesColumnConfig[];
-    @Input() selectionMode = true;
+    @Input() set selectionMode(selectionMode: boolean) {
+        console.log('ici', selectionMode);
+        this.selection = new SelectionModel<any>(selectionMode);
+    }
     @Input() options: Options<any> = {
         verticalSeparator: true,
         capitalisedHeader: true,
@@ -106,7 +110,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     lineFields: IKlesFieldConfig[][];
     dataSource = new MatTableDataSource<AbstractControl>([]);
-    selection = new SelectionModel<AbstractControl>(this.selectionMode);
+    selection = new SelectionModel<AbstractControl>(true);
 
     renderedData: any[]; // data from the datasource
 
@@ -140,23 +144,25 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this.formHeader = this.initFormHeader();
         this.formFooter = this.initFormFooter();
 
+        console.log('this.selectionMode', this.selectionMode)
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        if (changes.columns) {
-            this.columns = changes.columns.currentValue;
-            this.formHeader = this.initFormHeader();
-        }
-        if (changes.lines) {
-            this.updateData(changes.lines.currentValue);
-        }
-        if (changes.selectionMode) {
-            this.selectionMode = changes.selectionMode.currentValue;
-            this.selection = new SelectionModel<any>(this.selectionMode);
-        }
-        if (changes.footer) {
+        // console.log('changes', changes);
+        // if (changes.columns) {
+        //     this.columns = changes.columns.currentValue;
+        //     this.formHeader = this.initFormHeader();
+        // }
+        // if (changes.lines) {
+        //     this.updateData(changes.lines.currentValue);
+        // }
+        // if (changes.selectionMode) {
+        //     this.selectionMode = changes.selectionMode.currentValue;
+        //     this.selection = new SelectionModel<any>(this.selectionMode);
+        // }
+        // if (changes.footer) {
 
-        }
+        // }
     }
 
     ngAfterViewInit() {
