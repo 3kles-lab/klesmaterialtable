@@ -62,7 +62,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Input Component */
     @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) {
-        console.log('set lines');
         this.updateData(lines);
     }
 
@@ -143,8 +142,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
         this.formHeader = this.initFormHeader();
         this.formFooter = this.initFormFooter();
-
-        console.log('this.selectionMode', this.selectionMode)
     }
 
     ngOnChanges(changes: SimpleChanges): void {
