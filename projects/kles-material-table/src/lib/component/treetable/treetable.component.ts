@@ -14,8 +14,9 @@ import { SearchableNode, TreeTableNode } from '../../models/node.model';
 import { ConverterService } from '../../services/treetable/converter.service';
 import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTableComponent } from '../table/table.component';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { AbstractKlesTreeTableService } from '../../services/treetable/abstracttreetable.service';
+import { of, combineLatest } from 'rxjs';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -79,16 +80,57 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
     initFormArray() {
         const treeTableTree = this.searchableTree.map(st => this.converterService.toTreeTableTree(st));
-        const treeTable = flatMap(treeTableTree, this.treeService.flatten);
 
         this.lineFields = [];
         const array = this.formBuilder.array(
-            // treeTableTree
-            treeTable
-                .map(row => {
-                    return this.addFormLine(row);
-                }));
+            treeTableTree.flatMap(node => {
+                return this.createFormNode(node);
+            })
+        );
         return array;
+    }
+
+    createFormNode(node: TreeTableNode<any>): FormGroup[] {
+        let children: FormGroup[] = [];
+        const parent = this.addFormLine(node);
+        if (node.children) {
+            children = node.children.flatMap(child => {
+                const childControls = this.createFormNode(child);
+                childControls.filter(control => control.value._status.depth === parent.value._status.depth + 1)
+                    .forEach((control) => {
+                        control.valueChanges
+                            .pipe(
+                                takeUntil(this._onDestroy))
+                            .subscribe((value) => {
+                                // delete value._id;
+                                // delete value._status;
+                                const v = { ...value };
+                                delete v._id;
+                                delete v._status;
+
+                                const data = {
+                                    value: v,
+                                    ...(value._status.children && { children: value._status.children }),
+                                    depth: value._status.depth,
+                                    isExpanded: value._status.isExpanded,
+                                    isVisible: value._status.isVisible,
+                                    _id: value._id
+
+                                };
+
+                                parent.controls._status
+                                    .patchValue({
+                                        children:
+                                            parent.controls._status.value.children
+                                                .filter(c => c._id !== value._id)
+                                                .concat(data)
+                                    });
+                            });
+                    });
+                return childControls;
+            });
+        }
+        return [parent, ...children];
     }
 
     addFormLine(row: TreeTableNode<T>): FormGroup {
