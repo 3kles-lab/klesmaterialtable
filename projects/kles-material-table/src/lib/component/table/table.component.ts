@@ -74,7 +74,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() columns = [] as KlesColumnConfig[];
     @Input() set selectionMode(selectionMode: boolean) {
-        console.log('ici', selectionMode);
         this.selection = new SelectionModel<any>(selectionMode);
     }
     @Input() options: Options<any> = {
