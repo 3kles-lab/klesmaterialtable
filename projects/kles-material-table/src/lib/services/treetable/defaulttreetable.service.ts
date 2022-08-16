@@ -74,17 +74,13 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         const searchableNode = this.table.converterService.toSearchableTree(record);
         const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
 
-        const treeTable = flatMap([treeNode], this.table.treeService.flatten);
-
-        const groups = treeTable.map((t) => {
-            return this.table.addFormLine(t);
-        });
+        const groups = this.table.createFormNode(treeNode);
 
         if (typeof index !== 'undefined') {
             this.table._lines.splice(index, 0, record);
             groups.forEach((group, i) => {
                 this.table.getFormArray().insert(index + i, group);
-            })
+            });
         } else {
             this.table._lines.push(record);
             groups.forEach((group) => {
@@ -98,4 +94,58 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         return groups[0];
     }
 
+    updateRow(row: any, options?: { emitEvent: boolean, onlySelf: boolean }) {
+        const data = {
+            ...row.value,
+            _id: row._id,
+            // _status: { depth: row.depth, isExpanded: row.isExpanded, isVisible: row.isVisible }
+        };
+        return this.updateRecord(data, options);
+    }
+
+    addChild(parentId: string, record): FormGroup {
+        /*TODO*/
+        // console.log(this.table.searchableTree);
+        // const parent = this.table.searchableTree.find(s => s._id === parentId);
+
+        // console.log('parent', parent);
+
+        // if (parent) {
+        //     const searchableNode = this.table.converterService.toSearchableTree(record);
+        //     console.log(searchableNode)
+        //     const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
+        //     treeNode.depth = 1;
+        //     console.log('treeNode', treeNode);
+        //     const groups = this.table.createFormNode(treeNode);
+
+        //     const index = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId)
+        //         + (parent.children.length || 0);
+
+        //     if (parent.children) {
+        //         parent.children.push(record);
+        //     } else {
+        //         parent.children = [record];
+        //     }
+
+
+        //     console.log('index', index);
+
+        //     this.table._lines.splice(index, 0, record);
+        //     groups.forEach((group, i) => {
+        //         this.table.getFormArray().insert(index + i, group);
+        //     });
+        //     this.table.searchableTree = this.table._lines.map(t => this.table.converterService.toSearchableTree(t));
+
+        //     this.updateDataSource();
+
+        //     return groups[0];
+        // }
+
+        return null;
+    }
+
+
+    // deleteRecord(event: AbstractControl[]): void {
+    //     /*TODO*/
+    // }
 }

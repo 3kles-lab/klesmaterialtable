@@ -11,5 +11,6 @@ export abstract class AbstractKlesTreeTableService extends AbstractKlesTableServ
     abstract getParentDataAccessor(item: FormGroup, property: string): AbstractControl;
     abstract onLineOpen(e: any);
     abstract onLineClose(e: any);
-
+    abstract updateRow(record: any, options?: { emitEvent: boolean; onlySelf: boolean; });
+    abstract addChild(parentId: string, record, index?: number);
 }
