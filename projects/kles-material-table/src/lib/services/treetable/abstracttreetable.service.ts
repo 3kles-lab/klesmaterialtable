@@ -13,4 +13,7 @@ export abstract class AbstractKlesTreeTableService extends AbstractKlesTableServ
     abstract onLineClose(e: any);
     abstract updateRow(record: any, options?: { emitEvent: boolean; onlySelf: boolean; });
     abstract addChild(parentId: string, record, index?: number);
+    abstract addChildren(parentId: string, record: any[], index?: number);
+    abstract deleteChild(parentId: string, record, index?: number);
+    abstract deleteChildren(parentId: string);
 }

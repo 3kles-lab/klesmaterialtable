@@ -6,11 +6,12 @@ import { AbstractCell } from "./cell.abstract";
     template: `
     
         <div *ngIf="column.canExpand" [innerHTML]="formatIndentation(row)"></div>
-        <mat-icon
-            [ngStyle]="{'visibility': row.value._status.children?.length ? 'visible' : 'hidden'}"
+        <mat-icon *ngIf="!row.getRawValue()?._status?.isBusy"
+            [ngStyle]="{'visibility': row.value._status.childrenCounter>0 ? 'visible' : 'hidden'}"
             class="size-16" (click)="onNodeClick(row)">
             {{row.value._status.isExpanded ? 'remove' : 'add'}}
         </mat-icon>
+        <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30">
 
         <ng-container klesDynamicField [field]="field"
             [group]="group">

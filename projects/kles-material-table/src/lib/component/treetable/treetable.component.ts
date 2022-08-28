@@ -72,7 +72,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         this.setItems();
     }
 
-    private updateTree(data: any) {
+    protected updateTree(data: any) {
         this._lines = Array.isArray(data) ? data : [data];
         this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
     }
@@ -111,6 +111,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
                                 const data = {
                                     value: v,
                                     ...(value._status.children && { children: value._status.children }),
+                                    childrenCounter:~~value._status?.children?.length,
                                     depth: value._status.depth,
                                     isExpanded: value._status.isExpanded,
                                     isVisible: value._status.isVisible,
@@ -141,7 +142,8 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
             isVisible: row.isVisible,
             isExpanded: row.isExpanded,
             depth: row.depth,
-            children: [row.children]
+            children: [row.children],
+            childrenCounter: row.childrenCounter || ~~row.children?.length,
         });
 
         group.addControl('_status', statusControl);

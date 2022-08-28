@@ -28,9 +28,8 @@ export class KlesDynamicCellDirective extends KlesDynamicFieldDirective implemen
     }
 
     buildComponent() {
-
         const factory = this.resolver.resolveComponentFactory(
-            this.row.value._status.children && this.column.canExpand ? KlesNodeComponent : KlesLeafComponent
+            ~~this.row.value._status.childrenCounter > 0 && this.column.canExpand ? KlesNodeComponent : KlesLeafComponent
         );
 
         if (this.componentRef) this.componentRef.destroy();

@@ -11,6 +11,7 @@ export * from './lib/models/tableconfig.model';
 export * from './lib/models/header-field.config.model';
 export * from './lib/interfaces/pagination.interface';
 export * from './lib/interfaces/selection.interface';
+export * from './lib/interfaces/loadChildren.interface';
 
 /**DIRECTIVE */
 export * from './lib/directives/table.directive';

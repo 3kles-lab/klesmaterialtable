@@ -3,6 +3,8 @@ export interface Node {
     _id: string;
     options?: { [key: string]: string };
     children?: Node[];
+    childrenCounter?: number;
+    isBusy?: boolean;
 }
 
 export interface SearchableNode<T> extends Node {
@@ -14,6 +16,8 @@ export interface TreeTableNode<T> extends SearchableNode<T> {
     isVisible: boolean;
     isExpanded: boolean;
     children: TreeTableNode<T>[];
+    childrenCounter: number;
+    isBusy?: boolean;
 }
 
 export interface NodeInTree<T> extends SearchableNode<T> {

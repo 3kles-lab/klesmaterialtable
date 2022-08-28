@@ -33,6 +33,8 @@ export class ConverterService {
             node.depth = this.treeService.getNodeDepth(treeClone, node);
             node.isExpanded = false;
             node.isVisible = node.depth === 0;
+            node.childrenCounter = node.childrenCounter || ~~node.children?.length;
+            node.isBusy = node.isBusy || false
         });
         return treeClone;
     }

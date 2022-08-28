@@ -20,7 +20,14 @@ import {
     KlesFormTextHeaderComponent,
     IKlesHeaderFieldConfig,
     KlesTreetableComponent,
-    KlesTreetableService
+    KlesTreetableService,
+    KlesTreetableDirective,
+    KlesLazyTreetableComponent,
+    KlesLazyTableService,
+    IPagination,
+    KlesLazyTreetableService,
+    KlesTreeColumnConfig,
+    ILoadChildren
 } from 'kles-material-table';
 import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
@@ -149,18 +156,37 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     formValidatorsTable: IKlesValidator<ValidatorFn>[] = [];
 
-    @ViewChild(KlesTableDirective, { static: false }) tableContainer: KlesTableDirective;
+    // @ViewChild(KlesTableDirective, { static: false }) tableContainer: KlesTableDirective;
+    // @ViewChild('treetable', { static: false }) treetable: KlesTreetableDirective;
+    // @ViewChild(KlesTreetableDirective) set treetablelazy(content: KlesTreetableDirective) {
+    //     console.log('Content TreeTable=', content);
+    //     if (content && !this.treeTableLazy) {
+    //         this.treeTableLazy = content.componentRef.instance;
+    //     }
+    // }
+
+
+    @ViewChild(KlesTreetableDirective) set viewer(content: KlesTreetableDirective) {
+        if (content && !this.treeTableLazy) {
+            this.treeTableLazy = content.componentRef.instance;
+        }
+    }
+
+
     table: KlesTableComponent;
-    columns: KlesColumnConfig[];
+    treeTableLazy: KlesLazyTreetableComponent<any>;
+    columns: KlesTreeColumnConfig[];
     tableConfig: KlesTableConfig;
 
     listFormField: IKlesFieldConfig[] = [];
 
     title = 'KlesMaterialTable';
 
-    lines: any[] = [];
+    lines: any[] = data;
     lines$: Observable<any[]>;
+    linesLazy$: Observable<any[]>;
     treeTableConfig: KlesTableConfig;
+    treeTableConfigLazy: KlesTableConfig;
 
     footer: any;
 
@@ -197,23 +223,42 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     async ngOnInit() {
         this.listWarehouse = await (this.miService.execute(MMS005MI_LstWarehouses).pipe(map(m => m.items))).toPromise();
-        console.log('ListWarehouse=', this.listWarehouse);
+        // console.log('ListWarehouse=', this.listWarehouse);
         this.listFacility = this.listWarehouse.filter((item, i, arr) => {
             return arr.indexOf(arr.find(t => t.FACI === item.FACI)) === i;
         }).map(m => { return { FACI: m.FACI } });
-        console.log('ListFacility=', this.listFacility);
+        // console.log('ListFacility=', this.listFacility);
         this.listSeason = await (this.miService.execute(CRS912MI_LstSeason).pipe(map(m => m.items))).toPromise();
-        console.log('ListSeason=', this.listSeason);
+        // console.log('ListSeason=', this.listSeason);
         this.listOrderType = await (this.miService.execute(PMS120MI_LstOrderType).pipe(map(m => m.items))).toPromise();
-        console.log('ListOrderType=', this.listOrderType);
+        // console.log('ListOrderType=', this.listOrderType);
         this.listResponsible = await (this.miService.execute(MNS150MI_LstUserData).pipe(map(m => m.items))).toPromise();
-        console.log('ListResponsible=', this.listResponsible);
+        // console.log('ListResponsible=', this.listResponsible);
 
         this.lines$ = of(data).pipe(
             map(m => {
-                return m.map(t => { return { value: t } });
+                return m.map(t => {
+                    return {
+                        value: t,
+                        // children: this.generateChildren(t)
+                    }
+                });
             }),
             delay(1000)
+        );
+
+
+        this.linesLazy$ = of(data).pipe(
+            map(m => {
+                return m.map(t => {
+                    const tempChildren = this.generateChildren(t);
+                    return {
+                        value: { ...t, tempChildren },
+                        // children: tempChildren,
+                        childrenCounter: tempChildren.length
+                    }
+                });
+            })
         );
 
         this.columns = [
@@ -253,6 +298,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
                 //Check column to view error
                 columnDef: '#checker', sticky: false, visible: true,
+                canExpand: true,
                 headerCell: {
                     inputType: 'text',
                     name: '#checker',
@@ -374,9 +420,9 @@ export class AppComponent implements OnInit, AfterViewInit {
                     valueChanges: (field, group, siblingFields) => {
                         if (group.controls[field.name].value) {
                             // console.log('Search Facility=', group.controls[field.name].value.FACI, ' in ', this.listFacility);
-                            console.log('Search Facility=', group, ' in ', this.listFacility);
+                            // console.log('Search Facility=', group, ' in ', this.listFacility);
                             const facility = this.listFacility.find(f => f.FACI === group.controls[field.name].value.FACI);
-                            console.log('Find Facility=', facility);
+                            // console.log('Find Facility=', facility);
                             (group as FormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
                         }
                     }
@@ -721,7 +767,22 @@ export class AppComponent implements OnInit, AfterViewInit {
                         }
                     ]
                 } as IKlesFieldConfig,
-            }
+            },
+            {
+                columnDef: 'tempChildren',
+                sticky: false,
+                visible: false,
+                filterable: false,
+                sortable: false,
+                headerCell: {
+                    name: 'tempChildren',
+                    component: KlesFormTextComponent,
+                } as IKlesFieldConfig,
+                cell: {
+                    name: 'tempChildren',
+                    component: KlesFormTextComponent,
+                } as IKlesFieldConfig,
+            },
         ];
 
         const tableService: TableService = new TableService();
@@ -740,7 +801,46 @@ export class AppComponent implements OnInit, AfterViewInit {
             columns: this.columns,
             tableComponent: KlesTreetableComponent,
             tableService: new KlesTreetableService(),
-            hidePaginator: true,
+            // hidePaginator: false,
+        } as KlesTableConfig
+
+        const listComponent = this;
+        this.treeTableConfigLazy = {
+            columns: this.columns,
+            tableComponent: KlesLazyTreetableComponent,
+            tableService: new KlesLazyTreetableService(new class implements IPagination {
+                public list(sort: string, order: string, page: number, perPage: number): Observable<any> {
+                    return listComponent.linesLazy$
+                        .pipe(
+                            map((lines) => {
+                                return {
+                                    lines: order && order.length > 0 ? [...lines].sort((a, b) => {
+                                        if (Array.isArray(a[sort])) {
+                                            return a[sort].join('').localeCompare(b[sort].join('')) * ((order === 'desc') ? -1 : 1);
+                                        } else {
+                                            return a[sort].localeCompare(b[sort]) * ((order === 'desc') ? -1 : 1);
+                                        }
+
+                                    }).slice(perPage * page, perPage * page + perPage)
+                                        : lines.slice(perPage * page, perPage * page + perPage),
+                                    totalCount: lines.length
+                                };
+                            })
+                        );
+                }
+            }(), new class implements ILoadChildren {
+                loadChildren(parent: FormGroup): Observable<any> {
+                    console.log('Parent=', parent);
+                    let children = parent.getRawValue().tempChildren || [];
+                    children = children.map(m => {
+                        const currentValue = m.value;
+                        currentValue.Warehouse = 'toto'
+                        return { value: currentValue }
+                    })
+                    return of(parent.getRawValue().tempChildren || []);
+                }
+            }()),
+            pageSize: 10
         } as KlesTableConfig
 
         this.footer = {
@@ -788,16 +888,16 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.formTable.form.valueChanges.subscribe(s => {
             // console.log('Button=', s);
 
-            if (s.DIVI) {
-                this.tableContainer.componentRef.instance.setVisible('Division', true);
-            } else {
-                this.tableContainer.componentRef.instance.setVisible('Division', false);
-            }
-            if (s.FACI) {
-                this.tableContainer.componentRef.instance.setVisible('Facility', true);
-            } else {
-                this.tableContainer.componentRef.instance.setVisible('Facility', false);
-            }
+            // if (s.DIVI) {
+            //     this.tableContainer.componentRef.instance.setVisible('Division', true);
+            // } else {
+            //     this.tableContainer.componentRef.instance.setVisible('Division', false);
+            // }
+            // if (s.FACI) {
+            //     this.tableContainer.componentRef.instance.setVisible('Facility', true);
+            // } else {
+            //     this.tableContainer.componentRef.instance.setVisible('Facility', false);
+            // }
 
 
             const val = Object.keys(s).find(f => s[f]);
@@ -903,25 +1003,25 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 
     setTable() {
-        if (!this.table && this.tableContainer) {
-            if (this.tableContainer.componentRef) {
-                this.table = this.tableContainer.componentRef.instance;
-                this.table.selection.changed.subscribe(s => {
-                    this.table.columns.filter(f => f.columnDef === '#select').map(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
-                    if (this.table.selection.isEmpty()) {
-                        this.table.formHeader.controls['#select']?.patchValue(false, { onlySelf: true, emitEvent: false });
-                    }
-                    (this.table.selection.selected.length > 0) ? this.formTable.form.controls['delete'].enable() : this.formTable.form.controls['delete'].disable();
-                    (this.table.selection.selected.length === 1) ? this.formTable.form.controls['update'].enable() : this.formTable.form.controls['update'].disable();
-                });
-                (this.table.tableService as TableService).onLoaded.subscribe(s => {
-                    console.log('Subscribe loading!!!');
-                    this.isLoading = !s;
-                    this.formFile.form.controls['message'].patchValue(null, { onlySelf: true, emitEvent: false });
-                });
-                console.warn('Table=', this.table);
-            }
-        }
+        // if (!this.table && this.tableContainer) {
+        //     if (this.tableContainer.componentRef) {
+        //         this.table = this.tableContainer.componentRef.instance;
+        //         this.table.selection.changed.subscribe(s => {
+        //             this.table.columns.filter(f => f.columnDef === '#select').map(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
+        //             if (this.table.selection.isEmpty()) {
+        //                 this.table.formHeader.controls['#select']?.patchValue(false, { onlySelf: true, emitEvent: false });
+        //             }
+        //             (this.table.selection.selected.length > 0) ? this.formTable.form.controls['delete'].enable() : this.formTable.form.controls['delete'].disable();
+        //             (this.table.selection.selected.length === 1) ? this.formTable.form.controls['update'].enable() : this.formTable.form.controls['update'].disable();
+        //         });
+        //         (this.table.tableService as TableService).onLoaded.subscribe(s => {
+        //             console.log('Subscribe loading!!!');
+        //             this.isLoading = !s;
+        //             this.formFile.form.controls['message'].patchValue(null, { onlySelf: true, emitEvent: false });
+        //         });
+        //         console.warn('Table=', this.table);
+        //     }
+        // }
     }
 
     /**Validators */
@@ -1169,6 +1269,15 @@ export class AppComponent implements OnInit, AfterViewInit {
         return data;
     }
 
+    generateChildren(item: any) {
+        const nbChildren = Math.floor(Math.random() * 5);
+        const children = [];
+        for (let i = 0; i < nbChildren; i++) {
+            children.push({ value: { ...item, Warehouse: ('child' + i) } })
+        }
+        return children;
+    }
+
     displayWithKeyLabel(value) {
         if (!value) return;
         const temp = _.cloneDeep(value);
@@ -1212,7 +1321,7 @@ const data = [
         ProjectNumber: 'SUMMER',
         PlannedDate: new Date(),
         StandardRouting: 'AOI1',
-        WorkCenter: 'PLG1'
+        WorkCenter: 'PLG1',
     },
     {
         Warehouse: '102',

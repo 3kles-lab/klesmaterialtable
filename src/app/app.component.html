@@ -19,12 +19,24 @@
     </span>
   </div>
 
-  <ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines" [footer]="footer">
-  </ng-container>
+  <mat-tab-group>
+    <!-- <mat-tab label="Table">
+      <ng-container #table klesTable [tableConfig]="tableConfig" [lines]="lines" [footer]="footer">
+      </ng-container>
+    </mat-tab>
+    <mat-tab label="Lazy Table"> Content 2 </mat-tab>
+    <mat-tab label="TreeTable">
+      <ng-container *ngIf="lines$ | async as treeLines else loading" #treetable klesTreetable
+        [tableConfig]="treeTableConfig" [lines]="treeLines" (_onSelected)="onSelected($event)">
+      </ng-container>
+    </mat-tab> -->
+    <mat-tab label="Lazy TreeTable">
+      <ng-container #treetablelazy klesTreetable
+        [tableConfig]="treeTableConfigLazy">
+      </ng-container>
+    </mat-tab>
+  </mat-tab-group>
 
-  <ng-container *ngIf="lines$ | async as treeLines else loading" #treetable klesTreetable
-    [tableConfig]="treeTableConfig" [lines]="treeLines" (_onSelected)="onSelected($event)">
-  </ng-container>
   <ng-template #loading>
     <div>
       <mat-spinner></mat-spinner>

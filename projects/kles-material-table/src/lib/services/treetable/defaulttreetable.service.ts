@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 import { DefaultKlesTableService } from '../defaulttable.service';
 import { flatMap } from 'lodash';
 import { isSome, fold } from 'fp-ts/lib/Option';
@@ -48,15 +48,19 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         return value;
     };
 
-    onLineOpen(e: any) { }
+    onLineOpen(e: any) {
+        console.log('OnLineOpen=', e);
+    }
 
-    onLineClose(e: any) { }
+    onLineClose(e: any) {
+        console.log('OnLineClose=', e);
+    }
 
     onLineChange(e: any) {
         this.changeChildrenVisibility(e.group, e.group.controls._status.value.isExpanded);
     }
 
-    private changeChildrenVisibility(node: FormGroup, visibility: boolean) {
+    protected changeChildrenVisibility(node: FormGroup, visibility: boolean) {
         node.value._status.children?.forEach(child => {
             const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as FormGroup;
 
@@ -104,45 +108,47 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
     }
 
     addChild(parentId: string, record): FormGroup {
-        /*TODO*/
-        // console.log(this.table.searchableTree);
-        // const parent = this.table.searchableTree.find(s => s._id === parentId);
+        const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
+        const parent = treeTableTree.find(s => s._id === parentId);
+        const parentDepth = ~~parent?.depth;
+        if (parent) {
+            const searchableNode = this.table.converterService.toSearchableTree(record);
+            console.log(searchableNode)
+            const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
+            treeNode.depth = ~~parentDepth + 1;
+            const groups = this.table.createFormNode(treeNode);
+            const indexParent = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId);
+            const index = indexParent;
+            + (parent.children?.length || 0);
 
-        // console.log('parent', parent);
+            if (parent.children) {
+                parent.children.push({ value: groups[0].getRawValue() });
+            } else {
+                parent.children = [{ value: groups[0].getRawValue() }];
+            }
 
-        // if (parent) {
-        //     const searchableNode = this.table.converterService.toSearchableTree(record);
-        //     console.log(searchableNode)
-        //     const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
-        //     treeNode.depth = 1;
-        //     console.log('treeNode', treeNode);
-        //     const groups = this.table.createFormNode(treeNode);
+            this.table._lines[indexParent].children = parent.children;
+            this.table._lines.splice(index + 1, 0, record);
+            groups.forEach((group, i) => {
+                this.table.getFormArray().insert(index + (i + 1), group);
+            });
+            this.table.searchableTree = (this.table.getFormArray() as FormArray).controls.map(line => {
+                return {
+                    value: (line.value?._id === parentId) ? { ...line.value, children: parent.children, childrenCounter: ~~parent.children?.length } : line.value,
+                    _id: line.value?._id,
+                    children: (line.value?._id === parentId) ? parent.children : line.value?._status?.children,
+                    childrenCounter: (line.value?._id === parentId) ? ~~parent.children?.length : ~~line.value?._status?.childrenCounter,
+                    isBusy: line.value?._status?.isBusy || false
+                }
+            });
 
-        //     const index = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId)
-        //         + (parent.children.length || 0);
-
-        //     if (parent.children) {
-        //         parent.children.push(record);
-        //     } else {
-        //         parent.children = [record];
-        //     }
-
-
-        //     console.log('index', index);
-
-        //     this.table._lines.splice(index, 0, record);
-        //     groups.forEach((group, i) => {
-        //         this.table.getFormArray().insert(index + i, group);
-        //     });
-        //     this.table.searchableTree = this.table._lines.map(t => this.table.converterService.toSearchableTree(t));
-
-        //     this.updateDataSource();
-
-        //     return groups[0];
-        // }
+            this.updateDataSource();
+            return groups[0];
+        }
 
         return null;
     }
+
 
 
     // deleteRecord(event: AbstractControl[]): void {
