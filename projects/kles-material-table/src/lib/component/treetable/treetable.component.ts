@@ -111,7 +111,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
                                 const data = {
                                     value: v,
                                     ...(value._status.children && { children: value._status.children }),
-                                    childrenCounter:~~value._status?.children?.length,
+                                    childrenCounter: ~~value._status?.children?.length,
                                     depth: value._status.depth,
                                     isExpanded: value._status.isExpanded,
                                     isVisible: value._status.isVisible,
@@ -152,11 +152,11 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         // if (row.children) {
         //     group.addControl('_children', this.formBuilder.array(row.children.map(child => this.addFormLine(child))));
         // }
-
+        const rowValue = (row.value) ? row.value : row;
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, row.value[column.cell.name]);
+            const control = this.buildControlField(column.cell, rowValue[column.cell.name]);
             listField.push({ ...column.cell });
             control.valueChanges
                 .pipe(

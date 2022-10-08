@@ -11,8 +11,8 @@ import { AbstractCell } from "./cell.abstract";
             class="size-16" (click)="onNodeClick(row)">
             {{row.value._status.isExpanded ? 'remove' : 'add'}}
         </mat-icon>
-        <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30">
-
+        <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30"></mat-spinner>
+    
         <ng-container klesDynamicField [field]="field"
             [group]="group">
         </ng-container>

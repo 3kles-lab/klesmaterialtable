@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import * as _ from 'lodash';
 import { classes } from 'polytype';
 import { Observable } from 'rxjs';
 import { ILoadChildren } from '../../interfaces/loadChildren.interface';
@@ -151,7 +152,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
         console.log('TreeTable Complete=', treeTableTree);
         const parent = treeTableTree.find(s => s._id === parentId);
-        console.log('parent', parent);
+        console.log('parent', _.cloneDeep(parent));
 
         if (parent && parent.children) {
             const listChildrenId = parent.children.map(m => m.value?._id);

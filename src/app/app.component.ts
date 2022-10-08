@@ -298,7 +298,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             {
                 //Check column to view error
                 columnDef: '#checker', sticky: false, visible: true,
-                canExpand: true,
                 headerCell: {
                     inputType: 'text',
                     name: '#checker',
@@ -320,6 +319,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 visible: true,
                 filterable: true,
                 sortable: true,
+                canExpand: true,
                 headerCell: {
                     type: 'text',
                     name: 'Division',
@@ -1310,6 +1310,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
 const data = [
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1324,6 +1325,7 @@ const data = [
         WorkCenter: 'PLG1',
     },
     {
+        Division: '770',
         Warehouse: '102',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1338,6 +1340,7 @@ const data = [
         WorkCenter: 'PLG2'
     },
     {
+        Division: '770',
         Warehouse: 'AA',
         Style: 'AMB02',
         Color: 'YY02',
@@ -1352,6 +1355,7 @@ const data = [
         WorkCenter: 'PLGF'
     },
     {
+        Division: '770',
         Warehouse: '943',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1366,6 +1370,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: 'BBB',
         Style: 'AMB01',
         Color: 'YY09',
@@ -1380,6 +1385,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '943',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1395,6 +1401,7 @@ const data = [
     }
     ,
     {
+        Division: '770',
         Warehouse: '220',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1409,6 +1416,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1423,6 +1431,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1437,6 +1446,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1451,6 +1461,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1465,6 +1476,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1479,6 +1491,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1493,6 +1506,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1507,6 +1521,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1521,6 +1536,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1535,6 +1551,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
@@ -1549,6 +1566,7 @@ const data = [
         WorkCenter: 'PLG1'
     },
     {
+        Division: '770',
         Warehouse: '101',
         Style: 'AMB01',
         Color: 'YY02',
