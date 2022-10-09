@@ -151,7 +151,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         // if (row.children) {
         //     group.addControl('_children', this.formBuilder.array(row.children.map(child => this.addFormLine(child))));
         // }
-        const rowValue = (row.value) ? row.value : row;
+        const rowValue = row?.value;
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
@@ -199,8 +199,8 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
                 // })
             ).subscribe(e => {
                 const group = control.parent;
-                this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
-                this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
+                this.tableService.onCellChange({ column, row, group, response: e.response });
+                this._onChangeCell.emit({ column, row, group, response: e.response });
             });
             control.statusChanges.subscribe(status => {
                 const group = control.parent;
