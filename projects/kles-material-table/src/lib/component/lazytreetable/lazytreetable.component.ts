@@ -4,8 +4,9 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
+import * as _ from 'lodash';
 import { BehaviorSubject, merge, of } from 'rxjs';
-import { catchError, debounceTime, startWith, switchMap, tap, distinctUntilChanged, takeUntil, filter, delay } from 'rxjs/operators';
+import { catchError, debounceTime, startWith, switchMap, tap, take, takeUntil, filter, map } from 'rxjs/operators';
 import { TreeTableNode } from '../../models/node.model';
 import { AbstractKlesLazyTreetableService } from '../../services/lazy/abstractlazytreetable.service';
 import { ConverterService } from '../../services/treetable/converter.service';
@@ -219,31 +220,53 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
-            const control = this.buildControlField(column.cell, rowValue[column.cell.name]);
-            listField.push({ ...column.cell });
-            control.valueChanges
-                .pipe(
-                    debounceTime(column.cell.debounceTime || 0),
-                    distinctUntilChanged((prev, curr) => {
-                        if (Array.isArray(prev) && Array.isArray(curr)) {
-                            if (column.cell?.property) {
-                                return prev.length === curr.length
-                                    && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
-                            } else {
-                                return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
-                            }
-                        } else {
-                            if (column.cell?.property && prev && curr) {
-                                return prev[column.cell.property] === curr[column.cell.property];
-                            }
-                        }
-                        return prev === curr;
-                    }))
-                .subscribe(e => {
-                    const group = control.parent;
-                    this.tableService.onCellChange({ column, row, group });
-                    this._onChangeCell.emit({ column, row, group });
-                });
+            const colCell = _.cloneDeep(column.cell);
+            const control = this.buildControlField(colCell, rowValue[colCell.name]);
+            listField.push(colCell);
+            control.valueChanges.pipe(
+                takeUntil(this._onLinesChanges),
+                debounceTime(colCell.debounceTime || 0),
+                switchMap((value) => {
+                    if (colCell.executeAfterChange) {
+                        colCell.pending = true;
+                        this.ref.markForCheck();
+                        return colCell.executeAfterChange(colCell.name,
+                            { ...control?.parent.value, [colCell.name]: value }, control?.parent)
+                            .pipe(
+                                take(1),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of(null);
+                                }),
+                                map((response) => ({ value, response })),
+                                tap(() => {
+                                    colCell.pending = false;
+                                    this.ref.markForCheck();
+                                })
+                            );
+                    }
+                    return of({ value, response: null });
+                })
+                // distinctUntilChanged((prev, curr) => {
+                //     if (Array.isArray(prev) && Array.isArray(curr)) {
+                //         if (column.cell?.property) {
+                //             return prev.length === curr.length
+                //                 && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
+                //         } else {
+                //             return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
+                //         }
+                //     } else {
+                //         if (column.cell?.property && prev && curr) {
+                //             return prev[column.cell.property] === curr[column.cell.property];
+                //         }
+                //     }
+                //     return prev === curr;
+                // })
+            ).subscribe(e => {
+                const group = control.parent;
+                this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
+                this._onChangeCell.emit({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
+            });
             control.statusChanges.subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });
