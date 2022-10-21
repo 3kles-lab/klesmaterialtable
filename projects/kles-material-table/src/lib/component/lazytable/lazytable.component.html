@@ -35,7 +35,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
-            <tr mat-row [ngClass]="{'highlight-on-hover': options.highlightRowOnHover}"
+            <tr mat-row [ngClass]="row | rowPipe"
                 *matRowDef="let row; columns: displayedColumns;"></tr>
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">

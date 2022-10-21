@@ -33,6 +33,7 @@ import { AbstractKlesTreeTableService } from './services/treetable/abstracttreet
 import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytreetable.service';
 import { KlesLazyTableService } from './services/lazy/lazytable.service';
 import { KlesLazyTreetableService } from './services/lazy/lazytreetable.service';
+import { RowPipe } from './pipe/row.pipe';
 
 const components = [
     KlesTableComponent,
@@ -66,7 +67,7 @@ const services = [
     ConverterService, 
     TreeService
 ];
-const pipes = [FieldPipe, GroupPipe, ElevationPipe];
+const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe];
 
 @NgModule({
     declarations: [

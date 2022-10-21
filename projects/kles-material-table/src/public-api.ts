@@ -61,6 +61,7 @@ export * from './lib/services/features/selection/selectiontable.service';
 export * from './lib/pipe/field.pipe';
 export * from './lib/pipe/group.pipe';
 export * from './lib/pipe/elevation.pipe';
+export * from './lib/pipe/row.pipe';
 
 /**MODULE */
 export * from './lib/table.module';

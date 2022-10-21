@@ -4,7 +4,7 @@ import { KlesColumnConfig } from './columnconfig.model';
 import { Options } from './options.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
 import { IKlesValidator } from '@3kles/kles-material-dynamicforms';
-import { AsyncValidatorFn, ValidatorFn } from '@angular/forms';
+import { AsyncValidatorFn, FormGroup, ValidatorFn } from '@angular/forms';
 
 export interface KlesTableConfig {
     tableComponent: Type<any>;
@@ -19,4 +19,5 @@ export interface KlesTableConfig {
     lineValidations?: ValidatorFn[];
     lineAsyncValidations?: AsyncValidatorFn[];
     showFooter?: boolean;
+    ngClassRow?: (row: FormGroup) => any;
 }

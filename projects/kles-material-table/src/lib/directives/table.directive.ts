@@ -138,6 +138,9 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.showFooter) {
             this.componentRef.instance.showFooter = this.tableConfig.showFooter;
         }
+        if (this.tableConfig.ngClassRow) {
+            this.componentRef.instance.ngClassRow = this.tableConfig.ngClassRow;
+        }
 
         // this.componentRef.instance.lines = [...this.lines];
 

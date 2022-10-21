@@ -91,6 +91,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];
 
+    @Input() ngClassRow: (row: FormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
+
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
     @Output() _onSelected = new EventEmitter<AbstractControl[]>();
