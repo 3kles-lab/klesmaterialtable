@@ -61,7 +61,7 @@ import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FOR
     //   },
     //   { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     // ],
-    //encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, AfterViewInit {
 
@@ -806,6 +806,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         const listComponent = this;
         this.treeTableConfigLazy = {
+            ngClassRow: (row: FormGroup) => {
+                return {'make-gold': row.value.Warehouse == 'AA'};
+            },
             columns: this.columns,
             tableComponent: KlesLazyTreetableComponent,
             tableService: new KlesLazyTreetableService(new class implements IPagination {
