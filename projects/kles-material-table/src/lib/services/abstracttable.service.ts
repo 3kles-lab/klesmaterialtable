@@ -29,6 +29,7 @@ export abstract class AbstractKlesTableService {
     abstract onDataLoaded();
 
     abstract getCellStyle(row: any, column: KlesColumnConfig): SafeStyle;
+    abstract getFooterStyle(column: KlesColumnConfig): SafeStyle;
 
     //Sorting
     abstract getSortingDataAccessor(item: AbstractControl, property);

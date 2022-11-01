@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
+import { SafeStyle } from '@angular/platform-browser';
 import * as _ from 'lodash';
 import { classes } from 'polytype';
 import { Observable } from 'rxjs';
 import { ILoadChildren } from '../../interfaces/loadChildren.interface';
 import { IPagination } from '../../interfaces/pagination.interface';
 import { ISelection } from '../../interfaces/selection.interface';
+import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { DefaultKlesTableService } from '../defaulttable.service';
 import { KlesSelectionTableService } from '../features/selection/selectiontable.service';
 import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
@@ -20,6 +22,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
                 { super: KlesSelectionTableLazyService, arguments: ['#select', selection] },
             );
     }
+
     //Header 
     onHeaderChange(e: any) {
         this.table.filteredValues$.next(this.table.formHeader.value);

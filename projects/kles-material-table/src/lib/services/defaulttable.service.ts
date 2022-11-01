@@ -31,7 +31,8 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     onDataLoaded() { }
 
     //Cell Style
-    getCellStyle(row: any, column: KlesColumnConfig): SafeStyle { return "" };
+    getCellStyle(row: any, column: KlesColumnConfig): SafeStyle { return ''; }
+    getFooterStyle(column: KlesColumnConfig): SafeStyle { return ''; }
 
     //Sorting
     getSortingDataAccessor = (item: AbstractControl, property) => {

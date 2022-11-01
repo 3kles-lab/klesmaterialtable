@@ -546,6 +546,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return this.tableService.getCellStyle(row, column);
     }
 
+    getFooterStyle(column: KlesColumnConfig): SafeStyle {
+        return this.tableService.getFooterStyle(column);
+    }
+
     /**
      * Method to check if column is sticky
      * @param column

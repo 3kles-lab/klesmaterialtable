@@ -25,7 +25,7 @@
 
                 </ng-container>
 
-                <td mat-footer-cell *matFooterCellDef>
+                <td mat-footer-cell *matFooterCellDef [style]="getFooterStyle(column)">
                     <ng-container *ngIf="column.footerCell" klesDynamicField [field]="column.footerCell" [group]="formFooter">
                     </ng-container>
                   </td>
