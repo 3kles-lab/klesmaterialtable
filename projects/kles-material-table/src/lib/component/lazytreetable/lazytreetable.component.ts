@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { BehaviorSubject, merge, of } from 'rxjs';
-import { catchError, debounceTime, startWith, switchMap, tap, take, takeUntil, filter, map } from 'rxjs/operators';
+import { BehaviorSubject, concat, merge, of } from 'rxjs';
+import { catchError, debounceTime, switchMap, tap, take, takeUntil, filter, map } from 'rxjs/operators';
 import { TreeTableNode } from '../../models/node.model';
 import { AbstractKlesLazyTreetableService } from '../../services/lazy/abstractlazytreetable.service';
 import { ConverterService } from '../../services/treetable/converter.service';
@@ -51,23 +51,33 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     ngAfterViewInit(): void {
         super.ngAfterViewInit();
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(200)))
+
+        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
             .pipe(
-                startWith({}),
+                takeUntil(this._onDestroy),
                 switchMap(() => {
-                    this.loading = true;
-                    return this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
-                        this.filteredValues$.getValue());
-                }),
-                tap(() => this.loading = false),
-                catchError(() => {
-                    this.loading = false;
-                    return of({ lines: [], totalCount: 0 });
+                    return concat(
+                        of({ loading: true, value: { lines: [], totalCount: 0 } }),
+                        this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
+                            this.filteredValues$.getValue()).pipe(
+                                map(value => ({ loading: false, value })),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                                })
+                            )
+                    );
                 })
             )
             .subscribe((response) => {
-                this.updateData(response.lines);
-                this.paginator.length = response.totalCount;
+                if (response.loading) {
+                    this.loading = true;
+                } else {
+                    this.loading = false;
+                    this.updateData(response.value.lines);
+                    this.paginator.length = response.value.totalCount;
+                }
+                this.ref.markForCheck();
             });
 
     }

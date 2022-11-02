@@ -4,8 +4,8 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, merge, of } from 'rxjs';
-import { catchError, debounceTime, startWith, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, concat, merge, of } from 'rxjs';
+import { catchError, debounceTime, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 
@@ -52,23 +52,32 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         super.ngAfterViewInit();
 
         this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(200)))
+        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
             .pipe(
-                startWith({}),
+                takeUntil(this._onDestroy),
                 switchMap(() => {
-                    this.loading = true;
-                    return this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
-                        this.filteredValues$.getValue());
-                }),
-                tap(() => this.loading = false),
-                catchError(() => {
-                    this.loading = false;
-                    return of({ lines: [], totalCount: 0 });
+                    return concat(
+                        of({ loading: true, value: { lines: [], totalCount: 0 } }),
+                        this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
+                            this.filteredValues$.getValue()).pipe(
+                                map(value => ({ loading: false, value })),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                                })
+                            )
+                    );
                 })
             )
             .subscribe((response) => {
-                this.updateData(response.lines);
-                this.paginator.length = response.totalCount;
+                if (response.loading) {
+                    this.loading = true;
+                } else {
+                    this.loading = false;
+                    this.updateData(response.value.lines);
+                    this.paginator.length = response.value.totalCount;
+                }
+                this.ref.markForCheck();
             });
 
     }
