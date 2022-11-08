@@ -63,7 +63,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     }
 
     load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):
-        Observable<{ lines: any[], totalCount: number }> {
+        Observable<{ lines: any[], totalCount: number, footer?: any, header?: any }> {
         return this.data.list(sort, order, page, perPage, filter);
     }
 

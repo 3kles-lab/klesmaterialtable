@@ -49,7 +49,7 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
     }
 
     load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):
-        Observable<{ lines: any[], totalCount: number }> {
+        Observable<{ lines: any[], totalCount: number, footer?: any, header?: any }> {
         return this.pagination.list(sort, order, page, perPage, filter);
     }
 

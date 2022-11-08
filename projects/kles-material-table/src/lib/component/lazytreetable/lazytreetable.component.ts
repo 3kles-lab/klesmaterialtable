@@ -57,13 +57,13 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                 takeUntil(this._onDestroy),
                 switchMap(() => {
                     return concat(
-                        of({ loading: true, value: { lines: [], totalCount: 0 } }),
+                        of({ loading: true, value: { lines: [], totalCount: 0, footer: {}, header: {} } }),
                         this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,
                             this.filteredValues$.getValue()).pipe(
                                 map(value => ({ loading: false, value })),
                                 catchError((err) => {
                                     console.error(err);
-                                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                                    return of({ loading: false, value: { lines: [], totalCount: 0, footer: {}, header: {} } });
                                 })
                             )
                     );
@@ -74,6 +74,14 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                     this.loading = true;
                 } else {
                     this.loading = false;
+
+                    if (this.showFooter && response.value.footer) {
+                        this.formFooter.patchValue(response.value.footer);
+                    }
+                    if (response.value.header) {
+                        this.formHeader.patchValue(response.value.header, { emitEvent: false });
+                    }
+
                     this.updateData(response.value.lines);
                     this.paginator.length = response.value.totalCount;
                 }

@@ -6,7 +6,7 @@ import { AbstractKlesTreeTableService } from '../treetable/abstracttreetable.ser
 export abstract class AbstractKlesLazyTreetableService extends AbstractKlesTreeTableService {
 
     abstract load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; })
-        : Observable<{ lines: any[], totalCount: number }>;
+        : Observable<{ lines: any[], totalCount: number, footer?: any, header?: any }>;
     abstract loadChild(parent: any)
         : Observable<any[]>;
 }

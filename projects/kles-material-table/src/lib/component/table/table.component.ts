@@ -247,21 +247,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                     }
                     return of({ value, response: null });
                 })
-                // distinctUntilChanged((prev, curr) => {
-                //     if (Array.isArray(prev) && Array.isArray(curr)) {
-                //         if (column.cell?.property) {
-                //             return prev.length === curr.length
-                //                 && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
-                //         } else {
-                //             return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
-                //         }
-                //     } else {
-                //         if (column.cell?.property && prev && curr) {
-                //             return prev[column.cell.property] === curr[column.cell.property];
-                //         }
-                //     }
-                //     return prev === curr;
-                // })
             ).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row: { ...group.value, [colCell.name]: e.value }, group, response: e.response });
