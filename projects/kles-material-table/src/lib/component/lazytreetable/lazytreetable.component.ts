@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -28,7 +28,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        protected formBuilder: FormBuilder,
+        protected formBuilder: UntypedFormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
@@ -116,8 +116,8 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     //     return array;
     // }
 
-    createFormNode(node: TreeTableNode<any>): FormGroup[] {
-        let children: FormGroup[] = [];
+    createFormNode(node: TreeTableNode<any>): UntypedFormGroup[] {
+        let children: UntypedFormGroup[] = [];
         const parent = this.addFormLine(node);
         if (node.children) {
             children = node.children.flatMap(child => {
@@ -161,7 +161,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     }
 
 
-    addFormLine(row: TreeTableNode<T>): FormGroup {
+    addFormLine(row: TreeTableNode<T>): UntypedFormGroup {
         const group = this.formBuilder.group({});
         const idControl = this.formBuilder.control(row._id);
         group.addControl('_id', idControl);

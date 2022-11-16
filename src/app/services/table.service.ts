@@ -1,6 +1,6 @@
 import { KlesColumnConfig, KlesTableService } from 'kles-material-table';
 import { Injectable } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormArray, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormControl, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { SafeStyle } from '@angular/platform-browser';
 import { classes } from 'polytype';
 import * as _ from 'lodash'
@@ -24,7 +24,7 @@ export class TableService extends classes(KlesTableService) {
     }
 
     getCellStyle(row: any, column: KlesColumnConfig): SafeStyle {
-        if ((row as FormGroup).controls[column.columnDef]?.errors) {
+        if ((row as UntypedFormGroup).controls[column.columnDef]?.errors) {
             return 'text-align: center; background-color:lightcoral';
         }
         return super.getCellStyle(row, column);
@@ -48,7 +48,7 @@ export class TableService extends classes(KlesTableService) {
         //     console.log('Find Facility=', facility);
         //     (e.group as FormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
         // }
-        this.checkError(e.group as FormGroup);
+        this.checkError(e.group as UntypedFormGroup);
     }
 
     onLineChange(e: IChangeLine) {
@@ -83,7 +83,7 @@ export class TableService extends classes(KlesTableService) {
         this.listWarehouse = list;
     }
 
-    checkError(form: FormGroup) {
+    checkError(form: UntypedFormGroup) {
         let checker = {};
         if (form.pending) {
             checker = {
@@ -101,8 +101,8 @@ export class TableService extends classes(KlesTableService) {
         this.table.ref.detectChanges();
     }
 
-    static isFormGroup(control: AbstractControl): control is FormGroup {
-        return !!(<FormGroup>control).controls;
+    static isFormGroup(control: AbstractControl): control is UntypedFormGroup {
+        return !!(<UntypedFormGroup>control).controls;
     }
 
     static allErrors(control: AbstractControl): any[] {
@@ -130,15 +130,15 @@ export class TableService extends classes(KlesTableService) {
     }
 
     static countControls(control: AbstractControl): number {
-        if (control instanceof FormControl) {
+        if (control instanceof UntypedFormControl) {
             return 1;
         }
 
-        if (control instanceof FormArray) {
+        if (control instanceof UntypedFormArray) {
             return control.controls.reduce((acc, curr) => acc + this.countControls(curr), 1)
         }
 
-        if (control instanceof FormGroup) {
+        if (control instanceof UntypedFormGroup) {
             return Object.keys(control.controls)
                 .map(key => control.controls[key])
                 .reduce((acc, curr) => acc + this.countControls(curr), 1);
@@ -147,15 +147,15 @@ export class TableService extends classes(KlesTableService) {
     }
 
     static countErrors(control: AbstractControl): number {
-        if (control instanceof FormControl) {
-            return (control as FormControl)?.errors?.length;
+        if (control instanceof UntypedFormControl) {
+            return (control as UntypedFormControl)?.errors?.length;
         }
 
-        if (control instanceof FormArray) {
+        if (control instanceof UntypedFormArray) {
             return control.controls.reduce((acc, curr) => acc + this.countErrors(curr), 1)
         }
 
-        if (control instanceof FormGroup) {
+        if (control instanceof UntypedFormGroup) {
             return Object.keys(control.controls)
                 .map(key => control.controls[key])
                 .reduce((acc, curr) => acc + this.countErrors(curr), 1);

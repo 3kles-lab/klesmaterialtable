@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
 
@@ -12,8 +12,8 @@ export class KlesSelectionTableService implements KlesTableBaseService {
 
     changeSelectionHeader(e: any) {
         if (e.column.columnDef === this.columnSelect) {
-            const val = (e.group as FormGroup).controls[this.columnSelect].value;
-            this.table.getFormArray().controls.forEach((e: FormGroup) => {
+            const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
+            this.table.getFormArray().controls.forEach((e: UntypedFormGroup) => {
                 e.controls[this.columnSelect]?.patchValue(val);
             });
         }
@@ -23,11 +23,11 @@ export class KlesSelectionTableService implements KlesTableBaseService {
         if (this.table) {
             if (e.column.columnDef === this.columnSelect && e.row) {
                 if (this.table.dataSource.filteredData.includes(e.group)) {
-                    if ((e.group as FormGroup).controls[e.column.columnDef].value) {
+                    if ((e.group as UntypedFormGroup).controls[e.column.columnDef].value) {
                         if (!this.table.selection.isMultipleSelection()) {
                             this.table.getFormArray().controls
-                                .filter((row: FormGroup) => row.value._id !== e.group.value._id)
-                                .forEach((row: FormGroup) => {
+                                .filter((row: UntypedFormGroup) => row.value._id !== e.group.value._id)
+                                .forEach((row: UntypedFormGroup) => {
                                     row.controls[this.columnSelect]?.patchValue(false, { emitEvent: false });
                                 });
                         }
@@ -39,7 +39,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
                     }
                     this.table._onSelected.emit(this.table.selection.selected);
                 } else {
-                    (e.group as FormGroup).controls[e.column.columnDef]?.patchValue(false, { onlySelf: true, emitEvent: false });
+                    (e.group as UntypedFormGroup).controls[e.column.columnDef]?.patchValue(false, { onlySelf: true, emitEvent: false });
                     this.table.selection.deselect(e.row);
                 }
             }

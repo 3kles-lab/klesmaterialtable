@@ -1,5 +1,5 @@
 import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormArray, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormArray, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import {
     IKlesFieldConfig, IKlesValidator, KlesDynamicFormComponent, KlesFormButtonCheckerComponent, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormColorComponent,
@@ -380,8 +380,8 @@ export class AppComponent implements OnInit, AfterViewInit {
                             // siblingFields.find(sibling => sibling.name === 'Warehouse').options = listWarehouse;
                             (siblingFields.find(sibling => sibling.name === 'Warehouse').options as BehaviorSubject<any[]>).next(listWarehouse);
                             const warehouse = this.listWarehouse.find(f => f.WHLO === group.controls[field.name].value.WHLO);
-                            (group as FormGroup).controls['Warehouse'].patchValue(warehouse, { onlySelf: true, emitEvent: false });
-                            (group as FormGroup).controls['Warehouse'].markAsTouched({ onlySelf: true });
+                            (group as UntypedFormGroup).controls['Warehouse'].patchValue(warehouse, { onlySelf: true, emitEvent: false });
+                            (group as UntypedFormGroup).controls['Warehouse'].markAsTouched({ onlySelf: true });
                         }
                     }
                 } as IKlesFieldConfig,
@@ -423,7 +423,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                             // console.log('Search Facility=', group, ' in ', this.listFacility);
                             const facility = this.listFacility.find(f => f.FACI === group.controls[field.name].value.FACI);
                             // console.log('Find Facility=', facility);
-                            (group as FormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
+                            (group as UntypedFormGroup).controls['Facility'].patchValue(facility, { onlySelf: true, emitEvent: false });
                         }
                     }
                 } as IKlesFieldConfig,
@@ -806,7 +806,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         const listComponent = this;
         this.treeTableConfigLazy = {
-            ngClassRow: (row: FormGroup) => {
+            ngClassRow: (row: UntypedFormGroup) => {
                 return {'make-gold': row.value.Warehouse == 'AA'};
             },
             columns: this.columns,
@@ -832,7 +832,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                         );
                 }
             }(), new class implements ILoadChildren {
-                loadChildren(parent: FormGroup): Observable<any> {
+                loadChildren(parent: UntypedFormGroup): Observable<any> {
                     console.log('Parent=', parent);
                     let children = parent.getRawValue().tempChildren || [];
                     children = children.map(m => {
@@ -990,7 +990,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         if (this.errorView) {
             buttonError.label = 'Voir tout';
             const formGroupError = this.table.getFormArray().controls
-                .filter((formGroup: FormGroup) => {
+                .filter((formGroup: UntypedFormGroup) => {
                     const nbError = TableService.allErrors(formGroup);
                     // console.log('FormGroup ', formGroup, ' = ', nbError);
                     return nbError.length !== 0

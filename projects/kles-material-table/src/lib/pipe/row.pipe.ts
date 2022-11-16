@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, EmbeddedViewRef, Pipe, PipeTransform, Type } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Pipe({
     name: 'rowPipe',
@@ -13,7 +13,7 @@ export class RowPipe implements PipeTransform {
         this.context = ((cdRef as EmbeddedViewRef<Type<any>>).context);
     }
 
-    transform(row: FormGroup): any {
+    transform(row: UntypedFormGroup): any {
         if (this.context) {
             return this.context.ngClassRow(row);
         }

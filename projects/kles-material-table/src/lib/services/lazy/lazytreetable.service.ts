@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormGroup } from '@angular/forms';
+import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { SafeStyle } from '@angular/platform-browser';
 import * as _ from 'lodash';
@@ -41,11 +41,11 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         super.onLineChange(e);
     }
 
-    protected changeChildrenVisibility(node: FormGroup, visibility: boolean) {
+    protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
         // console.log('changeChildrenVisibility=', node);
         // node.controls._status.patchValue({ ...node.getRawValue()._status, children: node.getRawValue().tempChildren }, { emitEvent: false, onlySelf: true });
         node.value._status.children?.forEach(child => {
-            const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as FormGroup;
+            const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as UntypedFormGroup;
             if (childGroup) {
                 childGroup.controls._status.patchValue({
                     isVisible: visibility,
@@ -71,7 +71,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         return this.child.loadChildren(parentId);
     }
 
-    addChild(parentId: string, record): FormGroup {
+    addChild(parentId: string, record): UntypedFormGroup {
         console.log('##AddChild ', record);
         console.log('##Searchable=', this.table.searchableTree);
         // const parent = this.table.searchableTree.find(s => s._id === parentId);
@@ -92,8 +92,8 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             const groups = this.table.createFormNode(treeNode);
             console.log('Groups=', groups);
             console.log('List FormArray=', this.table.getFormArray().controls);
-            console.log('Find Index Parent=', this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId));
-            const indexParent = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId);
+            console.log('Find Index Parent=', this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId));
+            const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
             const index = indexParent;
             + (parent.children?.length || 0);
 
@@ -112,7 +112,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             });
             console.log('new _lines=', this.table._lines);
             // this.table.searchableTree=this.table.getFormArray().controls
-            console.log('new lines control=', (this.table.getFormArray() as FormArray).controls.map(line => {
+            console.log('new lines control=', (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
                 return {
                     value: line.value,
                     _id: line.value?._id,
@@ -121,7 +121,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
                     isBusy: (line.value?._id === parentId) ? false : line.value?._status?.isBusy || false
                 }
             }))
-            this.table.searchableTree = (this.table.getFormArray() as FormArray).controls.map(line => {
+            this.table.searchableTree = (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
                 return {
                     value: (line.value?._id === parentId) ? { ...line.value, children: parent.children, childrenCounter: ~~parent.children?.length } : line.value,
                     _id: line.value?._id,
@@ -141,7 +141,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         return null;
     }
 
-    addChildren(parentId: string, record: any[]): FormGroup[] {
+    addChildren(parentId: string, record: any[]): UntypedFormGroup[] {
         return record.map(m => this.addChild(parentId, record));
     }
 
@@ -161,15 +161,15 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             const listChildrenId = parent.children.map(m => m.value?._id);
             console.log('Children _id to delete=', listChildrenId);
             parent.children = null;
-            const indexParent = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId);
+            const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
             this.table._lines[indexParent] = parent;
             listChildrenId.forEach(childId => {
-                const index = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === childId);
+                const index = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === childId);
                 this.table._lines.splice(index, 1);
-                (this.table.getFormArray() as FormArray).removeAt(index, { emitEvent: false })
+                (this.table.getFormArray() as UntypedFormArray).removeAt(index, { emitEvent: false })
             });
 
-            this.table.searchableTree = (this.table.getFormArray() as FormArray).controls.map(line => {
+            this.table.searchableTree = (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
                 return {
                     value: (line.value?._id === parentId) ? { ...line.value, children: parent.children } : line.value,
                     _id: line.value?._id,

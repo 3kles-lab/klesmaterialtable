@@ -1,4 +1,4 @@
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import * as _ from "lodash";
 import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
@@ -16,7 +16,7 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
 
     /**Filter */
     protected createFilter() {
-        const myFilterPredicate = (data: FormGroup, filter: string): boolean => {
+        const myFilterPredicate = (data: UntypedFormGroup, filter: string): boolean => {
             let searchString = JSON.parse(filter);
             const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
 

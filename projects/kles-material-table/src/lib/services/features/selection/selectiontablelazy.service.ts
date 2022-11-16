@@ -1,4 +1,4 @@
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { KlesTableComponent } from '../../../component/table/table.component';
 import { ISelection } from '../../../interfaces/selection.interface';
 import { KlesTableBaseService } from '../tableservice.interface';
@@ -16,7 +16,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
     changeSelectionHeader(e: any) {
         if (this.selection?.selectAll) {
             if (e.column.columnDef === this.columnSelect) {
-                const val = (e.group as FormGroup).controls[this.columnSelect].value;
+                const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
 
                 const filterHeader = this.table.columns
                     .filter(column => column.filterable)
@@ -38,7 +38,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
                     )
                     .subscribe((response) => {
 
-                        this.table.getFormArray().controls.forEach((row: FormGroup) => {
+                        this.table.getFormArray().controls.forEach((row: UntypedFormGroup) => {
                             row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false, onlySelf: true });
                         });
 
@@ -51,7 +51,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
     changeSelectionLine(e: any) {
         if (this.selection?.select) {
             if (e.column.columnDef === this.columnSelect && e.row) {
-                const val = (e.group as FormGroup).controls[e.column.columnDef].value;
+                const val = (e.group as UntypedFormGroup).controls[e.column.columnDef].value;
                 this.selection.select(val, e.group)
                     .pipe(
                         take(1),
@@ -65,7 +65,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
                     )
                     .subscribe((response) => {
                         if (!response.success) {
-                            (e.group as FormGroup).controls[e.column.columnDef].patchValue(!val, { emitEvent: false });
+                            (e.group as UntypedFormGroup).controls[e.column.columnDef].patchValue(!val, { emitEvent: false });
                         } else if (response.success) {
                             if (response.indeterminate) {
                                 this.table.formHeader

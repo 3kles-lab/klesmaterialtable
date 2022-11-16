@@ -1,4 +1,4 @@
-import { FormArray, FormGroup } from "@angular/forms";
+import { UntypedFormArray, UntypedFormGroup } from "@angular/forms";
 import { KlesTreetableComponent } from "../../../component/treetable/treetable.component";
 import { KlesSelectionTableService } from "./selectiontable.service";
 import * as O from "fp-ts/lib/Option";
@@ -17,15 +17,15 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
         if (this.table) {
             if (e.column.columnDef === this.columnSelect && e.row) {
                 if (this.table.dataSource.filteredData.includes(e.group)) {
-                    const selected = (e.group as FormGroup).controls[e.column.columnDef].value;
+                    const selected = (e.group as UntypedFormGroup).controls[e.column.columnDef].value;
                     this.updateChildrens(e.column, e.group, selected);
                     this.updateParent(e.column, e.group);
 
                     this.table.selection.clear();
 
                     /* TODO not sure about this*/
-                    (this.table.form.controls.rows as FormArray).controls
-                        .filter((group: FormGroup) => group.controls[this.columnSelect].value === true)
+                    (this.table.form.controls.rows as UntypedFormArray).controls
+                        .filter((group: UntypedFormGroup) => group.controls[this.columnSelect].value === true)
                         .forEach(control => {
                             this.table.selection.select(control);
                         });
@@ -49,25 +49,25 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
         }
     }
 
-    childrenIsAllSelected(column, group: FormGroup): boolean {
+    childrenIsAllSelected(column, group: UntypedFormGroup): boolean {
         if (!group.value._status.children) {
             return true;
         }
 
         return group.value._status.children.every(children => {
-            return (this.table.dataSource.data.find(row => row.value._id === children._id) as FormGroup).controls[column.columnDef].value === true;
+            return (this.table.dataSource.data.find(row => row.value._id === children._id) as UntypedFormGroup).controls[column.columnDef].value === true;
         });
     }
 
 
-    childrenAtLeastOneSelected(column, group: FormGroup): boolean {
+    childrenAtLeastOneSelected(column, group: UntypedFormGroup): boolean {
         if (!group.value._status.children) {
             return true;
         }
         return group.value._status.children.some(children => {
             const index = this.table.dataSource.data.findIndex(row => row.value._id === children._id);
 
-            return (this.table.dataSource.data.find(row => row.value._id === children._id) as FormGroup).controls[column.columnDef].value === true
+            return (this.table.dataSource.data.find(row => row.value._id === children._id) as UntypedFormGroup).controls[column.columnDef].value === true
                 || this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate === true;
         });
     }
@@ -86,10 +86,10 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
 
 
 
-    updateChildrens(column, group: FormGroup, selected: boolean) {
-        const childrens = (group.controls._status as FormGroup).controls.children?.value || [];
+    updateChildrens(column, group: UntypedFormGroup, selected: boolean) {
+        const childrens = (group.controls._status as UntypedFormGroup).controls.children?.value || [];
         childrens.forEach(children => {
-            const childGroup = this.table.dataSource.data.find(row => row.value._id === children._id) as FormGroup;
+            const childGroup = this.table.dataSource.data.find(row => row.value._id === children._id) as UntypedFormGroup;
             if (childGroup.controls[column.columnDef].value !== selected) {
                 childGroup.controls[column.columnDef].patchValue(selected, { emitEvent: false });
             }
@@ -97,7 +97,7 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
         });
     }
 
-    updateParent(column, group: FormGroup) {
+    updateParent(column, group: UntypedFormGroup) {
         // const node = this.table.searchableTree.map(st => this.table.treeService.searchById(st, group.value._id)).find(st => st.isSome()).getOrElse(null);
         const node = this.table.searchableTree
             .map(st => this.table.treeService.searchById(st, group.value._id))
@@ -126,7 +126,7 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
             pipe(
                 node,
                 O.map(m => m.pathToRoot.forEach(parent => {
-                    const parentGroup = this.table.dataSource.data.find(row => row.value._id === parent._id) as FormGroup;
+                    const parentGroup = this.table.dataSource.data.find(row => row.value._id === parent._id) as UntypedFormGroup;
 
                     const index = this.table.dataSource.data.findIndex(row => row.value._id === parent._id);
                     this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = false;

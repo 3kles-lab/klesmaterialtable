@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -24,7 +24,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        private fb1: FormBuilder,
+        private fb1: UntypedFormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,

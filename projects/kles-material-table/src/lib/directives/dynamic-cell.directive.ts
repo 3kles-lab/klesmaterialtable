@@ -1,6 +1,6 @@
 import { KlesDynamicFieldDirective } from "@3kles/kles-material-dynamicforms";
 import { Directive, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { KlesLeafComponent } from "../component/treetable/cell/leaf.component";
 import { KlesNodeComponent } from "../component/treetable/cell/node.component";
 import { KlesTreeColumnConfig } from "../models/columnconfig.model";
@@ -12,7 +12,7 @@ import { KlesTreeColumnConfig } from "../models/columnconfig.model";
 export class KlesDynamicCellDirective extends KlesDynamicFieldDirective implements OnInit, OnChanges, OnDestroy {
 
     @Input() column: KlesTreeColumnConfig;
-    @Input() row: FormGroup;
+    @Input() row: UntypedFormGroup;
 
     ngOnInit() {
         this.buildComponent();

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { DefaultKlesTableService } from '../defaulttable.service';
 import { flatMap } from 'lodash';
 import { isSome, fold } from 'fp-ts/lib/Option';
@@ -13,7 +13,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         return item.value._status.depth;
     }
 
-    getParentDataAccessor(item: FormGroup, property: string): AbstractControl {
+    getParentDataAccessor(item: UntypedFormGroup, property: string): AbstractControl {
         const [parent] = this.table.searchableTree.map(st => this.table.treeService.searchById(st, item.value._id))
             .filter(node => {
                 return isSome(node);
@@ -60,9 +60,9 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         this.changeChildrenVisibility(e.group, e.group.controls._status.value.isExpanded);
     }
 
-    protected changeChildrenVisibility(node: FormGroup, visibility: boolean) {
+    protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
         node.value._status.children?.forEach(child => {
-            const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as FormGroup;
+            const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as UntypedFormGroup;
 
             if (childGroup) {
                 childGroup.controls._status.patchValue({
@@ -73,7 +73,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         });
     }
 
-    addRecord(record, index?: number): FormGroup {
+    addRecord(record, index?: number): UntypedFormGroup {
 
         const searchableNode = this.table.converterService.toSearchableTree(record);
         const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
@@ -107,7 +107,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         return this.updateRecord(data, options);
     }
 
-    addChild(parentId: string, record): FormGroup {
+    addChild(parentId: string, record): UntypedFormGroup {
         const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
         const parent = treeTableTree.find(s => s._id === parentId);
         const parentDepth = ~~parent?.depth;
@@ -117,7 +117,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
             const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
             treeNode.depth = ~~parentDepth + 1;
             const groups = this.table.createFormNode(treeNode);
-            const indexParent = this.table.getFormArray().controls.findIndex((group: FormGroup) => group.value._id === parentId);
+            const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
             const index = indexParent;
             + (parent.children?.length || 0);
 
@@ -132,7 +132,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
             groups.forEach((group, i) => {
                 this.table.getFormArray().insert(index + (i + 1), group);
             });
-            this.table.searchableTree = (this.table.getFormArray() as FormArray).controls.map(line => {
+            this.table.searchableTree = (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
                 return {
                     value: (line.value?._id === parentId) ? { ...line.value, children: parent.children, childrenCounter: ~~parent.children?.length } : line.value,
                     _id: line.value?._id,

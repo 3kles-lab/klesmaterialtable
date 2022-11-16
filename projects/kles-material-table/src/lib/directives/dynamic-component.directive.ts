@@ -1,6 +1,6 @@
 import { IKlesFieldConfig } from '@3kles/kles-material-dynamicforms';
 import { Directive, Input, OnInit, ComponentFactoryResolver, ViewContainerRef, ComponentRef, Type, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 
 @Directive({
     selector: '[klesComponentHeader]'
@@ -8,7 +8,7 @@ import { FormGroup } from '@angular/forms';
 export class KlesComponentHeaderDirective implements OnInit, OnChanges {
     @Input() component: Type<any>;
     @Input() value: any;
-    @Input() group?: FormGroup;
+    @Input() group?: UntypedFormGroup;
     @Input() field?: IKlesFieldConfig;
 
 

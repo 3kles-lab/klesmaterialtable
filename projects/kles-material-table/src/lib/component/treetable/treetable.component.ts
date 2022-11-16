@@ -4,7 +4,7 @@ import {
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTreetableData } from './mat-treetable-datasource';
@@ -45,7 +45,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        protected formBuilder: FormBuilder,
+        protected formBuilder: UntypedFormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
@@ -89,8 +89,8 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         return array;
     }
 
-    createFormNode(node: TreeTableNode<any>): FormGroup[] {
-        let children: FormGroup[] = [];
+    createFormNode(node: TreeTableNode<any>): UntypedFormGroup[] {
+        let children: UntypedFormGroup[] = [];
         const parent = this.addFormLine(node);
         if (node.children) {
             children = node.children.flatMap(child => {
@@ -133,7 +133,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         return [parent, ...children];
     }
 
-    addFormLine(row: TreeTableNode<T>): FormGroup {
+    addFormLine(row: TreeTableNode<T>): UntypedFormGroup {
         const group = this.formBuilder.group({});
         const idControl = this.formBuilder.control(row._id);
         group.addControl('_id', idControl);

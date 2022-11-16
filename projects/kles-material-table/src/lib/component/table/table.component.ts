@@ -7,7 +7,7 @@ import {
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -91,7 +91,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];
 
-    @Input() ngClassRow: (row: FormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
+    @Input() ngClassRow: (row: UntypedFormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -104,9 +104,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Output() _onStatusCellChange = new EventEmitter();
 
     // Table
-    formHeader: FormGroup;
-    form: FormGroup;
-    formFooter: FormGroup;
+    formHeader: UntypedFormGroup;
+    form: UntypedFormGroup;
+    formFooter: UntypedFormGroup;
 
     lineFields: IKlesFieldConfig[][];
     dataSource = new MatTableDataSource<AbstractControl>([]);
@@ -118,7 +118,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
-        protected fb: FormBuilder,
+        protected fb: UntypedFormBuilder,
         public ref: ChangeDetectorRef,
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
@@ -169,7 +169,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
 
-    trackById(index: number, item: FormGroup): any {
+    trackById(index: number, item: UntypedFormGroup): any {
         // return `${item.value._id}`;
         return item;
     }
@@ -211,7 +211,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return array;
     }
 
-    addFormLine(row): FormGroup {
+    addFormLine(row): UntypedFormGroup {
         const group = this.fb.group({});
         const idControl = this.fb.control(row._id);
         const indexControl = this.fb.control(row._index);
@@ -285,9 +285,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
             const colCell = _.cloneDeep(cell);
             const control = this.buildControlField(colCell,
-                ((this.form.controls.rows as FormArray).controls[index] as FormGroup).value[cell.name] || cell.value);
+                ((this.form.controls.rows as UntypedFormArray).controls[index] as UntypedFormGroup).value[cell.name] || cell.value);
 
-            ((this.form.controls.rows as FormArray).controls[index] as FormGroup).setControl(cell.name, control);
+            ((this.form.controls.rows as UntypedFormArray).controls[index] as UntypedFormGroup).setControl(cell.name, control);
 
             control.valueChanges.pipe(takeUntil(this._onLinesChanges),
                 debounceTime(colCell.debounceTime || 0),
@@ -404,11 +404,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         }
     }
 
-    getFormArray(): FormArray {
-        return (this.form.get('rows') as FormArray);
+    getFormArray(): UntypedFormArray {
+        return (this.form.get('rows') as UntypedFormArray);
     }
 
-    getFilterFormArray(): FormGroup[] {
+    getFilterFormArray(): UntypedFormGroup[] {
         // return this.fb.array(this.renderedData);
         return this.renderedData;
     }

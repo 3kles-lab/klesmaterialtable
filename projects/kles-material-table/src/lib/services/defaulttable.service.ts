@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
@@ -57,7 +57,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     /**Util Table */
     //Manage Record
-    addRecord(record, index?: number): FormGroup {
+    addRecord(record, index?: number): UntypedFormGroup {
         const _id = record._id || uuid.v4();
         delete record._id;
 
@@ -67,11 +67,11 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
             value: record
         };
 
-        const group: FormGroup = this.table.addFormLine(newRecord);
+        const group: UntypedFormGroup = this.table.addFormLine(newRecord);
 
         if (typeof index !== 'undefined') {
 
-            (this.table.getFormArray() as FormArray).controls.forEach((row: FormGroup) => {
+            (this.table.getFormArray() as UntypedFormArray).controls.forEach((row: UntypedFormGroup) => {
                 if (row.value._index >= index) {
                     row.patchValue({ _index: row.value._index + 1 }, { emitEvent: false });
                 }
@@ -96,7 +96,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     deleteRecord(event: AbstractControl[]) {
         // console.log('Delete Record=', event);
-        event.forEach((e: FormGroup) => {
+        event.forEach((e: UntypedFormGroup) => {
             const id = e.controls['_id'].value;
             const index = this.table.getFormArray().value.findIndex(f => f._id === id);
             this.table.getFormArray().removeAt(index);
@@ -110,7 +110,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     updateRecord(record, options?: { emitEvent: boolean, onlySelf: boolean }) {
         const updateForm = this.table.getFormArray().controls
-            .find((f: FormGroup) => f.controls._id.value === '' + record._id);
+            .find((f: UntypedFormGroup) => f.controls._id.value === '' + record._id);
         if (updateForm) {
             updateForm.patchValue(record, options);
             this.updateDataSource();

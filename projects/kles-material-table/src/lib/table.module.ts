@@ -88,9 +88,6 @@ const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe];
         directives,
         pipes
     ],
-    entryComponents: [
-        components,
-    ],
     providers: [
         services
     ]
