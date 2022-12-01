@@ -446,7 +446,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     getLineFields(index, key) {
-        return this.lineFields[this.getActualIndex(index)].find(f => f.name === key);
+        return this.lineFields[index].find(f => f.name === key);
     }
 
     /**Manage Data */
