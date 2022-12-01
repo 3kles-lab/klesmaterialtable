@@ -14,10 +14,11 @@
         <!-- <td mat-cell *cdkCellDef="let row;let index = index;" klesCellStyle [row]="row" [column]="column" -->
         <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
-          <ng-container klesDynamicField [field]="column | fieldPipe:index" [group]="index | groupPipe"
+          <ng-container klesDynamicField [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
             [siblingFields]="lineFields[index]">
           </ng-container>
         </td>
+
 
         <td mat-footer-cell *matFooterCellDef [style]="getFooterStyle(column)">
           <ng-container *ngIf="column.footerCell" klesDynamicField [field]="column.footerCell" [group]="formFooter">

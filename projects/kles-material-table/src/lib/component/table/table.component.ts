@@ -7,7 +7,7 @@ import {
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -277,17 +277,19 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     public updateFormCell(index: number, cell: IKlesCellFieldConfig) {
-
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
         const column = this.columns.find(col => col.columnDef === cell.name);
 
-        if (cellIndex >= 0 && column) {
+        const group = ((this.form.controls.rows as UntypedFormArray).controls
+            .find((c: UntypedFormGroup) => c.controls._index.value === index));
+
+        if (cellIndex >= 0 && column && group) {
             this.lineFields[index][cellIndex] = _.cloneDeep(cell);
             const colCell = _.cloneDeep(cell);
-            const control = this.buildControlField(colCell,
-                ((this.form.controls.rows as UntypedFormArray).controls[index] as UntypedFormGroup).value[cell.name] || cell.value);
 
-            ((this.form.controls.rows as UntypedFormArray).controls[index] as UntypedFormGroup).setControl(cell.name, control);
+            const control = this.buildControlField(colCell, group.value[cell.name] || cell.value);
+
+            (group as UntypedFormGroup).setControl(cell.name, control);
 
             control.valueChanges.pipe(takeUntil(this._onLinesChanges),
                 debounceTime(colCell.debounceTime || 0),
@@ -319,17 +321,18 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                 //     return prev === curr;
                 // }))
                 .subscribe(e => {
-                    const group = control.parent;
-                    this.tableService.onCellChange({ column, row: { ...group.value, [cell.name]: e.value }, group, response: e.response });
-                    this._onChangeCell.emit({ column, row: { ...group.value, [cell.name]: e.value }, group, response: e.response });
+                    const parent = control.parent;
+                    this.tableService.onCellChange({ column, row: { ...parent.value, [cell.name]: e.value }, group: parent, response: e.response });
+                    this._onChangeCell.emit({ column, row: { ...parent.value, [cell.name]: e.value }, group: parent, response: e.response });
                 });
 
             control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
-                const group = control.parent;
-                this.tableService.onStatusCellChange({ cell: control, group, status });
-                this._onStatusCellChange.emit({ cell: control, group, status });
+                const parent = control.parent;
+                this.tableService.onStatusCellChange({ cell: control, group: parent, status });
+                this._onStatusCellChange.emit({ cell: control, group: parent, status });
             });
             this.ref.markForCheck();
+
         }
     }
 
@@ -431,7 +434,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     getLineFields(index, key) {
-        return this.lineFields[this.getActualIndex(index)].find(f => f.name === key);
+        // return this.lineFields[this.getActualIndex(index)].find(f => f.name === key);
+        return this.lineFields[index].find(f => f.name === key);
     }
 
     /**Manage Data */
