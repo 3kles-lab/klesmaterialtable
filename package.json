@@ -1,6 +1,6 @@
 {
   "name": "@3kles/kles-material-table",
-  "version": "14.0.0",
+  "version": "14.0.1",
   "scripts": {
     "build:lib": "ng build kles-material-table --prod",
     "publish:lib": "cd dist/kles-material-table && npm publish --registry 'http://192.168.111.61:8081/repository/npm-3kles/'  --force",
@@ -14,8 +14,8 @@
   },
   "private": true,
   "dependencies": {
-    "@3kles/kles-material-dialog": "^1.0.0",
-    "@3kles/kles-material-dynamicforms": "^1.1.16",
+    "@3kles/kles-material-dialog": "^14.0.1",
+    "@3kles/kles-material-dynamicforms": "^14.0.8",
     "@angular/animations": "^14.2.11",
     "@angular/cdk": "^14.2.7",
     "@angular/common": "^14.2.11",
@@ -29,8 +29,8 @@
     "@angular/platform-browser-dynamic": "^14.2.11",
     "@angular/router": "^14.2.11",
     "@infor-up/m3-odin": "^4.0.0",
-    "@ngx-translate/core": "^12.1.1",
-    "@ngx-translate/http-loader": "^4.0.0",
+    "@ngx-translate/core": "^14.0.0",
+    "@ngx-translate/http-loader": "^7.0.0",
     "fp-ts": "^2.11.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
