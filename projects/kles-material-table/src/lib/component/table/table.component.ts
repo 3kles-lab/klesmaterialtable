@@ -2,15 +2,18 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, OnDestroy
+    ChangeDetectorRef, Inject, OnDestroy, ContentChild
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import {
+    AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormBuilder,
+    UntypedFormGroup, ValidatorFn, Validators
+} from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
@@ -19,10 +22,11 @@ import { Node } from '../../models/node.model';
 import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, debounceTime, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { IChangeCell, IChangeHeaderFooterCell, IKlesCellFieldConfig } from '../../models/cell.model';
 import { AbstractKlesTableService } from '../../services/abstracttable.service';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
+import { TableVirtualScrollDataSource } from '../../virtual-scroll/table-virtual-data-source';
 
 
 @Component({
@@ -42,35 +46,25 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
 })
 
 export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-    public paginator: MatPaginator;
-    public sort: MatSort;
+    // public paginator: MatPaginator;
+    // public sort: MatSort;
     protected sortDefault = false;
-
     protected _onDestroy = new Subject<void>();
     protected _onLinesChanges = new Subject<void>();
 
-    @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
-        this.sort = ms;
-        this.setDataSourceAttributes();
-    }
+    @ViewChild(MatTable) table: MatTable<any>;
 
-    @ViewChild(MatPaginator, { static: true }) set matPaginator(mp: MatPaginator) {
-        this.paginator = mp;
-        this.setDataSourceAttributes();
-    }
+    @ViewChild(MatSort, { static: false }) sort: MatSort;
+    @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
     /** Input Component */
-    @Input() _lines: Node[] = [];
-    @Input() set lines(lines: any | any[]) {
-        this.updateData(lines);
-    }
-
-    @Input() _footer: any = {};
-    @Input() set footer(footer: any) {
-        if (footer) {
-            this.updateFooter(footer);
-        }
-    }
+    @Input() lines: any[] = [];
+    @Input() footer: any = {};
+    // @Input() set footer(footer: any) {
+    //     if (footer) {
+    //         this.updateFooter(footer);
+    //     }
+    // }
 
     @Input() columns = [] as KlesColumnConfig[];
     @Input() set selectionMode(selectionMode: boolean) {
@@ -84,6 +78,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     };
     @Input() sortConfig: Sort;
     @Input() hidePaginator: boolean = false;
+    @Input() virtualScroll: boolean = false;
     @Input() pageSize = 10;
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;
@@ -109,7 +104,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     formFooter: UntypedFormGroup;
 
     lineFields: IKlesFieldConfig[][];
-    dataSource = new MatTableDataSource<AbstractControl>([]);
+    // dataSource: MatTableDataSource<any> =  new TableVirtualScrollDataSource<AbstractControl>([]);
+    // dataSource = new MatTableDataSource<AbstractControl>([]);
+    dataSource: MatTableDataSource<AbstractControl>;
     selection = new SelectionModel<AbstractControl>(true);
 
     renderedData: any[]; // data from the datasource
@@ -137,34 +134,38 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     ngOnInit() {
-        this.dataSource.connect().subscribe(d => {
-            this.renderedData = d;
-        });
+        if (this.virtualScroll) {
+            this.dataSource = new TableVirtualScrollDataSource<AbstractControl>([]);
+        } else {
+            this.dataSource = new MatTableDataSource<AbstractControl>([]);
+        }
+
+        this.updateData(this.lines);
+        this.updateFooter(this.footer);
+
+        this.dataSource.connect()
+            .pipe(
+                takeUntil(this._onDestroy)
+            )
+            .subscribe(d => {
+                this.renderedData = d;
+            });
 
         this.formHeader = this.initFormHeader();
         this.formFooter = this.initFormFooter();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
-        // console.log('changes', changes);
-        // if (changes.columns) {
-        //     this.columns = changes.columns.currentValue;
-        //     this.formHeader = this.initFormHeader();
-        // }
-        // if (changes.lines) {
-        //     this.updateData(changes.lines.currentValue);
-        // }
-        // if (changes.selectionMode) {
-        //     this.selectionMode = changes.selectionMode.currentValue;
-        //     this.selection = new SelectionModel<any>(this.selectionMode);
-        // }
-        // if (changes.footer) {
-
-        // }
+        if (changes.lines && !changes.lines.firstChange) {
+            this.updateData(changes.lines.currentValue);
+        }
+        if (changes.footer && !changes.footer.firstChange) {
+            this.updateFooter(changes.footer.currentValue);
+        }
     }
 
     ngAfterViewInit() {
-        // this.setDataSourceAttributes();
+        this.setDataSourceAttributes();
         // this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
     }
 
@@ -205,7 +206,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     initFormArray() {
         this.lineFields = [];
         this._onLinesChanges.next();
-        const array = this.fb.array(this._lines.map((row) => {
+        const array = this.fb.array(this.lines.map((row) => {
             return this.addFormLine(row);
         }));
         return array;
@@ -344,7 +345,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             .forEach(column => {
                 const colCellFooter = column.footerCell;
                 colCellFooter.name = column.columnDef;
-                const control = this.buildControlField(colCellFooter, this._footer[colCellFooter.name]);
+                const control = this.buildControlField(colCellFooter, this.footer[colCellFooter.name]);
                 control.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
                     const parent = control.parent;
                     const change: IChangeHeaderFooterCell = { column, group: parent };
@@ -447,35 +448,20 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        // this.dataSource.data = this._lines.map(l => l.value);
 
         this.dataSource.data = this.getFormArray().controls;
         this.dataSource.filteredData = this.getFormArray().controls;
-
-        // this.getFormArray();
-        // .map(l => {
-        //     return this.columns.filter(c => c.visible).map(c => c.columnDef).reduce((a, b) => {
-        //         return {
-        //             ...a,
-        //             [b]: l[b]
-        //         }
-        //     }, {});
-        // });
-        this.getFormArray().valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
-            // console.log('Value change on rows in form table=', e);
-            //this.tableService.onLineChange(e);
-        });
         this._onLoaded.emit();
         this.tableService.onDataLoaded();
     }
 
     updateFooter(footer: any) {
-        this._footer = { ...footer };
+        this.footer = { ...footer };
         this.formFooter = this.initFormFooter();
     }
 
     updateData(lines: any[]) {
-        this._lines = lines.map((l, index) => {
+        this.lines = lines.map((l, index) => {
             const data = { ...l };
             const options = data.options;
             const _id = l._id || uuid.v4();

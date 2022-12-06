@@ -7,8 +7,10 @@
 
 form{
   overflow: auto;
-  height: inherit;
+  // height: inherit;
   max-height: calc(100vh - 155px);
+  height: 500px;
+
 }
 
 .mat-paginator{
@@ -18,8 +20,8 @@ form{
 }
 
 .mat-header-row {
-    position: sticky;
-    position: -webkit-sticky;
+    // position: sticky;
+    // position: -webkit-sticky;
     top: 0;
     z-index: 1000;
     min-height: 50px !important;

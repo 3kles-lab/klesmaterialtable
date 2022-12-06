@@ -34,6 +34,7 @@ import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytr
 import { KlesLazyTableService } from './services/lazy/lazytable.service';
 import { KlesLazyTreetableService } from './services/lazy/lazytreetable.service';
 import { RowPipe } from './pipe/row.pipe';
+import { TableItemSizeDirective } from './virtual-scroll/table-item-size.directive';
 
 const components = [
     KlesTableComponent,
@@ -53,6 +54,8 @@ const directives = [
     KlesComponentHeaderDirective,
     KlesDynamicCellDirective,
     KlesTreetableDirective,
+
+    TableItemSizeDirective
 ];
 const services = [
     AbstractKlesTableService,

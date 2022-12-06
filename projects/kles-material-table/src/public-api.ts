@@ -65,3 +65,8 @@ export * from './lib/pipe/row.pipe';
 
 /**MODULE */
 export * from './lib/table.module';
+
+/**Virtual scroll */
+export * from './lib/virtual-scroll/table-item-size.directive';
+export * from './lib/virtual-scroll/table-virtual-data-source';
+export * from './lib/virtual-scroll/table-virtual-scroll-stragegy';

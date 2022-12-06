@@ -53,6 +53,8 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.footer = changes.footer.currentValue;
             this.componentRef.instance.footer = this.footer;
         }
+
+        this.componentRef.instance.ngOnChanges(changes);
     }
 
     buildComponent() {
@@ -140,6 +142,10 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
         if (this.tableConfig.ngClassRow) {
             this.componentRef.instance.ngClassRow = this.tableConfig.ngClassRow;
+        }
+
+        if (this.tableConfig.virtualScroll) {
+            this.componentRef.instance.virtualScroll = this.tableConfig.virtualScroll;
         }
 
         // this.componentRef.instance.lines = [...this.lines];

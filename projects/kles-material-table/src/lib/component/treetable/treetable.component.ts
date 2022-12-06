@@ -72,8 +72,8 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
     }
 
     protected updateTree(data: any) {
-        this._lines = Array.isArray(data) ? data : [data];
-        this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
+        this.lines = Array.isArray(data) ? data : [data];
+        this.searchableTree = this.lines.map(t => this.converterService.toSearchableTree(t));
     }
 
 

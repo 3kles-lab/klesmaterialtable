@@ -33,6 +33,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 @NgModule({
@@ -72,7 +73,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
         MatSliderModule,
         MatButtonModule,
         MatSlideToggleModule,
-        ColorPickerModule
+        ColorPickerModule,
+        ScrollingModule
     ],
 
     exports: [
@@ -109,7 +111,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
         MatSliderModule,
         MatButtonModule,
         MatSlideToggleModule,
-        ColorPickerModule
+        ColorPickerModule,
+        ScrollingModule
     ],
     providers: [
         MatDatepickerModule,
