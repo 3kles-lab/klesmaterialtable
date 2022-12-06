@@ -65,6 +65,10 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         super.ngOnChanges(changes);
     }
 
+    ngAfterViewInit() {
+        this.setDataSourceAttributes();
+    }
+
     updateData(lines: any[]) {
         this.updateTree(lines);
         this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
