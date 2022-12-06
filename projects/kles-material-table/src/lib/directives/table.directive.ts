@@ -148,6 +148,10 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.componentRef.instance.virtualScroll = this.tableConfig.virtualScroll;
         }
 
+        if (this.tableConfig.virtualScrollConfig) {
+            this.componentRef.instance.virtualScrollConfig = this.tableConfig.virtualScrollConfig;
+        }
+
         // this.componentRef.instance.lines = [...this.lines];
 
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;

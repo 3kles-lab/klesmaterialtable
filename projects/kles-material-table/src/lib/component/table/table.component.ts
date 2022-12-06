@@ -79,6 +79,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() sortConfig: Sort;
     @Input() hidePaginator: boolean = false;
     @Input() virtualScroll: boolean = false;
+    @Input() virtualScrollConfig = {
+        rowHeight: 58,
+        headerHeight: 71,
+        footerHeight: 48,
+        bufferMultiplier: 0.5
+    };
+
     @Input() pageSize = 10;
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;

@@ -1,6 +1,8 @@
 <form class="dynamic-form" [formGroup]="form">
   <ng-container *ngIf="virtualScroll; else tableTemplate">
-    <cdk-virtual-scroll-viewport tvsItemSize autosize style="height: 100%" [tableComponent]="table">
+    <cdk-virtual-scroll-viewport [tvsItemSize]="virtualScrollConfig.rowHeight" autosize style="height: 100%" [tableComponent]="table"
+      [showFooter]="showFooter" [headerHeight]="virtualScrollConfig.headerHeight" [footerHeight]="virtualScrollConfig.footerHeight"
+      [bufferMultiplier]="virtualScrollConfig.bufferMultiplier">
       <ng-container *ngTemplateOutlet="tableTemplate">
       </ng-container>
     </cdk-virtual-scroll-viewport>

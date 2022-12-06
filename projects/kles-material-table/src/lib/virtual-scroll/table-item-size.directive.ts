@@ -38,16 +38,6 @@ export function _tableVirtualScrollDirectiveStrategyFactory(tableDir: TableItemS
 
 const stickyHeaderSelector = '.mat-header-row .mat-table-sticky, .mat-header-row.mat-table-sticky';
 const stickyFooterSelector = '.mat-footer-row .mat-table-sticky, .mat-header-row.mat-table-sticky';
-
-const defaults = {
-    rowHeight: 58,
-    headerHeight: 71,
-    headerEnabled: true,
-    footerHeight: 48,
-    footerEnabled: false,
-    bufferMultiplier: 0.5
-};
-
 @Directive({
     selector: 'cdk-virtual-scroll-viewport[tvsItemSize]',
     providers: [{
@@ -60,23 +50,19 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     private destroyed$ = new Subject<void>();
 
     // tslint:disable-next-line:no-input-rename
-    @Input('tvsItemSize')
-    rowHeight: string | number = defaults.rowHeight;
+    @Input('tvsItemSize') rowHeight: number;
 
     @Input()
-    headerEnabled: boolean = defaults.headerEnabled;
+    headerHeight!: number;
 
     @Input()
-    headerHeight: string | number = defaults.headerHeight;
+    showFooter!: boolean;
 
     @Input()
-    footerEnabled: boolean = defaults.footerEnabled;
+    footerHeight!: number;
 
     @Input()
-    footerHeight: string | number = defaults.footerHeight;
-
-    @Input()
-    bufferMultiplier: string | number = defaults.bufferMultiplier;
+    bufferMultiplier!: number;
 
     table: MatTable<any>;
     // @ContentChild(MatTable) table: MatTable<any>;
@@ -199,10 +185,10 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
 
     ngOnChanges() {
         const config = {
-            rowHeight: +this.rowHeight || defaults.rowHeight,
-            headerHeight: this.headerEnabled ? +this.headerHeight || defaults.headerHeight : 0,
-            footerHeight: this.footerEnabled ? +this.footerHeight || defaults.footerHeight : 0,
-            bufferMultiplier: +this.bufferMultiplier || defaults.bufferMultiplier
+            rowHeight: this.rowHeight,
+            headerHeight: this.headerHeight ,
+            footerHeight: this.showFooter ? this.footerHeight : 0,
+            bufferMultiplier: this.bufferMultiplier
         };
         this.scrollStrategy.setConfig(config);
     }

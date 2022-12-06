@@ -75,6 +75,7 @@ export class TableVirtualScrollStrategy implements VirtualScrollStrategy {
     }
 
     public setConfig(configs: TSVStrategyConfigs) {
+        console.log('configs',configs);
         const { rowHeight, headerHeight, footerHeight, bufferMultiplier } = configs;
         if (
             this.rowHeight === rowHeight

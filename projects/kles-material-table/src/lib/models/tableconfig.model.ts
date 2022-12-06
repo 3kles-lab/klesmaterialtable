@@ -20,4 +20,10 @@ export interface KlesTableConfig {
     showFooter?: boolean;
     ngClassRow?: (row: UntypedFormGroup) => any;
     virtualScroll?: boolean;
+    virtualScrollConfig?: {
+        rowHeight?: number,
+        headerHeight?: number,
+        footerHeight?: number,
+        bufferMultiplier?: number
+    };
 }
