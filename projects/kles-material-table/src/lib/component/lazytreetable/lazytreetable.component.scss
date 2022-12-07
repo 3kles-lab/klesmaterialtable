@@ -14,6 +14,10 @@
     // max-height: calc(100vh - 201px);
   }
   
+    cdk-virtual-scroll-viewport {
+      min-height: 500px;
+    }
+
   .mat-paginator{
     position: sticky;
     bottom: 0;
