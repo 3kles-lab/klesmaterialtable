@@ -56,6 +56,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
             .pipe(
                 takeUntil(this._onDestroy),
                 switchMap(() => {
+                    console.log('size',this.paginator.pageSize)
                     return concat(
                         of({ loading: true, value: { lines: [], totalCount: 0, footer: {}, header: {} } }),
                         this.tableService.load(this.sort.active, this.sort.direction, this.paginator.pageIndex, this.paginator.pageSize,

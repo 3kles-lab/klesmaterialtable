@@ -92,9 +92,8 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     }
 
     private isStickyEnabled(): boolean {
-        return !!this.scrollStrategy.viewport && (this.table['_headerRowDefs'] as CdkHeaderRowDef[])
-            .map(def => def.sticky)
-            .reduce((prevState, state) => prevState && state, true);
+        return !!this.scrollStrategy.viewport
+            && (this.table['_headerRowDefs'] as CdkHeaderRowDef[]).every(def => def.sticky);
     }
 
     private init() {
@@ -186,7 +185,7 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
     ngOnChanges() {
         const config = {
             rowHeight: this.rowHeight,
-            headerHeight: this.headerHeight ,
+            headerHeight: this.headerHeight,
             footerHeight: this.showFooter ? this.footerHeight : 0,
             bufferMultiplier: this.bufferMultiplier
         };
@@ -232,7 +231,6 @@ export class TableItemSizeDirective implements OnChanges, AfterContentInit, OnDe
                 }
             });
     }
-
 
     private getScheduleObservable(): Observable<any> {
         // Use onStable when in the context of an ongoing change detection cycle so that we
