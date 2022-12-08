@@ -8,16 +8,17 @@
 form {
   overflow: auto;
   height: inherit;
-  // min-height: 200px;
+  min-height: 300px;
   max-height: calc(100vh - 155px);
   position: relative;
   // max-height: calc(100vh - 201px);
-  height: 500px;
 }
 
 cdk-virtual-scroll-viewport {
-  // min-height: 500px;
+  min-height: 300px;
+  max-height: calc(100vh - 155px);
 }
+
 
 .mat-paginator {
   position: sticky;
