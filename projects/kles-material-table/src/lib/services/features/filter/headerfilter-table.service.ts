@@ -12,7 +12,7 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
         if (this.table) {
             this.filteredValues = this.table.formHeader.value;
             Object.keys(this.filteredValues).map(key => {
-                if (this.filteredValues[key] instanceof moment) {
+                if (moment.isMoment(this.filteredValues[key])) {
                     this.filteredValues[key] = moment(this.filteredValues[key]).toDate().toDateString();
                 }
             })
