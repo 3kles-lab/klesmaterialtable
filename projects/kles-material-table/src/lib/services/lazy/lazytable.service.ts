@@ -53,4 +53,8 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
         return this.pagination.list(sort, order, page, perPage, filter);
     }
 
+    reload(): void {
+        this.table.reload$.next();
+    }
+
 }
