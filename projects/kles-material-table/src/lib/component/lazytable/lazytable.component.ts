@@ -4,7 +4,7 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
-import { BehaviorSubject, concat, merge, of } from 'rxjs';
+import { BehaviorSubject, concat, merge, of, Subject } from 'rxjs';
 import { catchError, debounceTime, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
@@ -19,8 +19,8 @@ import { KlesTableComponent } from '../table/table.component';
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     loading: boolean;
-
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
+    reload$ = new Subject<void>();
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
@@ -51,8 +51,10 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
     ngAfterViewInit(): void {
         super.ngAfterViewInit();
 
-        this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
-        merge(this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
+        merge(this.sort.sortChange, this.filteredValues$.pipe(debounceTime(500)), this.reload$)
+            .subscribe(() => this.paginator.pageIndex = 0);
+
+        merge(this.reload$, this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
             .pipe(
                 takeUntil(this._onDestroy),
                 switchMap(() => {
