@@ -13,7 +13,7 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
             this.filteredValues = this.table.formHeader.value;
             Object.keys(this.filteredValues).map(key => {
                 if (moment.isMoment(this.filteredValues[key])) {
-                    this.filteredValues[key] = moment(this.filteredValues[key]).toDate().toDateString();
+                    this.filteredValues[key] = this.filteredValues[key].toDate().toDateString();
                 }
             })
             this.table.dataSource.filterPredicate = this.createFilter();
@@ -28,8 +28,7 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
             const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
 
             searchString = _.pick(searchString, filterableColumn);
-            return Object.keys(searchString).filter(f => filterableColumn.includes(f)).every(key => {
-
+            return Object.keys(searchString).filter(f => searchString[f] && filterableColumn.includes(f)).every(key => {
                 let keyValue = data?.controls[key]?.value;
                 const column: KlesColumnConfig = this.table.columns.find(col => col.columnDef === key);
 
