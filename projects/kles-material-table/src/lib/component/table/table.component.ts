@@ -10,7 +10,7 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAda
 import { AbstractControl, AsyncValidatorFn, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
@@ -58,6 +58,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this.paginator = mp;
         this.setDataSourceAttributes();
     }
+
+    @ViewChild(MatTable) matTable: MatTable<any>;
 
     /** Input Component */
     @Input() _lines: Node[] = [];
@@ -164,8 +166,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     }
 
     ngAfterViewInit() {
-        // this.setDataSourceAttributes();
-        // this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+        this.matTable?.updateStickyColumnStyles();
     }
 
 
