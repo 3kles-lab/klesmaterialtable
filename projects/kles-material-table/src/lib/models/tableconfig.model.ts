@@ -3,8 +3,8 @@ import { Sort } from '@angular/material/sort';
 import { KlesColumnConfig } from './columnconfig.model';
 import { Options } from './options.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
-import { IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import { AsyncValidatorFn, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { IKlesCellFieldConfig } from './cell.model';
 
 export interface KlesTableConfig {
     tableComponent: Type<any>;
@@ -20,4 +20,6 @@ export interface KlesTableConfig {
     lineAsyncValidations?: AsyncValidatorFn[];
     showFooter?: boolean;
     ngClassRow?: (row: UntypedFormGroup) => any;
+    multiTemplate?: boolean;
+    templates?: { field: IKlesCellFieldConfig, when?: ((index: number, rowData: any) => boolean) }[];
 }

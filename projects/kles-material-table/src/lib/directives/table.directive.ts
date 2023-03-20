@@ -142,6 +142,11 @@ export class KlesTableDirective implements OnInit, OnChanges {
             this.componentRef.instance.ngClassRow = this.tableConfig.ngClassRow;
         }
 
+        if (this.tableConfig.multiTemplate) {
+            this.componentRef.instance.multiTemplate = this.tableConfig.multiTemplate;
+            this.componentRef.instance.templates = this.tableConfig.templates || [];
+        }
+
         // this.componentRef.instance.lines = [...this.lines];
 
         this.componentRef.instance._onChangeHeaderCell = this._onChangeHeaderCell;
@@ -150,5 +155,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         this.componentRef.instance._onSelected = this._onSelected;
         this.componentRef.instance._onLoaded = this._onLoaded;
         this.componentRef.instance._onStatusHeaderChange = this._onStatusHeaderChange;
+
+
     }
 }

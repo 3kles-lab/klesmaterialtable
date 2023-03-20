@@ -95,6 +95,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() ngClassRow: (row: UntypedFormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
 
+    @Input() multiTemplate: boolean = false;
+    @Input() templates: any[] = [];
+
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
     @Output() _onSelected = new EventEmitter<AbstractControl[]>();
@@ -262,6 +265,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             group.addControl(column.cell.name, control);
         });
         this.lineFields.push(listField);
+
+        if (this.multiTemplate && this.templates?.length) {
+            this.templates.forEach(template => {
+                const field: IKlesCellFieldConfig = _.cloneDeep(template.field);
+                const control = this.buildControlField(field, row.value[field.name]);
+                group.addControl(template.field.name, control);
+            });
+        }
 
         group.setValidators(this.lineValidations);
         group.setAsyncValidators(this.lineAsyncValidations);
