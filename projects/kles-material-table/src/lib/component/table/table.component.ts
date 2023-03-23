@@ -16,7 +16,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { Options } from '../../models/options.model';
 import { Node } from '../../models/node.model';
-import { EnumType, IKlesFieldConfig, IKlesValidator } from '@3kles/kles-material-dynamicforms';
+import { componentMapper, EnumType, IKlesFieldConfig, IKlesValidator, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
@@ -374,48 +374,26 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     /**Field and control */
     buildControlField(field: IKlesFieldConfig, value?: any): AbstractControl {
-        if (field.type === EnumType.button) {
-            return;
-        }
 
-        if (field.type === EnumType.group) {
-            const subGroup = this.fb.group({});
-            field.collections.forEach(subfield => {
-                const control = this.fb.control(
-                    value ? value[subfield.name] : null,
-                    this.bindValidations(subfield.validations || []),
-                    this.bindAsyncValidations(subfield.asyncValidations || [])
-                );
-                if (subfield.disabled) {
-                    control.disable();
+        const asyncValidations = field.asyncValidations?.map(asyncValisation => {
+            const klesValidator = { ...asyncValisation };
+            const validatorFn = ((c: AbstractControl) => {
+                const validator$ = klesValidator.validator(c);
+                if (validator$ instanceof Promise) {
+                    return validator$.finally(() => this.ref.markForCheck());
+                } else {
+                    return validator$.pipe(tap(() => this.ref.markForCheck()));
                 }
-                subGroup.addControl(subfield.name, control);
             });
-            return subGroup;
+            asyncValisation.validator = validatorFn;
+            return asyncValisation;
+        }) || [];
 
+
+        if (field.type) {
+            return componentMapper.find(c => c.type === field.type)?.factory({ ...field, value, asyncValidations }) || klesFieldControlFactory({ ...field, value, asyncValidations });
         } else {
-            const control = this.fb.control(
-                value,
-                this.bindValidations(field.validations || []),
-                this.bindAsyncValidations(field.asyncValidations?.map(asyncValisation => {
-                    const klesValidator = { ...asyncValisation };
-                    const validatorFn = ((c: AbstractControl) => {
-                        const validator$ = klesValidator.validator(c);
-                        if (validator$ instanceof Promise) {
-                            return validator$.finally(() => this.ref.markForCheck());
-                        } else {
-                            return validator$.pipe(tap(() => this.ref.markForCheck()));
-                        }
-                    });
-                    asyncValisation.validator = validatorFn;
-                    return asyncValisation;
-                }) || [])
-            );
-
-            if (field.disabled) {
-                control.disable();
-            }
-            return control;
+            return componentMapper.find(c => c.component === field.component)?.factory({ ...field, value, asyncValidations }) || klesFieldControlFactory({ ...field, value, asyncValidations });
         }
     }
 
@@ -564,31 +542,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     formatElevation(): string {
         return `mat-elevation-z${this.options.elevation}`;
-    }
-
-    /**Validation */
-    protected bindValidations(validations: IKlesValidator<ValidatorFn>[]): ValidatorFn {
-        if (validations.length > 0) {
-            const validList = [];
-            validations.forEach(valid => {
-                validList.push(valid.validator);
-            });
-            return Validators.compose(validList);
-
-        }
-        return null;
-    }
-
-    protected bindAsyncValidations(validations: IKlesValidator<AsyncValidatorFn>[]): AsyncValidatorFn {
-        if (validations.length > 0) {
-            const validList = [];
-            validations.forEach(valid => {
-                validList.push(valid.validator);
-            });
-            return Validators.composeAsync(validList);
-
-        }
-        return null;
     }
 
     public isSortingDisabled(column: KlesColumnConfig): boolean {
