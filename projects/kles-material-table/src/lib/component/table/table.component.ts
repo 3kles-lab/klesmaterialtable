@@ -96,7 +96,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() ngClassRow: (row: UntypedFormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
 
     @Input() multiTemplate: boolean = false;
-    @Input() templates: any[] = [];
+    @Input() templates: { cells: IKlesCellFieldConfig[], when?: ((index: number, rowData: any) => boolean) }[] = [];
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -268,9 +268,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
         if (this.multiTemplate && this.templates?.length) {
             this.templates.forEach(template => {
-                const field: IKlesCellFieldConfig = _.cloneDeep(template.field);
-                const control = this.buildControlField(field, row.value[field.name]);
-                group.addControl(template.field.name, control);
+                template.cells.forEach((cell) => {
+                    const field: IKlesCellFieldConfig = _.cloneDeep(cell);
+                    const control = this.buildControlField(field, row.value[cell.name]);
+                    group.addControl(cell.name, control);
+                })
+
             });
         }
 
@@ -560,5 +563,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public pageChanged(event: PageEvent) {
         this.tableService.onPageChange(event);
+    }
+
+    public getTemplateColumns(template: any): string[] {
+        return template.cells.map(c => c.name);
     }
 }
