@@ -29,15 +29,15 @@ import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
-    providers: [
-        { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
-        {
-            provide: DateAdapter,
-            useClass: MomentDateAdapter,
-            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-        },
-        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    ],
+    // providers: [
+    //     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+    //     {
+    //         provide: DateAdapter,
+    //         useClass: MomentDateAdapter,
+    //         deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    //     },
+    //     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    // ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

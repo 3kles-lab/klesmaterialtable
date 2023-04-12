@@ -1,5 +1,6 @@
 import { EnumType, KlesFormColorComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormSelectSearchComponent } from '@3kles/kles-material-dynamicforms';
 import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { BehaviorSubject } from 'rxjs';
 import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
@@ -56,12 +57,23 @@ export class KlesTableDirective implements OnInit, OnChanges {
     }
 
     buildComponent() {
-        const options = {
+        const options: any = {
             providers: [{
                 provide: 'tableService',
                 useValue: this.tableConfig.tableService
             }]
         };
+        if (this.tableConfig.dateOptions) {
+            options.providers.push(...[
+                { provide: MAT_DATE_LOCALE, useValue: this.tableConfig.dateOptions.language },
+                // {
+                //     provide: DateAdapter,
+                //     useClass: this.tableConfig.dateOptions.dateAdapter,
+                //     deps: [MAT_DATE_LOCALE, this.tableConfig.dateOptions.dateAdapterOptions]
+                // },
+                { provide: MAT_DATE_FORMATS, useValue: this.tableConfig.dateOptions.dateFormat }
+            ]);
+        }
         const injector: Injector = Injector.create(options);
         const factory = this.resolver.resolveComponentFactory(
             this.tableConfig.tableComponent

@@ -3,8 +3,8 @@ import { Sort } from '@angular/material/sort';
 import { KlesColumnConfig } from './columnconfig.model';
 import { Options } from './options.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
-import { IKlesValidator } from '@3kles/kles-material-dynamicforms';
 import { AsyncValidatorFn, FormGroup, ValidatorFn } from '@angular/forms';
+import { MatDateFormats } from '@angular/material/core';
 
 export interface KlesTableConfig {
     tableComponent: Type<any>;
@@ -20,4 +20,10 @@ export interface KlesTableConfig {
     lineAsyncValidations?: AsyncValidatorFn[];
     showFooter?: boolean;
     ngClassRow?: (row: FormGroup) => any;
+    dateOptions?: {
+        language: string,
+        // dateAdapter: any,
+        // dateAdapterOptions: any;
+        dateFormat: MatDateFormats
+    }
 }

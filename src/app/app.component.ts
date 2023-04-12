@@ -1,21 +1,19 @@
-import { AfterContentChecked, AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormArray, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AbstractControl, AsyncValidatorFn, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import {
     IKlesFieldConfig, IKlesValidator, KlesDynamicFormComponent, KlesFormButtonCheckerComponent, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormColorComponent,
     KlesFormDateComponent,
-    KlesFormInputComponent, KlesFormLabelComponent, KlesFormTextComponent,
+    KlesFormInputComponent, KlesFormTextComponent,
     autocompleteObjectValidator,
     KlesFormButtonFileComponent,
-    KlesFormButtonToogleGroupComponent,
     KlesFormSlideToggleComponent,
     KlesFormInputClearableComponent,
     KlesFormSelectSearchComponent,
     EnumType
 } from '@3kles/kles-material-dynamicforms';
 import {
-    KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
-    KlesFormTextHeaderFilterComponent,
+    KlesTableComponent, KlesTableConfig, KlesFormTextHeaderFilterComponent,
     KlesFormDynamicHeaderFilterComponent,
     KlesFormTextHeaderComponent,
     IKlesHeaderFieldConfig,
@@ -23,7 +21,6 @@ import {
     KlesTreetableService,
     KlesTreetableDirective,
     KlesLazyTreetableComponent,
-    KlesLazyTableService,
     IPagination,
     KlesLazyTreetableService,
     KlesTreeColumnConfig,
@@ -33,7 +30,7 @@ import * as _ from 'lodash';
 import * as XLSX from 'xlsx';
 import * as moment from 'moment';
 import { Observable, of, timer } from 'rxjs';
-import { switchMap, catchError, map, delay, tap } from 'rxjs/operators';
+import { switchMap, catchError, map, delay } from 'rxjs/operators';
 import { FakeApiService } from './services/fakemi.service';
 import { IMIResponse } from '@infor-up/m3-odin';
 import { TableService } from './services/table.service';
@@ -45,8 +42,7 @@ import { IKlesDynamicFormDataDialog, KlesDynamicFormDialogComponent } from '@3kl
 import { AutocompleteComponent } from './components/autocomplete.component';
 import { BehaviorSubject } from 'rxjs';
 import { isArray } from 'lodash';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { DateAdapter } from '@angular/material/core';
 
 @Component({
     selector: 'app-root',
@@ -138,6 +134,20 @@ export class AppComponent implements OnInit, AfterViewInit {
         {
             name: 'date',
             component: KlesFormDateComponent,
+            dateOptions: {
+                language: 'fr-FR',
+                dateFormat: {
+                    parse: {
+                        dateInput: 'MM/DD/YYYY',
+                    },
+                    display: {
+                        dateInput: 'MM/DD/YYYY',
+                        monthYearLabel: 'MMM YYYY',
+                        dateA11yLabel: 'MM/DD/YYYY',
+                        monthYearA11yLabel: 'MMM YYYY',
+                    },
+                }
+            },
             value: new Date()
         },
         {
@@ -200,6 +210,21 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     isLoading = false;
     errorView = false;
+
+    dateOptions = {
+        language: 'fr-FR',
+        dateFormat: {
+            parse: {
+                dateInput: 'DD/MM/YYYY',
+            },
+            display: {
+                dateInput: 'DD/MM/YYYY',
+                monthYearLabel: 'MMM YYYY',
+                dateA11yLabel: 'DD/MM/YYYY',
+                monthYearA11yLabel: 'MMM YYYY',
+            },
+        }
+    }
 
     constructor(
         private ref: ChangeDetectorRef,
@@ -661,12 +686,14 @@ export class AppComponent implements OnInit, AfterViewInit {
                     component: KlesFormDynamicHeaderFilterComponent,
                     // autocompleteComponent: KlesFormDateComponent,
                     filterComponent: KlesFormDateComponent,
+                    dateOptions: this.dateOptions,
                     filterClearable: true
                 } as IKlesHeaderFieldConfig,
                 cell: {
                     inputType: 'text',
                     name: 'PlannedDate',
                     component: KlesFormDateComponent,
+                    dateOptions: this.dateOptions,
                 } as IKlesFieldConfig,
             },
             {
@@ -807,7 +834,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         const listComponent = this;
         this.treeTableConfigLazy = {
             ngClassRow: (row: FormGroup) => {
-                return {'make-gold': row.value.Warehouse == 'AA'};
+                return { 'make-gold': row.value.Warehouse == 'AA' };
             },
             columns: this.columns,
             tableComponent: KlesLazyTreetableComponent,

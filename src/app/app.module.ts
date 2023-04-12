@@ -13,6 +13,7 @@ import { FakeApiService } from './services/fakemi.service';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { KlesMaterialDialogModule } from '@3kles/kles-material-dialog';
 import { AutocompleteComponent } from './components/autocomplete.component';
+import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import { AutocompleteComponent } from './components/autocomplete.component';
     KlesMaterialTableModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    MatMomentDateModule,
     TranslateModule.forRoot(
       {
         loader: {

@@ -21,15 +21,15 @@ import { of, combineLatest } from 'rxjs';
     selector: 'app-kles-dynamictreetable',
     templateUrl: './treetable.component.html',
     styleUrls: ['./treetable.component.scss'],
-    providers: [
-        { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
-        {
-            provide: DateAdapter,
-            useClass: MomentDateAdapter,
-            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-        },
-        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    ],
+    // providers: [
+    //     { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+    //     {
+    //         provide: DateAdapter,
+    //         useClass: MomentDateAdapter,
+    //         deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    //     },
+    //     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    // ],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
