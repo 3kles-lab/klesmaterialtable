@@ -107,6 +107,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Output() _onStatusHeaderChange = new EventEmitter();
     @Output() _onStatusLineChange = new EventEmitter();
     @Output() _onStatusCellChange = new EventEmitter();
+    @Output() _onClick = new EventEmitter();
 
     // Table
     formHeader: UntypedFormGroup;
@@ -567,5 +568,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public getTemplateColumns(template: any): string[] {
         return template.cells.map(c => c.name);
+    }
+
+    public onClick(row: UntypedFormGroup) {
+        this._onClick.emit(row);
     }
 }

@@ -19,6 +19,8 @@ export class KlesTableDirective implements OnInit, OnChanges {
     @Output() _onChangeFooterCell = new EventEmitter();
     @Output() _onStatusHeaderChange = new EventEmitter();
 
+    @Output() _onClick = new EventEmitter();
+
     componentRef: ComponentRef<any>;
 
     constructor(private resolver: ComponentFactoryResolver,
@@ -155,7 +157,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
         this.componentRef.instance._onSelected = this._onSelected;
         this.componentRef.instance._onLoaded = this._onLoaded;
         this.componentRef.instance._onStatusHeaderChange = this._onStatusHeaderChange;
-
-
+        this.componentRef.instance._onClick = this._onClick;
     }
 }

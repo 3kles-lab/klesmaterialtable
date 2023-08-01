@@ -51,7 +51,7 @@
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
-    <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;"></tr>
+    <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row)"></tr>
     <ng-container *ngIf="multiTemplate">
       <ng-container *ngFor="let template of templates">
         <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: getTemplateColumns(template); when: template.when"></tr>
