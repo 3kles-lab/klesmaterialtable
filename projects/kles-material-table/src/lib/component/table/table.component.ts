@@ -572,5 +572,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public onClick(row: UntypedFormGroup) {
         this._onClick.emit(row);
+        this.tableService.onClick(row);
     }
 }
