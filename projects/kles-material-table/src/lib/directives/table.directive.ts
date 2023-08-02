@@ -3,6 +3,7 @@ import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Dir
 import { BehaviorSubject } from 'rxjs';
 import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
+import { MatPaginatorIntl } from '@angular/material/paginator';
 
 @Directive({
     selector: '[klesTable]'
@@ -59,10 +60,16 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
     buildComponent() {
         const options = {
-            providers: [{
-                provide: 'tableService',
-                useValue: this.tableConfig.tableService
-            }]
+            providers: [
+                {
+                    provide: 'tableService',
+                    useValue: this.tableConfig.tableService
+                },
+                ...this.tableConfig.customMatPaginatorIntl ? [{
+                    provide: MatPaginatorIntl,
+                    useClass: this.tableConfig.customMatPaginatorIntl
+                }] : []
+            ]
         };
         const injector: Injector = Injector.create(options);
         const factory = this.resolver.resolveComponentFactory(

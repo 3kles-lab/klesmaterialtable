@@ -48,7 +48,7 @@ export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract impleme
         if (this.field.options instanceof Observable) {
             this.options$ = this.field.options;
         } else {
-            this.options$ = of(this.field.options);
+            this.options$ = of(this.field.options as any);
         }
 
         this.filteredOption = this.group.get(this.field.name).valueChanges
