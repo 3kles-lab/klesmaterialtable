@@ -50,6 +50,7 @@ export * from './lib/services/treetable/treetable.service';
 export * from './lib/services/features/treetableservice.interface';
 export * from './lib/services/features/selection/selectiontreetable.service';
 export * from './lib/services/features/selection/selectiontablelazy.service';
+export * from './lib/services/features/selectionclick/selectionclick.service';
 
 /**FEATURES */
 export * from './lib/services/features/tableservice.interface';
