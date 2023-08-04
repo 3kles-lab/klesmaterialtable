@@ -49,6 +49,7 @@ import { FormGroup } from "@angular/forms";
 })
 
 export class KlesNodeComponent extends AbstractCell {
+
     onNodeClick(row: any): void {
         (this.group.controls._status as FormGroup).controls.paginator?.patchValue({
             pageIndex: 0

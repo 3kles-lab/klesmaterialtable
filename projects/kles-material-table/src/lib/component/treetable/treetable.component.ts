@@ -122,16 +122,19 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
                                     isExpanded: value._status.isExpanded,
                                     isVisible: value._status.isVisible,
                                     _id: value._id
-
                                 };
 
                                 parent.controls._status
                                     .patchValue({
                                         children:
-                                            parent.controls._status.value.children
-                                                .filter(c => c._id !== value._id)
-                                                .concat(data)
-                                    });
+                                            parent.controls._status.value.children.map((c => {
+                                                if (c._id === data._id) {
+                                                    return data;
+                                                }
+                                                return c;
+                                            }))
+
+                                    }, { emitEvent: false });
                             });
                     });
                 return childControls;
