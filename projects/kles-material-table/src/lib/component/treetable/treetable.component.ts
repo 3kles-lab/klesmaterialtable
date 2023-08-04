@@ -148,7 +148,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         const idControl = this.formBuilder.control(row._id);
         group.addControl('_id', idControl);
 
-        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator);
+        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
 
         const statusControl = this.formBuilder.group({
             isVisible: row.isVisible,
