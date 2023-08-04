@@ -12,11 +12,13 @@ import { AbstractKlesLazyTreetableService } from '../../services/lazy/abstractla
 import { ConverterService } from '../../services/treetable/converter.service';
 import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTreetableComponent } from '../treetable/treetable.component';
+import { rowsAnimation } from '../../animations/row.animation';
 
 @Component({
     selector: 'app-kles-lazytreetable',
     templateUrl: './lazytreetable.component.html',
     styleUrls: ['./lazytreetable.component.scss'],
+    animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

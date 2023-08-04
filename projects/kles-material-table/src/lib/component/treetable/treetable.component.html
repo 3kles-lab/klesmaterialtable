@@ -34,7 +34,7 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
-        <tr mat-row [ngClass]="row | rowPipe"
+        <tr mat-row [ngClass]="row | rowPipe" [@rowsAnimation]=""
             *matRowDef="let row; columns: displayedColumns;" [hidden]="!row.value._status.isVisible" (click)="onClick(row)"></tr>
         <div *ngIf="showFooter">
             <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">

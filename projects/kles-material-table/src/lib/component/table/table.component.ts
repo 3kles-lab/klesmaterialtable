@@ -7,7 +7,7 @@ import {
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, FormGroup, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -16,19 +16,21 @@ import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { Options } from '../../models/options.model';
 import { Node } from '../../models/node.model';
-import { componentMapper, EnumType, IKlesFieldConfig, IKlesValidator, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
+import { componentMapper, IKlesFieldConfig, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
-import { catchError, debounceTime, distinctUntilChanged, finalize, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
+import { catchError, debounceTime, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
 import { IChangeCell, IChangeHeaderFooterCell, IKlesCellFieldConfig } from '../../models/cell.model';
 import { AbstractKlesTableService } from '../../services/abstracttable.service';
-import { BehaviorSubject, Observable, of, Subject } from 'rxjs';
+import { of, Subject } from 'rxjs';
+import { rowsAnimation } from '../../animations/row.animation';
 
 
 @Component({
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
+    animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
         {

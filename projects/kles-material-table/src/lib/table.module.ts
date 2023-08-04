@@ -34,6 +34,7 @@ import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytr
 import { KlesLazyTableService } from './services/lazy/lazytable.service';
 import { KlesLazyTreetableService } from './services/lazy/lazytreetable.service';
 import { RowPipe } from './pipe/row.pipe';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 const components = [
     KlesTableComponent,
@@ -81,6 +82,7 @@ const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe];
         TranslateModule,
         ReactiveFormsModule,
         FormsModule,
+        BrowserAnimationsModule,
         KlesMaterialDynamicformsModule
     ],
     exports: [

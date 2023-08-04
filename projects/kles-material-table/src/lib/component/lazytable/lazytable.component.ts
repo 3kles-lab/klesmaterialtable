@@ -8,11 +8,13 @@ import { BehaviorSubject, concat, merge, of, Subject } from 'rxjs';
 import { catchError, debounceTime, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
+import { rowsAnimation } from '../../animations/row.animation';
 
 @Component({
     selector: 'app-kles-lazytable',
     templateUrl: './lazytable.component.html',
     styleUrls: ['./lazytable.component.scss'],
+    animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 

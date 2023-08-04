@@ -16,11 +16,13 @@ import { KlesTableComponent } from '../table/table.component';
 import { debounceTime, switchMap, take, catchError, takeUntil, map, tap } from 'rxjs/operators';
 import { AbstractKlesTreeTableService } from '../../services/treetable/abstracttreetable.service';
 import { of, combineLatest } from 'rxjs';
+import { rowsAnimation } from '../../animations/row.animation';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
     templateUrl: './treetable.component.html',
     styleUrls: ['./treetable.component.scss'],
+    animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
         {
