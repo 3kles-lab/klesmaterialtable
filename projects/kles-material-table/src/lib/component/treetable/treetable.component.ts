@@ -17,6 +17,7 @@ import { debounceTime, switchMap, take, catchError, takeUntil, map, tap } from '
 import { AbstractKlesTreeTableService } from '../../services/treetable/abstracttreetable.service';
 import { of, combineLatest } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
+import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -143,20 +144,26 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         const group = this.formBuilder.group({});
         const idControl = this.formBuilder.control(row._id);
         group.addControl('_id', idControl);
+
+        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator);
+
         const statusControl = this.formBuilder.group({
             isVisible: row.isVisible,
             isExpanded: row.isExpanded,
             depth: row.depth,
             children: [row.children],
             childrenCounter: row.childrenCounter || ~~row.children?.length,
+            ...(paginator && {
+                paginator: this.formBuilder.group({
+                    pageIndex: 0,
+                    pageSize: paginator.paginatorOption?.pageSize || 5,
+                    length: row.childrenCounter || ~~row.children?.length || 0
+                })
+            })
         });
 
         group.addControl('_status', statusControl);
 
-
-        // if (row.children) {
-        //     group.addControl('_children', this.formBuilder.array(row.children.map(child => this.addFormLine(child))));
-        // }
         const rowValue = row?.value;
         const listField = [];
         this.columns.forEach(column => {

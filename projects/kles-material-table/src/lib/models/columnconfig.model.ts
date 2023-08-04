@@ -18,4 +18,10 @@ export interface KlesColumnConfig {
 }
 export interface KlesTreeColumnConfig extends KlesColumnConfig {
     canExpand?: boolean;
+    paginator?: boolean;
+    paginatorOption?: {
+        pageSize?: number;
+        showFirstLastButtons?: boolean;
+    }
+
 }

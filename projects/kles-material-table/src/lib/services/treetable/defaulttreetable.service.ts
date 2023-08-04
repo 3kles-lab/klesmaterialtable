@@ -61,14 +61,20 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
     }
 
     protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
-        node.value._status.children?.forEach(child => {
+
+        const paginator = node.value._status.paginator;
+        const start = (paginator?.pageIndex * paginator?.pageSize) || 0;
+        const end = (start + paginator?.pageSize) || node.value._status.children?.length;
+
+        node.value._status.children?.forEach((child, index) => {
             const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as UntypedFormGroup;
 
             if (childGroup) {
                 childGroup.controls._status.patchValue({
-                    isVisible: visibility,
+                    isVisible: (index >= start && index < end) ? visibility : false,
                 }, { emitEvent: false });
-                this.changeChildrenVisibility(childGroup, childGroup.controls._status.value.isExpanded && visibility);
+                this.changeChildrenVisibility(childGroup, childGroup.controls._status.value.isExpanded
+                    && ((index >= start && index < end) ? visibility : false));
             }
         });
     }
