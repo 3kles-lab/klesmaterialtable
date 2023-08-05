@@ -21,6 +21,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             (
                 { super: KlesSelectionTableLazyService, arguments: ['#select', selection] },
             );
+
     }
 
     //Header 
@@ -37,8 +38,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     }
 
     onLineChange(e: any) {
-        console.log('onLineChange=', e);
-        super.onLineChange(e);
+        // super.onLineChange(e);
     }
 
     protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
@@ -67,8 +67,8 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         return this.data.list(sort, order, page, perPage, filter);
     }
 
-    loadChild(parentId: string): Observable<{ lines: any[], totalCount: number }> {
-        return this.child.loadChildren(parentId);
+    loadChild(parentId: string, sort?: string, order?: string, page?: number, perPage?: number, filter?: { [key: string]: any; }): Observable<{ lines: any[], totalCount: number }> {
+        return this.child.loadChildren(parentId, sort, order, page, perPage, filter);
     }
 
     addChild(parentId: string, record): UntypedFormGroup {

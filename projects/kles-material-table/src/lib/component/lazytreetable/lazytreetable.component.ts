@@ -13,6 +13,7 @@ import { ConverterService } from '../../services/treetable/converter.service';
 import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTreetableComponent } from '../treetable/treetable.component';
 import { rowsAnimation } from '../../animations/row.animation';
+import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 
 @Component({
     selector: 'app-kles-lazytreetable',
@@ -100,24 +101,6 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         return this.lineFields[index].find(f => f.name === key);
     }
 
-    // protected updateTree(data: any) {
-    //     this._lines = Array.isArray(data) ? data : [data];
-    //     this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
-    // }
-
-
-    // initFormArray() {
-    //     const treeTableTree = this.searchableTree.map(st => this.converterService.toTreeTableTree(st));
-    //     // console.log('## treeTableTree=', treeTableTree);
-    //     this.lineFields = [];
-    //     const array = this.formBuilder.array(
-    //         treeTableTree.flatMap(node => {
-    //             return this.createFormNode(node);
-    //         })
-    //     );
-    //     return array;
-    // }
-
     createFormNode(node: TreeTableNode<any>): UntypedFormGroup[] {
         let children: UntypedFormGroup[] = [];
         const parent = this.addFormLine(node);
@@ -171,6 +154,8 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         const lazyChildControl = this.formBuilder.control(row.isExpanded);
         group.addControl('_lazyChild', lazyChildControl);
 
+        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
+
         const statusControl = this.formBuilder.group({
             isVisible: row.isVisible,
             isExpanded: row.isExpanded,
@@ -178,9 +163,17 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
             childrenCounter: row.childrenCounter || ~~row.children?.length,
             children: [row.children],
             isBusy: false,
+            ...(paginator && {
+                paginator: this.formBuilder.group({
+                    pageIndex: 0,
+                    pageSize: paginator.paginatorOption?.pageSize || 5,
+                    length: 0
+                })
+            })
         });
 
         group.addControl('_status', statusControl);
+
         statusControl.valueChanges.pipe(
             filter(f => f.isExpanded !== lazyChildControl.value),
             tap(t => {
@@ -189,46 +182,21 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                 return t;
             }),
             switchMap(s => {
-                // console.log('Status change=', s, "=> group=", group.getRawValue()._status);
                 if (s.isExpanded) {
-                    // console.log('Load Children group=>', group);
-                    // const child = { ...group.getRawValue().tempChildren[0] }
-                    // this.tableService.addChild(group.getRawValue()._id, child);
-                    return this.tableService.loadChild(group);
+                    return this.tableService.loadChild(group, null, null, s.paginator?.pageIndex, s.paginator?.pageSize);
                 } else {
-                    // console.log('Delete Children');
-                    return of([]);
+                    return of({ lines: [], totalCount: 0 });
                 }
             })
 
-        ).subscribe(listChildren => {
-            console.log('Result OnClick Child=', listChildren);
-            if (listChildren.length) {
-                console.log('###CHILD');
-                listChildren.forEach(child => this.tableService.addChild(row._id, child));
-                // console.log('###CHILDREN');
-                // this.tableService.addChildren(row._id, s);
-                // statusControl.patchValue({ children: s }, { emitEvent: false, onlySelf: true });
-                // console.log('Update Row=', { _id: group.getRawValue()._id, value: { ...group.getRawValue(), children: s } });
-                // this.tableService.updateRow({ _id: group.getRawValue()._id, value: { ...group.getRawValue(), Warehouse: 'toto', children: s }, children: s }, { emitEvent: false, onlySelf: true });
-                // console.log('Lines=', this._lines)
-                // const currentIndex = this._lines.findIndex(f => f?.value?._id === group.getRawValue()._id);
-                // console.log('Index to update=', currentIndex);
-                // let filterLines = this._lines.filter(f => f?.value?._id !== group.getRawValue()?._id);
-                // console.log('List Filter=', filterLines);
-                // const record = { _id: group.getRawValue()._id, value: { ...group.getRawValue() }, children: s as any };
-                // filterLines.splice(currentIndex, 0, record);
-                // this._lines = filterLines;
-                // this.updateData(this._lines);
+        ).subscribe(({ lines, totalCount }) => {
+            if (lines.length) {
+                lines.forEach(child => this.tableService.addChild(row._id, child));
             } else {
                 this.tableService.deleteChildren(row._id);
             }
-            // statusControl.patchValue({ isBusy: false }, { emitEvent: false, onlySelf: true });
-            statusControl.patchValue({ children: listChildren, isBusy: false }, { emitEvent: false });
-            console.log('Statuscontrol Result=', statusControl);
-            console.log('List FormArray Result=', this.getFormArray());
-            // (this.getFormArray().controls.find((group: FormGroup) => group.value._id === row._id) as FormGroup)
-            //     .controls._status.patchValue({ isBusy: false }, { emitEvent: false });
+            statusControl.patchValue({ children: lines, isBusy: false }, { emitEvent: false });
+            statusControl.controls.paginator.patchValue({ length: totalCount }, { emitEvent: false });
             this.ref.markForCheck();
         })
 
