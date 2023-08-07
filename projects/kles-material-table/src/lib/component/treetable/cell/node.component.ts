@@ -45,7 +45,7 @@ import { FormGroup } from "@angular/forms";
         `app-kles-node .mat-paginator-range-label { margin: 0px }`,
         `app-kles-node .mat-paginator { background: transparent }`,
         `app-kles-node .mat-paginator-range-label { min-width: max-content }`,
-        `app-kles-node .mat-paginator-container { padding: 0 2px 0 8px; }`
+        `app-kles-node .mat-paginator-container { padding: 0 2px 0 8px; min-height: auto }`
     ],
 })
 
