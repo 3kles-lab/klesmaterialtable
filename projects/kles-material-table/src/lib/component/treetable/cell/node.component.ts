@@ -7,27 +7,31 @@ import { FormGroup } from "@angular/forms";
     selector: 'app-kles-node',
     encapsulation: ViewEncapsulation.None,
     template: `
-        <div *ngIf="column.canExpand" [innerHTML]="formatIndentation(row)"></div>
-       
-        <mat-icon *ngIf="!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter>0"
-            class="size-16" (click)="onNodeClick(row)">
-            {{row.value._status.isExpanded ? 'remove' : 'add'}}
-        </mat-icon>
-        <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30"></mat-spinner>
+        <div style="display:flex">
+            <div *ngIf="column.canExpand" [innerHTML]="formatIndentation(row)"></div>
+        
+            <mat-icon *ngIf="!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter>0"
+                class="size-16" (click)="onNodeClick(row)">
+                {{row.value._status.isExpanded ? 'remove' : 'add'}}
+            </mat-icon>
+            <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30"></mat-spinner>
 
-        <ng-container klesDynamicField [field]="field"
-            [group]="group">
-        </ng-container>
+            <ng-container klesDynamicField [field]="field"
+                [group]="group">
+            </ng-container>
+        </div>
 
-        <mat-paginator #treePaginator *ngIf="column.paginator && row.value._status.childrenCounter>0 && row.value._status.isExpanded"
-            [length]="row.value._status.paginator?.length"
-            [pageSize]="row.value._status.paginator?.pageSize"
-            [showFirstLastButtons]="column.paginatorOption?.showFirstLastButtons"
-            [hidePageSize]="column.paginatorOption?.hidePageSize === undefined ? true : column.paginatorOption?.hidePageSize"
-            [pageSizeOptions]="column.paginatorOption?.pageSizeOptions || [5, 10, 25, 100]"
-            [pageIndex]="row.value._status.paginator?.pageIndex"
-            (page)="handlePageEvent($event)">
-        </mat-paginator>
+        <div class="paginator">
+            <mat-paginator #treePaginator *ngIf="column.paginator && row.value._status.childrenCounter>0 && row.value._status.isExpanded"
+                [length]="row.value._status.paginator?.length"
+                [pageSize]="row.value._status.paginator?.pageSize"
+                [showFirstLastButtons]="column.paginatorOption?.showFirstLastButtons"
+                [hidePageSize]="column.paginatorOption?.hidePageSize === undefined ? true : column.paginatorOption?.hidePageSize"
+                [pageSizeOptions]="column.paginatorOption?.pageSizeOptions || [5, 10, 25, 100]"
+                [pageIndex]="row.value._status.paginator?.pageIndex"
+                (page)="handlePageEvent($event)">
+            </mat-paginator>
+        </div>
     
     
     `,
@@ -41,11 +45,13 @@ import { FormGroup } from "@angular/forms";
         background: white;
         border: 1px solid #C0C0C0;margin-right:4px;}
         `,
-        `app-kles-node { display: inline-flex; align-items: center;}`,
+        `app-kles-node { display: inline-flex; align-items: center; flex-direction: column; width: 100%; }`,
         `app-kles-node .mat-paginator-range-label { margin: 0px }`,
         `app-kles-node .mat-paginator { background: transparent }`,
         `app-kles-node .mat-paginator-range-label { min-width: max-content }`,
-        `app-kles-node .mat-paginator-container { padding: 0 2px 0 8px; min-height: auto }`
+        `app-kles-node .mat-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
+        `app-kles-node .paginator { display: flex; width: 100%; justify-content: end; }`,
+        `app-kles-node .mat-paginator-range-actions .mat-icon-button { width:30px; height:30px; line-height: 30px;}`,
     ],
 })
 
