@@ -11,7 +11,11 @@ import {
     KlesFormSlideToggleComponent,
     KlesFormInputClearableComponent,
     KlesFormSelectSearchComponent,
-    EnumType
+    EnumType,
+    KlesButtonComponent,
+    KlesFormGroup,
+    KlesFormGroupComponent,
+    KlesFormArrayComponent
 } from '@3kles/kles-material-dynamicforms';
 import {
     KlesColumnConfig, KlesTableDirective, KlesTableComponent, KlesTableConfig, KlesTableService,
@@ -47,6 +51,9 @@ import { BehaviorSubject } from 'rxjs';
 import { isArray } from 'lodash';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
+import { RemainComponent } from './fields/remain.field';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomMatPaginatorIntl } from './custom-mat-paginator';
 
 @Component({
     selector: 'app-root',
@@ -240,7 +247,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                 return m.map(t => {
                     return {
                         value: t,
-                        // children: this.generateChildren(t)
+                        children: this.generateChildren(t, 1)
                     }
                 });
             }),
@@ -264,7 +271,8 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.columns = [
             {
                 //Selection column
-                columnDef: '#select', sticky: false, visible: true,
+                columnDef: '#select', sticky: true, visible: false,
+                sortable: true,
                 headerCell: {
                     name: '#select',
                     component: KlesFormCheckboxComponent,
@@ -280,21 +288,123 @@ export class AppComponent implements OnInit, AfterViewInit {
                 }
             },
             {
-                //Column to view result API
-                columnDef: 'Api', sticky: false, visible: false,
+                //Selection column
+                columnDef: 'DWDZ', sticky: false, visible: true, filterable: true,
+                sortable: false,
                 headerCell: {
-                    name: 'Api',
-                    label: 'result.text',
-                    component: KlesFormTextComponent,
-                    value: 'result.text',//this.translate.instant('result.text'),
-                    placeholder: 'result.text'
+                    name: 'DWDZ',
+                    component: KlesFormDynamicHeaderFilterComponent,
+                    label: 'toto',
+                    filterComponent: KlesFormDateComponent,
+                    indeterminate: false,
                 } as IKlesFieldConfig,
                 cell: {
-                    type: 'text',
-                    name: 'Api',
+                    name: 'DWDZ',
+                    component: KlesFormButtonComponent,
+                    label: 'test'
+                } as IKlesFieldConfig,
+            },
+            {
+                //Selection column
+                columnDef: 'testArray', sticky: false, visible: true, filterable: true,
+                sortable: false,
+                headerCell: {
+                    name: 'testArray',
+                    component: KlesFormDynamicHeaderFilterComponent,
+                    label: 'testArray',
+                    indeterminate: false,
+                } as IKlesFieldConfig,
+                cell: {
+                    name: 'testArray',
+                    // component: KlesFormDateComponent,
+                    // type: EnumType.group,
+                    component: KlesFormArrayComponent,
+                    direction: 'column',
+                    collections: [
+                        {
+                            component: KlesFormInputComponent,
+                            name: 'test',
+                            placeholder: 'firstElement',
+                        },
+                    ]
+                } as IKlesFieldConfig,
+            },
+            // {
+            //     //Selection column
+            //     columnDef: 'aaaaa', sticky: false, visible: true, filterable: true,
+            //     sortable: false,
+            //     headerCell: {
+            //         name: 'aaaaa',
+            //         component: KlesFormDynamicHeaderFilterComponent,
+            //         label: 'aaaaa',
+            //         filterComponent: KlesFormDateComponent,
+            //         indeterminate: false,
+            //     } as IKlesFieldConfig,
+            //     cell: {
+            //         name: 'aaaaa',
+            //         // component: KlesFormDateComponent,
+            //         // type: EnumType.group,
+            //         component: KlesFormGroupComponent,
+            //         direction: 'column',
+            //         collections: [
+            //             {
+            //                 component: KlesFormInputClearableComponent,
+            //                 name: 'read',
+            //                 label: 'read.text',
+            //                 tooltip: 'read.text',
+            //             },
+            //             {
+            //                 component: KlesFormInputClearableComponent,
+            //                 name: 'create',
+            //                 label: 'create.text',
+            //                 tooltip: 'create.text',
+
+            //             },
+            //             {
+            //                 component: KlesFormInputClearableComponent,
+            //                 name: 'delete',
+            //                 label: 'delete.text',
+            //                 tooltip: 'delete.text',
+            //             },
+            //             {
+            //                 component: KlesFormInputClearableComponent,
+            //                 name: 'update',
+            //                 label: 'update.text',
+            //                 tooltip: 'update.text',
+            //             }
+            //         ]
+            //     } as IKlesFieldConfig,
+            // },
+            {
+                //Check column to view error
+                columnDef: '_id', sticky: false, visible: false,
+                headerCell: {
+                    inputType: 'text',
+                    name: '_id',
+                    component: KlesFormTextComponent,
+                    value: '_id',
+                } as IKlesFieldConfig,
+                cell: {
+                    name: '_id',
                     component: KlesFormTextComponent,
                 } as IKlesFieldConfig,
             },
+            // {
+            //     //Column to view result API
+            //     columnDef: 'Api', sticky: false, visible: false,
+            //     headerCell: {
+            //         name: 'Api',
+            //         label: 'result.text',
+            //         component: KlesFormTextComponent,
+            //         value: 'result.text',//this.translate.instant('result.text'),
+            //         placeholder: 'result.text'
+            //     } as IKlesFieldConfig,
+            //     cell: {
+            //         type: 'text',
+            //         name: 'Api',
+            //         component: KlesFormTextComponent,
+            //     } as IKlesFieldConfig,
+            // },
             {
                 //Check column to view error
                 columnDef: '#checker', sticky: false, visible: true,
@@ -320,12 +430,17 @@ export class AppComponent implements OnInit, AfterViewInit {
                 filterable: true,
                 sortable: true,
                 canExpand: true,
+                paginator: true,
+                paginatorOption: {
+                    pageSize: 5,
+                    
+                },
                 headerCell: {
                     type: 'text',
                     name: 'Division',
                     label: this.translate.instant('division.text'),
                     placeholder: this.translate.instant('filter.text'),
-                    component: KlesFormTextHeaderFilterComponent,
+                    component: KlesFormTextHeaderComponent,
                 } as IKlesFieldConfig,
                 cell: {
                     type: 'text',
@@ -586,7 +701,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                     multiple: true,
                     options: new BehaviorSubject<any[]>(this.listOrderType),
                     component: KlesFormDynamicHeaderFilterComponent,
-                    filterComponent: KlesFormSelectSearchComponent,
+                    // filterComponent: KlesFormSelectSearchComponent,
                     autocomplete: true,
                     autocompleteComponent: AutocompleteComponent,
                     displayWith: ((value: any) => {
@@ -791,9 +906,36 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.tableConfig = {
             tableComponent: KlesTableComponent,
             columns: this.columns,
-            // hidePaginator: true,
+            hidePaginator: false,
             tableService: tableService,
-            showFooter: true
+            // customMatPaginatorIntl: CustomMatPaginatorIntl,
+            showFooter: false,
+            multiTemplate: true,
+            selectionMode: false,
+            ngClassRow: (row: UntypedFormGroup) => {
+                return { 'make-gold': row.value['#select'] };
+            },
+            templates: [
+                {
+                    cells: [{
+                        name: 'empty',
+                        component: RemainComponent,
+                    },
+                    {
+                        name: 'empty',
+                        component: RemainComponent,
+                    },
+                    {
+                        name: 'empty',
+                        component: RemainComponent,
+                    },
+                    {
+                        name: 'toto',
+                        component: RemainComponent,
+                        colspan: 5,
+                    }],
+                }
+            ]
             //lineAsyncValidations: [this.checkLine()]
         };
 
@@ -801,13 +943,13 @@ export class AppComponent implements OnInit, AfterViewInit {
             columns: this.columns,
             tableComponent: KlesTreetableComponent,
             tableService: new KlesTreetableService(),
-            // hidePaginator: false,
+            hidePaginator: true,
         } as KlesTableConfig
 
         const listComponent = this;
         this.treeTableConfigLazy = {
             ngClassRow: (row: UntypedFormGroup) => {
-                return {'make-gold': row.value.Warehouse == 'AA'};
+                return { 'make-gold': row.value.Warehouse == 'AA' };
             },
             columns: this.columns,
             tableComponent: KlesLazyTreetableComponent,
@@ -832,15 +974,15 @@ export class AppComponent implements OnInit, AfterViewInit {
                         );
                 }
             }(), new class implements ILoadChildren {
-                loadChildren(parent: UntypedFormGroup): Observable<any> {
-                    console.log('Parent=', parent);
+                loadChildren(parent: UntypedFormGroup, sort: string, order: string, page: number, perPage: number): Observable<any> {
+                    console.log('page', page, perPage)
                     let children = parent.getRawValue().tempChildren || [];
                     children = children.map(m => {
                         const currentValue = m.value;
                         currentValue.Warehouse = 'toto'
                         return { value: currentValue }
                     })
-                    return of(parent.getRawValue().tempChildren || []);
+                    return of({ lines: (parent.getRawValue().tempChildren).slice(page * perPage, page * perPage + perPage), totalCount: parent.getRawValue().tempChildren.length }).pipe(delay(2000));
                 }
             }()),
             pageSize: 10
@@ -1240,7 +1382,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     private loadData() {
         this.isLoading = true;
         this.setTable();
-        this.table.ref.detectChanges();
+        // this.table.ref.detectChanges();
         this.lines = [...this.transformData(data)];
         // const listData = [...this.transformData(data)];
         // listData.forEach(e => {
@@ -1272,11 +1414,12 @@ export class AppComponent implements OnInit, AfterViewInit {
         return data;
     }
 
-    generateChildren(item: any) {
-        const nbChildren = Math.floor(Math.random() * 5);
+    generateChildren(item: any, level: number = 0) {
+        const nbChildren = 6;
+        // const nbChildren = Math.floor(Math.random() * 10);
         const children = [];
         for (let i = 0; i < nbChildren; i++) {
-            children.push({ value: { ...item, Warehouse: ('child' + i) } })
+            children.push({ value: { ...item, Warehouse: ('child' + i) }, ...(level > 0 && { children: this.generateChildren(item, level - 1) }) })
         }
         return children;
     }
@@ -1326,6 +1469,10 @@ const data = [
         PlannedDate: new Date(),
         StandardRouting: 'AOI1',
         WorkCenter: 'PLG1',
+        remain: 50,
+        toto: 10,
+        SKU: ['fgdgfdgd fdgfdgfd feeee aazaezaezaea', 'fssdfsddddddddddddddddd fffffffffffffffffffffffff', 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'],
+        testArray: [{ test: 'aaaaa' }]
     },
     {
         Division: '770',
@@ -1340,7 +1487,8 @@ const data = [
         ProjectNumber: 'WINTER',
         PlannedDate: new Date(),
         StandardRouting: 'AOI4',
-        WorkCenter: 'PLG2'
+        WorkCenter: 'PLG2',
+        remain: 20,
     },
     {
         Division: '770',
