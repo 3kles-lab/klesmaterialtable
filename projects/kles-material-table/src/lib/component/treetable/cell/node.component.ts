@@ -23,7 +23,8 @@ import { FormGroup } from "@angular/forms";
             [length]="row.value._status.paginator?.length"
             [pageSize]="row.value._status.paginator?.pageSize"
             [showFirstLastButtons]="column.paginatorOption?.showFirstLastButtons"
-            [hidePageSize]="true"
+            [hidePageSize]="column.paginatorOption?.hidePageSize === undefined ? true : column.paginatorOption?.hidePageSize"
+            [pageSizeOptions]="column.paginatorOption?.pageSizeOptions || [5, 10, 25, 100]"
             [pageIndex]="row.value._status.paginator?.pageIndex"
             (page)="handlePageEvent($event)">
         </mat-paginator>
