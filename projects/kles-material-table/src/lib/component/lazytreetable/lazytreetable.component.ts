@@ -163,7 +163,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
             ...(paginator && {
                 paginator: this.formBuilder.group({
                     pageIndex: 0,
-                    pageSize: paginator.paginatorOption?.pageSize || 5,
+                    pageSize: paginator.paginatorOption?.pageSize || this.paginator?.pageSize || 5,
                     length: 0
                 })
             })
