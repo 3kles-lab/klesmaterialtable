@@ -22,6 +22,8 @@ export interface KlesTreeColumnConfig extends KlesColumnConfig {
     paginatorOption?: {
         pageSize?: number;
         showFirstLastButtons?: boolean;
+        hidePageSize?: boolean;
+        pageSizeOptions?: number[]
     }
 
 }
