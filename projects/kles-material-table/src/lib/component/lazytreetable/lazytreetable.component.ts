@@ -171,39 +171,10 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
         group.addControl('_status', statusControl);
 
-        // statusControl.valueChanges.pipe(
-        //     tap(t => {
-        //         statusControl.patchValue({ isBusy: true }, { emitEvent: false });
-        //     }),
-        //     switchMap(s => {
-        //         if (s.isExpanded) {
-        //             return this.tableService.loadChild(group, null, null, s.paginator?.pageIndex, s.paginator?.pageSize)
-        //                 .pipe(
-        //                     take(1),
-        //                     catchError((err) => {
-        //                         console.error(err);
-        //                         return of({ loading: false, value: { lines: [], totalCount: 0, footer: {}, header: {} } });
-        //                     })
-        //                 );
-        //         } else {
-        //             return of({ lines: [], totalCount: 0 });
-        //         }
-        //     })
-
-        // ).subscribe(({ lines, totalCount }) => {
-        //     this.tableService.deleteChildren(row._id);
-        //     if (lines.length) {
-        //         lines.forEach(child => this.tableService.addChild(row._id, child));
-        //     }
-        //     statusControl.patchValue({ children: lines, isBusy: false }, { emitEvent: false });
-        //     statusControl.controls.paginator?.patchValue({ length: totalCount }, { emitEvent: false });
-        //     this.ref.markForCheck();
-        // })
-
         merge(statusControl.controls.paginator?.valueChanges || of(), statusControl.controls.isExpanded.valueChanges)
             .pipe(
                 takeUntil(this._onDestroy),
-                switchMap((toto) => {
+                switchMap(() => {
                     if (statusControl.controls.isExpanded.value) {
                         return concat(
                             of({ loading: true, value: { lines: [], totalCount: 0 } }),
@@ -225,7 +196,10 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                     value.lines.forEach(child => this.tableService.addChild(row._id, child));
                 }
                 statusControl.patchValue({ isBusy: loading, children: value.lines }, { emitEvent: false });
-                statusControl.controls.paginator?.patchValue({ length: value.totalCount }, { emitEvent: false });
+                if (!loading) {
+                    statusControl.controls.paginator?.patchValue({ length: value.totalCount }, { emitEvent: false });
+                }
+
                 this.ref.markForCheck();
             })
 
