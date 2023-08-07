@@ -151,9 +151,6 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         const idControl = this.formBuilder.control(row._id);
         group.addControl('_id', idControl);
 
-        const lazyChildControl = this.formBuilder.control(row.isExpanded);
-        group.addControl('_lazyChild', lazyChildControl);
-
         const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
 
         const statusControl = this.formBuilder.group({
@@ -174,31 +171,63 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
         group.addControl('_status', statusControl);
 
-        statusControl.valueChanges.pipe(
-            filter(f => f.isExpanded !== lazyChildControl.value),
-            tap(t => {
-                statusControl.patchValue({ isBusy: true }, { emitEvent: false });
-                lazyChildControl.patchValue(t.isExpanded, { emitEvent: false });
-                return t;
-            }),
-            switchMap(s => {
-                if (s.isExpanded) {
-                    return this.tableService.loadChild(group, null, null, s.paginator?.pageIndex, s.paginator?.pageSize);
-                } else {
-                    return of({ lines: [], totalCount: 0 });
-                }
-            })
+        // statusControl.valueChanges.pipe(
+        //     tap(t => {
+        //         statusControl.patchValue({ isBusy: true }, { emitEvent: false });
+        //     }),
+        //     switchMap(s => {
+        //         if (s.isExpanded) {
+        //             return this.tableService.loadChild(group, null, null, s.paginator?.pageIndex, s.paginator?.pageSize)
+        //                 .pipe(
+        //                     take(1),
+        //                     catchError((err) => {
+        //                         console.error(err);
+        //                         return of({ loading: false, value: { lines: [], totalCount: 0, footer: {}, header: {} } });
+        //                     })
+        //                 );
+        //         } else {
+        //             return of({ lines: [], totalCount: 0 });
+        //         }
+        //     })
 
-        ).subscribe(({ lines, totalCount }) => {
-            if (lines.length) {
-                lines.forEach(child => this.tableService.addChild(row._id, child));
-            } else {
+        // ).subscribe(({ lines, totalCount }) => {
+        //     this.tableService.deleteChildren(row._id);
+        //     if (lines.length) {
+        //         lines.forEach(child => this.tableService.addChild(row._id, child));
+        //     }
+        //     statusControl.patchValue({ children: lines, isBusy: false }, { emitEvent: false });
+        //     statusControl.controls.paginator?.patchValue({ length: totalCount }, { emitEvent: false });
+        //     this.ref.markForCheck();
+        // })
+
+        merge(statusControl.controls.paginator?.valueChanges || of(), statusControl.controls.isExpanded.valueChanges)
+            .pipe(
+                takeUntil(this._onDestroy),
+                switchMap((toto) => {
+                    if (statusControl.controls.isExpanded.value) {
+                        return concat(
+                            of({ loading: true, value: { lines: [], totalCount: 0 } }),
+                            this.tableService.loadChild(group, null, null, statusControl.controls.paginator?.value.pageIndex, statusControl.controls.paginator?.value.pageSize).pipe(
+                                map(value => ({ loading: false, value })),
+                                catchError((err) => {
+                                    console.error(err);
+                                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                                })
+                            )
+                        );
+                    }
+                    return of({ loading: false, value: { lines: [], totalCount: 0 } })
+
+                })
+            ).subscribe(({ loading, value }) => {
                 this.tableService.deleteChildren(row._id);
-            }
-            statusControl.patchValue({ children: lines, isBusy: false }, { emitEvent: false });
-            statusControl.controls.paginator.patchValue({ length: totalCount }, { emitEvent: false });
-            this.ref.markForCheck();
-        })
+                if (value.lines.length) {
+                    value.lines.forEach(child => this.tableService.addChild(row._id, child));
+                }
+                statusControl.patchValue({ isBusy: loading, children: value.lines }, { emitEvent: false });
+                statusControl.controls.paginator?.patchValue({ length: value.totalCount }, { emitEvent: false });
+                this.ref.markForCheck();
+            })
 
 
         // if (row.children) {
