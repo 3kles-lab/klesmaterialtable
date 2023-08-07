@@ -26,15 +26,13 @@ import { KlesTreetableDirective } from './directives/treetable.directive';
 import { DefaultKlesTreetableService } from './services/treetable/defaulttreetable.service';
 import { ConverterService } from './services/treetable/converter.service';
 import { TreeService } from './services/treetable/tree.service';
-import { KlesTreetableService } from './services/treetable/treetable.service';
 import { KlesLazyTreetableComponent } from './component/lazytreetable/lazytreetable.component';
 import { AbstractKlesLazyTableService } from './services/lazy/abstractlazytable.service';
 import { AbstractKlesTreeTableService } from './services/treetable/abstracttreetable.service';
 import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytreetable.service';
-import { KlesLazyTableService } from './services/lazy/lazytable.service';
-import { KlesLazyTreetableService } from './services/lazy/lazytreetable.service';
 import { RowPipe } from './pipe/row.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RowTreePipe } from './pipe/rowtree.pipe';
 
 const components = [
     KlesTableComponent,
@@ -68,7 +66,7 @@ const services = [
     ConverterService, 
     TreeService
 ];
-const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe];
+const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe];
 
 @NgModule({
     declarations: [

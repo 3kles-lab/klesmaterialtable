@@ -63,6 +63,7 @@ export * from './lib/pipe/field.pipe';
 export * from './lib/pipe/group.pipe';
 export * from './lib/pipe/elevation.pipe';
 export * from './lib/pipe/row.pipe';
+export * from './lib/pipe/rowtree.pipe';
 
 /**MODULE */
 export * from './lib/table.module';
