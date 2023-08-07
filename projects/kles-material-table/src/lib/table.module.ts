@@ -80,7 +80,6 @@ const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe];
         TranslateModule,
         ReactiveFormsModule,
         FormsModule,
-        BrowserAnimationsModule,
         KlesMaterialDynamicformsModule
     ],
     exports: [
