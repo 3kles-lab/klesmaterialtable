@@ -49,11 +49,11 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
     };
 
     onLineOpen(e: any) {
-        console.log('OnLineOpen=', e);
+
     }
 
     onLineClose(e: any) {
-        console.log('OnLineClose=', e);
+
     }
 
     onLineChange(e: any) {
