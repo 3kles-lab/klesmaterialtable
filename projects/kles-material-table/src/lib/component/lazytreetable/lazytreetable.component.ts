@@ -178,13 +178,14 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                     if (statusControl.controls.isExpanded.value) {
                         return concat(
                             of({ loading: true, value: { lines: [], totalCount: 0 } }),
-                            this.tableService.loadChild(group, null, null, statusControl.controls.paginator?.value.pageIndex, statusControl.controls.paginator?.value.pageSize).pipe(
-                                map(value => ({ loading: false, value })),
-                                catchError((err) => {
-                                    console.error(err);
-                                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
-                                })
-                            )
+                            this.tableService.loadChild(group, this.sort.active, this.sort.direction, statusControl.controls.paginator?.value.pageIndex,
+                                statusControl.controls.paginator?.value.pageSize, this.filteredValues$.getValue()).pipe(
+                                    map(value => ({ loading: false, value })),
+                                    catchError((err) => {
+                                        console.error(err);
+                                        return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                                    })
+                                )
                         );
                     }
                     return of({ loading: false, value: { lines: [], totalCount: 0 } })
