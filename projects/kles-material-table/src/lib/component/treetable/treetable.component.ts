@@ -18,6 +18,7 @@ import { AbstractKlesTreeTableService } from '../../services/treetable/abstractt
 import { of, combineLatest } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
+import * as uuid from 'uuid';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -79,14 +80,15 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
     }
 
     protected updateTree(data: any) {
-        this._lines = Array.isArray(data) ? data : [data];
+        this._lines = (Array.isArray(data) ? data : [data]).map((line => {
+            return { _id: uuid.v4(), ...line, }
+        }));
         this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
     }
 
 
     initFormArray() {
         const treeTableTree = this.searchableTree.map(st => this.converterService.toTreeTableTree(st));
-
         this.lineFields = [];
         const array = this.formBuilder.array(
             treeTableTree.flatMap(node => {
@@ -151,6 +153,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
 
         const statusControl = this.formBuilder.group({
+            parentId: row.parentId,
             isVisible: row.isVisible,
             isExpanded: row.isExpanded,
             depth: row.depth,
