@@ -113,8 +113,6 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                             .pipe(
                                 takeUntil(this._onDestroy))
                             .subscribe((value) => {
-                                // delete value._id;
-                                // delete value._status;
                                 const v = { ...value };
                                 delete v._id;
                                 delete v._status;
@@ -168,7 +166,6 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                 })
             })
         });
-
         group.addControl('_status', statusControl);
 
         merge(statusControl.controls.paginator?.valueChanges || of(), statusControl.controls.isExpanded.valueChanges)
@@ -192,22 +189,18 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
                 })
             ).subscribe(({ loading, value }) => {
-                this.tableService.deleteChildren(row._id);
-                if (value.lines.length) {
-                    value.lines.forEach(child => this.tableService.addChild(row._id, child));
-                }
-                statusControl.patchValue({ isBusy: loading, children: value.lines }, { emitEvent: false });
                 if (!loading) {
+                    this.tableService.deleteChildren(row._id);
+                    if (value.lines.length) {
+                        value.lines.forEach(child => this.tableService.addChild(row._id, child));
+                    }
                     statusControl.controls.paginator?.patchValue({ length: value.totalCount }, { emitEvent: false });
                 }
+                statusControl.patchValue({ isBusy: loading }, { emitEvent: false });
 
                 this.ref.markForCheck();
             })
 
-
-        // if (row.children) {
-        //     group.addControl('_children', this.formBuilder.array(row.children.map(child => this.addFormLine(child))));
-        // }
         const rowValue = row.value;
         const listField = [];
         this.columns.forEach(column => {
@@ -239,27 +232,12 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                     }
                     return of({ value, response: null });
                 })
-                // distinctUntilChanged((prev, curr) => {
-                //     if (Array.isArray(prev) && Array.isArray(curr)) {
-                //         if (column.cell?.property) {
-                //             return prev.length === curr.length
-                //                 && prev.every((value, index) => value[column.cell.property] === curr[index][column.cell.property]);
-                //         } else {
-                //             return prev.length === curr.length && prev.every((value, index) => value === curr[index]);
-                //         }
-                //     } else {
-                //         if (column.cell?.property && prev && curr) {
-                //             return prev[column.cell.property] === curr[column.cell.property];
-                //         }
-                //     }
-                //     return prev === curr;
-                // })
             ).subscribe(e => {
                 const group = control.parent;
                 this.tableService.onCellChange({ column, row, group, response: e.response });
                 this._onChangeCell.emit({ column, row, group, response: e.response });
             });
-            control.statusChanges.subscribe(status => {
+            control.statusChanges.pipe(takeUntil(this._onLinesChanges)).subscribe(status => {
                 const group = control.parent;
                 this.tableService.onStatusCellChange({ cell: control, group, status });
                 this._onStatusCellChange.emit({ cell: control, group, status });
@@ -272,14 +250,18 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         group.setValidators(this.lineValidations);
         group.setAsyncValidators(this.lineAsyncValidations);
 
-        group.valueChanges.subscribe(value => {
+        group.valueChanges.pipe(
+            takeUntil(this._onDestroy)
+        ).subscribe(value => {
             this.tableService.onLineChange({ group, row, value });
         });
 
-        group.statusChanges.subscribe(status => {
-            this.tableService.onStatusLineChange({ group, row, status });
-            this._onStatusLineChange.emit({ group, row, status });
-        });
+        group.statusChanges
+            .pipe(takeUntil(this._onDestroy))
+            .subscribe(status => {
+                this.tableService.onStatusLineChange({ group, row, status });
+                this._onStatusLineChange.emit({ group, row, status });
+            });
         return group;
     }
 
