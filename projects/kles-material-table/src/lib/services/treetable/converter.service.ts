@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { TreeService } from './tree.service';
 import { v4 as uuidv4 } from 'uuid';
+import * as O from 'fp-ts/lib/Option';
 import { SearchableNode, TreeTableNode, Node } from '../../models/node.model';
 
 @Injectable({
@@ -30,6 +31,12 @@ export class ConverterService {
     toTreeTableTree<T>(tree: SearchableNode<T>): TreeTableNode<T> {
         const treeClone = cloneDeep(tree) as TreeTableNode<T>;
         this.treeService.traverse(treeClone, (node: TreeTableNode<T>) => {
+            const root = this.treeService.searchById(treeClone, node._id);
+
+            if (O.isSome(root) && root.value.pathToRoot.length > 0) {
+                node.parentId = root.value.pathToRoot[0]._id;
+            }
+
             node.depth = this.treeService.getNodeDepth(treeClone, node);
             node.isExpanded = false;
             node.isVisible = node.depth === 0;
