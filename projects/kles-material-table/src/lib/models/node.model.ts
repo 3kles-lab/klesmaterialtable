@@ -18,6 +18,7 @@ export interface TreeTableNode<T> extends SearchableNode<T> {
     children: TreeTableNode<T>[];
     childrenCounter: number;
     isBusy?: boolean;
+    parentId?: string;
 }
 
 export interface NodeInTree<T> extends SearchableNode<T> {
