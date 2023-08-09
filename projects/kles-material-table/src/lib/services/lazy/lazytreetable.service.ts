@@ -73,13 +73,9 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     }
 
     addChild(parentId: string, record): UntypedFormGroup {
-        console.log('record', { ...record })
-        console.log('begin', { ...this.table.getFormArray().value })
         const searchableParent = this.table.searchableTree.map(s => {
             return this.table.treeService.getById(s, parentId)
         })?.[0];
-
-        console.log('after searchableParent')
 
         if (searchableParent) {
             const searchableNode = this.table.converterService.toSearchableTree(record);
@@ -91,16 +87,10 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
                 return this.table.treeService.searchById(s, parentId)
             })).find(row => row._id === parentId);
 
-            console.log('1')
-
             const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
             treeNode.depth = ~~treeTableParent.depth + 1;
 
-            console.log('treeNode', { ...treeNode });
-
             const groups = this.table.createFormNode(treeNode);
-
-            console.log('2')
 
             const parentIndex = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
 
@@ -113,14 +103,8 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
                 this.table.getFormArray().insert(parentIndex + index + 1, group);
             });
 
-            console.log('3')
-
             this.updateDataSource();
-
-            console.log('end', { ...this.table.getFormArray().value })
-            console.log('searchableTree', this.table.searchableTree)
             return groups[0];
-
         }
     }
 
