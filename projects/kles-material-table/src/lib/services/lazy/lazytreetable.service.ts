@@ -13,6 +13,9 @@ import { DefaultKlesTableService } from '../defaulttable.service';
 import { KlesSelectionTableService } from '../features/selection/selectiontable.service';
 import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
 import { DefaultKlesTreetableService } from '../treetable/defaulttreetable.service';
+import { isSome, fold } from 'fp-ts/lib/Option';
+import * as O from 'fp-ts/lib/Option'
+import { pipe } from 'fp-ts/lib/function';
 
 export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService) {
 
@@ -70,82 +73,107 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     }
 
     addChild(parentId: string, record): UntypedFormGroup {
-        const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
-        const parent = treeTableTree.find(s => s._id === parentId);
-        const parentDepth = ~~parent?.depth;
+        console.log('record', { ...record })
+        console.log('begin', { ...this.table.getFormArray().value })
+        const searchableParent = this.table.searchableTree.map(s => {
+            return this.table.treeService.getById(s, parentId)
+        })?.[0];
 
-        if (parent) {
+        console.log('after searchableParent')
+
+        if (searchableParent) {
             const searchableNode = this.table.converterService.toSearchableTree(record);
+            searchableParent.children ? searchableParent.children.push(searchableNode) : searchableParent.children = [searchableNode];
+
+            const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
+
+            const treeTableParent = this.table.treeService.flatten(treeTableTree.find(s => {
+                return this.table.treeService.searchById(s, parentId)
+            })).find(row => row._id === parentId);
+
+            console.log('1')
+
             const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
-            treeNode.depth = ~~parentDepth + 1;
+            treeNode.depth = ~~treeTableParent.depth + 1;
+
+            console.log('treeNode', { ...treeNode });
+
             const groups = this.table.createFormNode(treeNode);
-            const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
-            const index = indexParent;
-            + (parent.children?.length || 0);
 
-            if (parent.children) {
-                parent.children.push({ value: groups[0].getRawValue() });
-            } else {
-                parent.children = [{ value: groups[0].getRawValue() }];
-            }
+            console.log('2')
 
-            this.table._lines[indexParent].children = parent.children;
-            this.table._lines.splice(index + 1, 0, record);
-            groups.forEach((group, i) => {
-                this.table.getFormArray().insert(index + (i + 1), group);
+            const parentIndex = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
+
+            this.table.getFormArray().controls[parentIndex].controls._status.patchValue({
+                children: (this.table.getFormArray().controls[parentIndex].controls._status.value.children || []).concat([treeNode]),
+                childrenCounter: (this.table.getFormArray().controls[parentIndex].controls._status.value.children?.length || 0) + 1
+            }, { emitEvent: false });
+
+            groups.forEach((group, index) => {
+                this.table.getFormArray().insert(parentIndex + index + 1, group);
             });
-            this.table.searchableTree = (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
-                return {
-                    value: (line.value?._id === parentId) ? { ...line.value, children: parent.children, childrenCounter: ~~parent.children?.length } : line.value,
-                    _id: line.value?._id,
-                    children: (line.value?._id === parentId) ? parent.children : line.value?._status?.children,
-                    childrenCounter: (line.value?._id === parentId) ? ~~parent.children?.length : ~~line.value?._status?.childrenCounter,
-                    isBusy: line.value?._status?.isBusy || false
-                    
-                }
-            });
+
+            console.log('3')
 
             this.updateDataSource();
-        }
 
-        return null;
+            console.log('end', { ...this.table.getFormArray().value })
+            console.log('searchableTree', this.table.searchableTree)
+            return groups[0];
+
+        }
     }
+
 
     addChildren(parentId: string, record: any[]): UntypedFormGroup[] {
         return record.map(m => this.addChild(parentId, record));
     }
 
-    deleteChild() {
 
+    deleteRow(rowId: string) {
+        const row = this.table.getFormArray().controls.find((group: UntypedFormGroup) => group.value._id === rowId);
+        if (row) {
+            row.controls._status.value.children?.forEach((child) => {
+                this.deleteRow(child._id);
+            });
+
+            const parentId = row.controls._status.value.parentId;
+            if (parentId) {
+                const parent: UntypedFormGroup = this.table.getFormArray().controls.find((group: UntypedFormGroup) => group.value._id === parentId);
+                if (parent) {
+                    parent.controls._status.patchValue({ children: parent.controls._status.value.children.filter(c => c._id !== rowId) }, { emitEvent: false });
+                }
+            }
+
+            const index = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === rowId);
+            if (index !== -1) {
+                this.table.getFormArray().removeAt(index);
+            }
+
+            this.table.searchableTree = this.table.searchableTree.filter(searchableNode => searchableNode._id !== rowId);
+        }
     }
 
     deleteChildren(parentId: string) {
-        const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
-        const parent = treeTableTree.find(s => s._id === parentId);
-
-        if (parent && parent.children) {
-            const listChildrenId = parent.children.map(m => m.value?._id);
-            parent.children = null;
-            const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
-            this.table._lines[indexParent] = parent;
-            listChildrenId.forEach(childId => {
-                const index = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === childId);
-                this.table._lines.splice(index, 1);
-                (this.table.getFormArray() as UntypedFormArray).removeAt(index, { emitEvent: false })
+        const parent = this.table.getFormArray().controls.find((group: UntypedFormGroup) => group.value._id === parentId);
+        if (parent?.controls._status.controls.children?.value) {
+            parent?.controls._status.controls.children?.value?.forEach((child) => {
+                this.deleteRow(child._id);
             });
 
-            this.table.searchableTree = (this.table.getFormArray() as UntypedFormArray).controls.map(line => {
-                return {
-                    value: (line.value?._id === parentId) ? { ...line.value, children: parent.children } : line.value,
-                    _id: line.value?._id,
-                    children: (line.value?._id === parentId) ? parent.children : line.value?._status?.children,
-                    childrenCounter: ~~line.value?._status?.childrenCounter,
-                    isBusy: (line.value?._id === parentId) ? false : line.value?._status?.isBusy || false
-                }
-            });
+            parent?.controls._status.patchValue({ children: [] }, { emitEvent: false });
+
+            const searchableParent = this.table.searchableTree.map(s => {
+                return this.table.treeService.getById(s, parentId)
+            })?.[0];
+
+            if (searchableParent) {
+                searchableParent.children = [];
+            }
+
             this.updateDataSource();
         }
-        return null;
+
     }
 
 }
