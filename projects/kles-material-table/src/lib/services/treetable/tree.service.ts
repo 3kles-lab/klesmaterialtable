@@ -48,6 +48,18 @@ export class TreeService {
         }) : O.none;
     }
 
+    getById<T, K extends SearchableNode<T>>(root: K, id: string): SearchableNode<T> {
+        let matchingNode: K;
+        this._traverse(root, (node: K) => {
+            if (node._id === id) {
+                matchingNode = node;
+            }
+            return node._id !== id;
+        });
+        return matchingNode;
+
+    }
+
     /**
      * Internal function that can be used to traverse or search the tree
      * @param root the tree to be scanned
