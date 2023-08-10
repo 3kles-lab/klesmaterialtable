@@ -1,2 +1,33 @@
-<ng-container #treetable klesTreetable [tableConfig]="treeTableConfigLazy">
-</ng-container>
+<main class="content">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="center">
+        <mat-tab>
+            <ng-template mat-tab-label>
+                table
+            </ng-template>
+            <app-table></app-table>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                lazytable
+            </ng-template>
+            <app-lazytable></app-lazytable>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                treetable
+            </ng-template>
+            <app-treetable></app-treetable>
+        </mat-tab>
+        <mat-tab>
+            <ng-template mat-tab-label>
+                lazytreetable
+            </ng-template>
+            <app-lazytreetable></app-lazytreetable>
+        </mat-tab>
+    </mat-tab-group>
+</main>
+
+
+
+<!--<ng-container #treetable klesTreetable [tableConfig]="treeTableConfigLazy">
+</ng-container>-->
