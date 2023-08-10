@@ -7,10 +7,10 @@ import { SharedModule } from '../shared/shared.module';
         LazyTableComponent
     ],
     imports: [
-        SharedModule
+        SharedModule,
     ],
     providers: [],
     exports: [LazyTableComponent],
     bootstrap: [LazyTableComponent]
 })
-export class LazyTableModule {}
+export class LazyTableModule { }

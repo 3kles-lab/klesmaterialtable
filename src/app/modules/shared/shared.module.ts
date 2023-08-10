@@ -53,10 +53,10 @@ const DIRECTIVES = [];
         ScrollingModule
     ],
     providers: [TitleCasePipe, UpperCasePipe,
-        {
-            provide: MatPaginatorIntl, deps: [TranslateService],
-            useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService).getPaginatorIntl()
-        }
+        // {
+        //     provide: MatPaginatorIntl, deps: [TranslateService],
+        //     useFactory: (translateService: TranslateService) => new PaginatorI18n(translateService).getPaginatorIntl()
+        // }
     ]
 })
 export class SharedModule { }

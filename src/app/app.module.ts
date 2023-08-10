@@ -13,10 +13,11 @@ import { FakeApiService } from './services/fakemi.service';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { KlesMaterialDialogModule } from '@3kles/kles-material-dialog';
 import { AutocompleteComponent } from './components/autocomplete.component';
-import { TableModule } from './modules/table/table.module';
 import { LazyTableModule } from './modules/lazytable/lazytable.module';
-import { TreeTableModule } from './modules/treetable/treetable.module';
 import { LazyTreeTableModule } from './modules/lazytreetable/lazytreetable.module';
+import { TableModule } from './modules/table/table.module';
+import { TreeTableModule } from './modules/treetable/treetable.module';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { LazyTreeTableModule } from './modules/lazytreetable/lazytreetable.modul
     KlesMaterialTableModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    SharedModule,
     TranslateModule.forRoot(
       {
         loader: {
@@ -44,7 +46,8 @@ import { LazyTreeTableModule } from './modules/lazytreetable/lazytreetable.modul
     TableModule,
     LazyTableModule,
     TreeTableModule,
-    LazyTreeTableModule
+    LazyTreeTableModule,
+
   ],
   providers: [TranslateService, FakeApiService],
   bootstrap: [AppComponent]
