@@ -25,11 +25,13 @@ import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { of, Subject } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 
+import { CdkDragDrop, CdkDragStart, moveItemInArray, transferArrayItem, CdkDragHandle } from '@angular/cdk/drag-drop';
+
 
 @Component({
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
-    styleUrls: ['./table.component.scss'],
+    styleUrls: ['./table.component.scss', '../../styles/dragdrop.scss'],
     animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
@@ -91,6 +93,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() pageSize = 10;
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;
+    @Input() dragDropRows: boolean = false;
 
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];
@@ -575,5 +578,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     public onClick(row: UntypedFormGroup) {
         this._onClick.emit(row);
         this.tableService.onClick(row);
+    }
+
+    public drop(event: CdkDragDrop<UntypedFormGroup[]>) {
+        this.tableService.drop(event);
     }
 }

@@ -27,4 +27,5 @@ export interface KlesTableConfig {
         cells: (IKlesCellFieldConfig & { colspan?: number, rowspan?: number })[],
         when?: ((index: number, rowData: any) => boolean)
     }[];
+    dragDropRows?: boolean;
 }

@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 import { classes } from 'polytype';
 import { DefaultKlesTableService } from './defaulttable.service';
 import { KlesSelectionTableService } from './features/selection/selectiontable.service';
-import { KlesTextFilterTableService } from './features/filter/textfiltertable.service';
 import { PageEvent } from '@angular/material/paginator';
 import { KlesHeaderFilterTableService } from './features/filter/headerfilter-table.service';
+import { KlesDragDropRowTableService } from './features/dragdrop/dragdroprow.service';
 
 // @Injectable({
 //     providedIn: 'root'
 // })
 @Injectable()
-export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesHeaderFilterTableService) {
+export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesHeaderFilterTableService, KlesDragDropRowTableService) {
 
     constructor() {
         super
@@ -31,6 +31,11 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
     onCellChange(e: any) {
         this.changeSelectionLine(e);
     }
+
+    drop(e: any): void {
+        this.onDrop(e);
+    }
+
 
     onLineChange(e: any) { }
 

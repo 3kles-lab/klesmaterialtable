@@ -9,6 +9,7 @@ import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cel
     providedIn: 'root'
 })
 export class DefaultKlesTableService extends AbstractKlesTableService {
+
     //Header
     onHeaderChange(e: any) { }
     onHeaderCellChange(e: IChangeHeaderFooterCell) { }
@@ -20,6 +21,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     onLineChange(e: IChangeLine) { }
     onStatusLineChange(e: any) { }
     onClick(e: any) { }
+    drop(e: any) { }
 
     //Footer
     onFooterChange(e: any) { }
