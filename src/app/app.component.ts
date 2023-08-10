@@ -13,7 +13,6 @@ import {
     KlesFormSelectSearchComponent,
     EnumType,
     KlesButtonComponent,
-    KlesFormGroup,
     KlesFormGroupComponent,
     KlesFormArrayComponent
 } from '@3kles/kles-material-dynamicforms';
@@ -50,24 +49,12 @@ import { AutocompleteComponent } from './components/autocomplete.component';
 import { BehaviorSubject } from 'rxjs';
 import { isArray } from 'lodash';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
-import { RemainComponent } from './fields/remain.field';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import { CustomMatPaginatorIntl } from './custom-mat-paginator';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    // providers: [
-    //   { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
-    //   {
-    //     provide: DateAdapter,
-    //     useClass: MomentDateAdapter,
-    //     deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    //   },
-    //   { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-    // ],
     encapsulation: ViewEncapsulation.None,
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -915,7 +902,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             ngClassRow: (row: UntypedFormGroup) => {
                 return { 'make-gold': row.value['#select'] };
             },
-            templates: [
+            /*templates: [
                 {
                     cells: [{
                         name: 'empty',
@@ -935,7 +922,7 @@ export class AppComponent implements OnInit, AfterViewInit {
                         colspan: 5,
                     }],
                 }
-            ]
+            ]*/
             //lineAsyncValidations: [this.checkLine()]
         };
 
@@ -1006,71 +993,74 @@ export class AppComponent implements OnInit, AfterViewInit {
 
         console.log('ListFormField=', this.listFormField);
 
-        this.formFile.form.valueChanges.subscribe(s => {
-            console.log('Button=', s);
+        if (this.formFile) {
+            this.formFile.form.valueChanges.subscribe(s => {
+                console.log('Button=', s);
+    
+                const valChange = Object.keys(s).find(f => s[f]);
+                console.log(valChange);
+    
+                switch (valChange) {
+                    case 'file':
+                        this.formFile.form.controls['message'].patchValue('Chargement en cours...', { onlySelf: true, emitEvent: false });
+                        const fileContent = s[valChange]?.fileContent;
+                        console.log('File switch=', fileContent);
+                        const data = this.loadFile(fileContent);
+                        this.lines = [...this.transformData(data)];
+                        break;
+                }
+                // if (valChange) {
+                //   this.formFile.form.reset();
+                // }
+            });
+        }
 
-            const valChange = Object.keys(s).find(f => s[f]);
-            console.log(valChange);
-
-            switch (valChange) {
-                case 'file':
-                    this.formFile.form.controls['message'].patchValue('Chargement en cours...', { onlySelf: true, emitEvent: false });
-                    const fileContent = s[valChange]?.fileContent;
-                    console.log('File switch=', fileContent);
-                    const data = this.loadFile(fileContent);
-                    this.lines = [...this.transformData(data)];
-                    break;
-            }
-            // if (valChange) {
-            //   this.formFile.form.reset();
-            // }
-        });
-
-        this.formTable.form.statusChanges.subscribe(s => {
-            // console.log('Status form=', s);
-        })
-
-        this.formTable.form.valueChanges.subscribe(s => {
-            // console.log('Button=', s);
-
-            // if (s.DIVI) {
-            //     this.tableContainer.componentRef.instance.setVisible('Division', true);
-            // } else {
-            //     this.tableContainer.componentRef.instance.setVisible('Division', false);
-            // }
-            // if (s.FACI) {
-            //     this.tableContainer.componentRef.instance.setVisible('Facility', true);
-            // } else {
-            //     this.tableContainer.componentRef.instance.setVisible('Facility', false);
-            // }
-
-
-            const val = Object.keys(s).find(f => s[f]);
-            console.log(val);
-
-            switch (val) {
-                case 'error':
-                    this.showError();
-                    break;
-                case 'add':
-                    this.openDynamicFormDialog();
-                    break;
-                case 'load':
-                    this.loadData();
-                    break;
-                case 'delete':
-                    console.log(this.table.selection.selected)
-                    this.table.tableService.deleteRecord(this.table.selection.selected);
-                    break;
-                case 'update':
-                    this.openDynamicFormDialog(this.table.selection.selected[0].value);
-                    break;
-            }
-            // if (val) {
-            //   this.formTable.form.reset();
-            // }
-        });
-
+        if (this.formTable) {
+            this.formTable.form.statusChanges.subscribe(s => {
+                // console.log('Status form=', s);
+            })
+    
+            this.formTable.form.valueChanges.subscribe(s => {
+                // console.log('Button=', s);
+    
+                // if (s.DIVI) {
+                //     this.tableContainer.componentRef.instance.setVisible('Division', true);
+                // } else {
+                //     this.tableContainer.componentRef.instance.setVisible('Division', false);
+                // }
+                // if (s.FACI) {
+                //     this.tableContainer.componentRef.instance.setVisible('Facility', true);
+                // } else {
+                //     this.tableContainer.componentRef.instance.setVisible('Facility', false);
+                // }
+    
+    
+                const val = Object.keys(s).find(f => s[f]);
+                console.log(val);
+    
+                switch (val) {
+                    case 'error':
+                        this.showError();
+                        break;
+                    case 'add':
+                        this.openDynamicFormDialog();
+                        break;
+                    case 'load':
+                        this.loadData();
+                        break;
+                    case 'delete':
+                        console.log(this.table.selection.selected)
+                        this.table.tableService.deleteRecord(this.table.selection.selected);
+                        break;
+                    case 'update':
+                        this.openDynamicFormDialog(this.table.selection.selected[0].value);
+                        break;
+                }
+                // if (val) {
+                //   this.formTable.form.reset();
+                // }
+            });
+        }
     }
 
     onSelected(event) {
