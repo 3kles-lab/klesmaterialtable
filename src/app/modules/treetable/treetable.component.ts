@@ -43,14 +43,24 @@ export class TreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
             value: { NAME: 'Léo', AGE: 30 }, children: [
                 {
                     value: { NAME: 'Gabriel', AGE: 40 }, children: [
-                        { value: { NAME: 'Arthur', AGE: 50 }, children: [] }
+                        { value: { NAME: 'Arthur', AGE: 50 }, children: [] },
+                        { value: { NAME: 'Patrick', AGE: 60 }, children: [] }
+                    ]
+                },
+                {
+                    value: { NAME: 'toto', AGE: 10 }, children: [
+                        { value: { NAME: 'tata', AGE: 14 } }
                     ]
                 }
             ]
+        },
+        {
+            value: { NAME: 'Charles', AGE: 28 }
         }
     ];
 
     tableConfigExample1: KlesTableConfig = {
+        dragDropRows: true,
         columns: this.columnsExample1,
         tableComponent: KlesTreetableComponent,
         tableService: new KlesTreetableService()

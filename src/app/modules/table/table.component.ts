@@ -68,10 +68,11 @@ export class TableComponent implements AfterViewInit, OnDestroy {
     ];
 
     footerExample1 = { NAME: 0, AGE: 0 };
-    linesExample1 = [{ NAME: 'Léo', AGE: 30, test: 'test' }, { NAME: 'Gabriel', AGE: 40, test: 'test' }, { NAME: 'Arthur', AGE: 50 }];
+    linesExample1 = [{ NAME: 'Léo', AGE: 30, test: 'premier ' }, { NAME: 'Gabriel', AGE: 40, test: 'deuxieme' }, { NAME: 'Arthur', AGE: 50 }];
 
     tableConfigExample1: KlesTableConfig = {
         columns: this.columnsExample1,
+        dragDropRows: true,
         tableComponent: KlesTableComponent,
         tableService: new StyleService(),
         showFooter: true,

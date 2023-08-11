@@ -207,6 +207,7 @@ export class LazyTreeTableComponent implements OnInit, AfterViewInit, OnDestroy 
         this.tableConfigExample1 = {
             columns: this.columnsExample1,
             tableComponent: KlesLazyTreetableComponent,
+            dragDropRows: true,
             tableService: new KlesLazyTreetableService(new class implements IPagination {
                 public list(sort: string, order: string, page: number, perPage: number): Observable<any> {
                     return list.linesExample1$.pipe(

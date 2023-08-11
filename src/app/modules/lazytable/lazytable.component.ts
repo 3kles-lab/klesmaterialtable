@@ -32,6 +32,7 @@ export class LazyTableComponent implements OnInit, AfterViewInit, OnDestroy {
     tableConfigExample1: KlesTableConfig = {
         columns: this.columnsExample1,
         tableComponent: KlesLazyTableComponent,
+        dragDropRows: true,
         tableService: new KlesLazyTableService(new class implements IPagination {
             public list(sort: string, order: string, page: number, perPage: number, filter: any): Observable<any> {
                 return of(Array.from(Array(500).keys()).map((i) => ({ NUMBER: `${i}` }))).pipe(
