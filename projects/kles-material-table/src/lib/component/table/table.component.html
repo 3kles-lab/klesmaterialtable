@@ -2,7 +2,7 @@
   <table mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe" formArrayName="rows"
     [trackBy]="trackById" [multiTemplateDataRows]="multiTemplate" cdkDropList (cdkDropListDropped)="drop($event)"
     cdkDropListData="dataSource" [cdkDropListDisabled]="!dragDropRows"
-    [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep">
+    [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep" [cdkDropListSortPredicate]="sortPredicate()">
     <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false">
 
       <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.class}}"

@@ -1,6 +1,6 @@
 import { Observable, of } from "rxjs";
 import { KlesDragDropRowTableService } from "./dragdroprow.service";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { CdkDrag, CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { UntypedFormGroup } from "@angular/forms";
 import { take } from "rxjs/operators";
 
@@ -55,5 +55,12 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
             return this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.controls._id.value === child._id);
         }))
     }
+
+    public sortPredicate(index: number, item: CdkDrag<UntypedFormGroup>): boolean {
+        return (this.table.getFormArray().controls[index] as UntypedFormGroup).controls._status.value.depth === item.data.controls._status.value.depth
+            && (this.table.getFormArray().controls[index] as UntypedFormGroup).controls._status.value.parentId === item.data.controls._status.value.parentId;
+
+    }
+
 
 }

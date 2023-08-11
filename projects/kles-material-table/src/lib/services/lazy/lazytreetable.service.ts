@@ -49,6 +49,10 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
         this.onDrop(e);
     }
 
+    getSortPredicate(index: number, item: any): boolean {
+        return this.sortPredicate(index, item);
+    }
+
     protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
         node.value._status.children?.forEach(child => {
             const childGroup = this.table.getFormArray().controls.find(control => control.value._id === child._id) as UntypedFormGroup;

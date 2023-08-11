@@ -21,7 +21,13 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     onLineChange(e: IChangeLine) { }
     onStatusLineChange(e: any) { }
     onClick(e: any) { }
+
+    //drag and drop
     drop(e: any) { }
+
+    getSortPredicate(index: number, item: any): boolean {
+        return true;
+    }
 
     //Footer
     onFooterChange(e: any) { }

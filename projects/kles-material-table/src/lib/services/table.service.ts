@@ -36,6 +36,9 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
         this.onDrop(e);
     }
 
+    getSortPredicate(index: number, item: any): boolean {
+        return this.sortPredicate(index, item);
+    }
 
     onLineChange(e: any) { }
 

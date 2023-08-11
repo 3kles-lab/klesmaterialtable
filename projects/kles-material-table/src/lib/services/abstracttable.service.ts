@@ -22,7 +22,10 @@ export abstract class AbstractKlesTableService {
     abstract onCellChange(e: IChangeCell);
     abstract onStatusCellChange(e: any);
     abstract onClick(e: any);
+
+    //drag and drop
     abstract drop(e: any);
+    abstract getSortPredicate(index: number, item: any): boolean;
 
     //Footer
     abstract onFooterChange(e: any);

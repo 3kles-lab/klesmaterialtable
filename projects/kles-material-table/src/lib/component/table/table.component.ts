@@ -25,7 +25,7 @@ import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { of, Subject } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 
-import { CdkDragDrop, CdkDragStart, moveItemInArray, transferArrayItem, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
 
 
 @Component({
@@ -584,5 +584,11 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public drop(event: CdkDragDrop<UntypedFormGroup[]>) {
         this.tableService.drop(event);
+    }
+
+    public sortPredicate() {
+        return ((index: number, item: CdkDrag<number>) => {
+            return this.tableService?.getSortPredicate(index, item);
+        })
     }
 }

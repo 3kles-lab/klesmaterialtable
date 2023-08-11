@@ -25,4 +25,8 @@ export class KlesTreetableService extends classes(DefaultKlesTreetableService, K
     drop(e: any): void {
         this.onDrop(e);
     }
+
+    getSortPredicate(index: number, item: any): boolean {
+        return this.sortPredicate(index, item);
+    }
 }

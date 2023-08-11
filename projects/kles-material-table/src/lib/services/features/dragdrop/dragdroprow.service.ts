@@ -4,13 +4,12 @@
 import { UntypedFormGroup } from "@angular/forms";
 import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
-import { CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
+import { CdkDrag, CdkDragDrop, moveItemInArray } from "@angular/cdk/drag-drop";
 import { IKlesDragDropTable } from "./dragdrop.interface";
 import { Observable, of } from "rxjs";
 import { take } from "rxjs/operators";
 
 export class KlesDragDropRowTableService implements KlesTableBaseService, IKlesDragDropTable {
-
     table: KlesTableComponent;
 
     public beforeDrop(event: any): Observable<boolean> {
@@ -34,5 +33,9 @@ export class KlesDragDropRowTableService implements KlesTableBaseService, IKlesD
 
     public afterDrop(event: any) {
 
+    }
+
+    public sortPredicate(index: number, item: CdkDrag<UntypedFormGroup>): boolean {
+        return true;
     }
 }
