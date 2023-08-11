@@ -22,6 +22,10 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
 
                 moveItemInArray(this.table.getFormArray().controls, previousIndex, currentIndex);
                 this.moveChildren(this.table.getFormArray().controls[currentIndex] as UntypedFormGroup, currentIndex);
+                this.table._onDragDropRow.emit({
+                    currentIndex, previousIndex: previousIndex,
+                    group: this.table.getFormArray().controls[currentIndex] as UntypedFormGroup
+                });
                 this.table.dataSource.data = this.table.getFormArray().controls;
                 this.afterDrop(event);
             }

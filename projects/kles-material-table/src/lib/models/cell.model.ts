@@ -23,3 +23,9 @@ export interface IChangeLine {
     row: any;
     value: any;
 }
+
+export interface IDropRow {
+    group: UntypedFormGroup | UntypedFormArray;
+    previousIndex: number;
+    currentIndex: number;
+}

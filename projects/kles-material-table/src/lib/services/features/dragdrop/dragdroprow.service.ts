@@ -22,6 +22,10 @@ export class KlesDragDropRowTableService implements KlesTableBaseService, IKlesD
             if (isValid) {
                 const previousIndex = this.table.getFormArray().controls.findIndex((d) => d.value._id === event.item.data.value._id);
                 moveItemInArray(this.table.getFormArray().controls, previousIndex, event.currentIndex);
+                this.table._onDragDropRow.emit({
+                    currentIndex: event.currentIndex, previousIndex: previousIndex,
+                    group: this.table.getFormArray().controls[event.currentIndex] as UntypedFormGroup
+                });
                 this.table.dataSource.data = this.table.getFormArray().controls;
                 this.afterDrop(event);
             }

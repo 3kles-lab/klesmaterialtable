@@ -20,7 +20,7 @@ import { componentMapper, IKlesFieldConfig, klesFieldControlFactory } from '@3kl
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { catchError, debounceTime, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
-import { IChangeCell, IChangeHeaderFooterCell, IKlesCellFieldConfig } from '../../models/cell.model';
+import { IChangeCell, IChangeHeaderFooterCell, IDropRow, IKlesCellFieldConfig } from '../../models/cell.model';
 import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { of, Subject } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
@@ -114,6 +114,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Output() _onStatusLineChange = new EventEmitter();
     @Output() _onStatusCellChange = new EventEmitter();
     @Output() _onClick = new EventEmitter();
+    @Output() _onDragDropRow = new EventEmitter<IDropRow>();
 
     // Table
     formHeader: UntypedFormGroup;
