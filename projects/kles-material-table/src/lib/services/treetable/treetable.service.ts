@@ -2,9 +2,10 @@ import { Injectable } from "@angular/core";
 import { classes } from "polytype";
 import { KlesSelectionTreetableService } from "../features/selection/selectiontreetable.service";
 import { DefaultKlesTreetableService } from "./defaulttreetable.service";
+import { KlesDragDropRowTreeTableService } from "../features/dragdrop/dragdroprowtree.service";
 
 @Injectable()
-export class KlesTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTreetableService) {
+export class KlesTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTreetableService, KlesDragDropRowTreeTableService) {
 
     constructor() {
         super
@@ -19,5 +20,9 @@ export class KlesTreetableService extends classes(DefaultKlesTreetableService, K
 
     onCellChange(e: any) {
         this.changeSelectionLine(e);
+    }
+
+    drop(e: any): void {
+        this.onDrop(e);
     }
 }

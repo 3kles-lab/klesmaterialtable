@@ -6,8 +6,9 @@ import { IPagination } from '../../interfaces/pagination.interface';
 import { ISelection } from '../../interfaces/selection.interface';
 import { DefaultKlesTableService } from '../defaulttable.service';
 import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
+import { KlesDragDropRowTableService } from '../features/dragdrop/dragdroprow.service';
 
-export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableLazyService) {
+export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableLazyService, KlesDragDropRowTableService) {
 
     constructor(private pagination: IPagination, selection?: ISelection) {
         super
@@ -46,6 +47,10 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
     onPageChange(event: PageEvent) {
 
 
+    }
+
+    drop(e: any): void {
+        this.onDrop(e);
     }
 
     load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):

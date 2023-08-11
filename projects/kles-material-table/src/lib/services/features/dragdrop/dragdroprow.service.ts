@@ -13,24 +13,22 @@ export class KlesDragDropRowTableService implements KlesTableBaseService, IKlesD
 
     table: KlesTableComponent;
 
-    beforeDrop(event: any): Observable<boolean> {
+    public beforeDrop(event: any): Observable<boolean> {
         return of(true);
     }
 
-    onDrop(event: CdkDragDrop<UntypedFormGroup[]>) {
-        console.log('event', event)
+    public onDrop(event: CdkDragDrop<UntypedFormGroup[]>) {
         this.beforeDrop(event).pipe(take(1)).subscribe((isValid) => {
             if (isValid) {
                 const previousIndex = this.table.getFormArray().controls.findIndex((d) => d.value._id === event.item.data.value._id);
                 moveItemInArray(this.table.getFormArray().controls, previousIndex, event.currentIndex);
                 this.table.dataSource.data = this.table.getFormArray().controls;
-                this.table.matTable.renderRows();
                 this.afterDrop(event);
             }
         })
     }
 
-    afterDrop(event: any) {
+    public afterDrop(event: any) {
 
     }
 }
