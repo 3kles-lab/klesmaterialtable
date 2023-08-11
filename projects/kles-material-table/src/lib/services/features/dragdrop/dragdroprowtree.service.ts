@@ -7,9 +7,7 @@ import { take } from "rxjs/operators";
 export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService {
     beforeDrop(event: any): Observable<boolean> {
         const rowDrop = event.item.data;
-
         const row = this.table.getFormArray().controls[event.currentIndex];
-
         return of(row.value._status.depth === rowDrop.value._status.depth && row.value._status.parentId === rowDrop.value._status.parentId)
     }
 
