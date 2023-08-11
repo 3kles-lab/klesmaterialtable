@@ -18,9 +18,9 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
             if (isValid) {
                 const previousIndex = this.table.getFormArray().controls.findIndex((d) => d.value._id === event.item.data.value._id);
 
-                const currentIndex = event.previousIndex < event.currentIndex ?
-                    this.findIndexLastChild(this.table.getFormArray().controls[event.currentIndex] as UntypedFormGroup)
-                    : event.currentIndex;
+                const currentIndex = (event.previousIndex < event.currentIndex ?
+                    this.findIndexLastChild(this.table.getFormArray().controls[event.currentIndex] as UntypedFormGroup) || event.currentIndex
+                    : event.currentIndex);
 
                 moveItemInArray(this.table.getFormArray().controls, previousIndex, currentIndex);
                 this.moveChildren(this.table.getFormArray().controls[currentIndex] as UntypedFormGroup, currentIndex);
@@ -45,7 +45,7 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
     }
 
     private findIndexLastChild(parent: UntypedFormGroup): number {
-        if (!parent.controls._status.value.children) {
+        if (!parent.controls._status.value.children || !parent.controls._status.value.children.length) {
             return null;
         }
 
