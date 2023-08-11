@@ -28,4 +28,7 @@ export interface KlesTableConfig {
         when?: ((index: number, rowData: any) => boolean)
     }[];
     dragDropRows?: boolean;
+    dragDropRowsOptions?: {
+        autoScrollStep?: number;
+    }
 }
