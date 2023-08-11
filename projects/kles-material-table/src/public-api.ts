@@ -59,6 +59,7 @@ export * from './lib/services/features/filter/headerfilter-table.service';
 export * from './lib/services/features/selection/selectiontable.service';
 export * from './lib/services/features/dragdrop/dragdrop.interface';
 export * from './lib/services/features/dragdrop/dragdroprow.service';
+export * from './lib/services/features/dragdrop/dragdroprowtree.service';
 
 /**PIPE */
 export * from './lib/pipe/field.pipe';
