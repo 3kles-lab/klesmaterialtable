@@ -157,6 +157,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         }
 
         this.componentRef.instance.dragDropRows = this.tableConfig.dragDropRows;
+        this.componentRef.instance.dragDropRowsOptions = { autoScrollStep: 5, ...this.tableConfig.dragDropRowsOptions };
 
         // this.componentRef.instance.lines = [...this.lines];
 
