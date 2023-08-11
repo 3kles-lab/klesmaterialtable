@@ -7,14 +7,15 @@ import { FormGroup } from "@angular/forms";
     selector: 'app-kles-node',
     encapsulation: ViewEncapsulation.None,
     template: `
-        <div style="display:flex">
+        <div style="display: flex; flex-direction: column; flex: auto;">
+        <div style="display:flex; align-items: center; gap:3px">
             <div *ngIf="column.canExpand" [innerHTML]="formatIndentation(row)"></div>
         
             <mat-icon *ngIf="!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter>0"
                 class="size-16" (click)="onNodeClick(row)">
                 {{row.value._status.isExpanded ? 'remove' : 'add'}}
             </mat-icon>
-            <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="30"></mat-spinner>
+            <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="25"></mat-spinner>
 
             <ng-container klesDynamicField [field]="field"
                 [group]="group">
@@ -32,6 +33,8 @@ import { FormGroup } from "@angular/forms";
                 (page)="handlePageEvent($event)">
             </mat-paginator>
         </div>
+
+        </div>
     
     
     `,
@@ -45,7 +48,7 @@ import { FormGroup } from "@angular/forms";
         background: white;
         border: 1px solid #C0C0C0;margin-right:4px;}
         `,
-        `app-kles-node { display: inline-flex; align-items: center; flex-direction: column; width: 100%; }`,
+        `app-kles-node { display: inline-flex; align-items: center; flex-direction: row; width: 100%; }`,
         `app-kles-node .mat-paginator-range-label { margin: 0px }`,
         `app-kles-node .mat-paginator { background: transparent }`,
         `app-kles-node .mat-paginator-range-label { min-width: max-content }`,
