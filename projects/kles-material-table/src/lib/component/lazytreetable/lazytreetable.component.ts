@@ -18,7 +18,7 @@ import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 @Component({
     selector: 'app-kles-lazytreetable',
     templateUrl: './lazytreetable.component.html',
-    styleUrls: ['./lazytreetable.component.scss'],
+    styleUrls: ['./lazytreetable.component.scss', '../../styles/dragdrop.scss'],
     animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

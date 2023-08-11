@@ -94,6 +94,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;
     @Input() dragDropRows: boolean = false;
+    @Input() dragDropRowsOptions: { autoScrollStep: number } = { autoScrollStep: 5 };
 
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];

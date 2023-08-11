@@ -2,10 +2,12 @@
     <div *ngIf="loading" class="loading">
         <mat-spinner></mat-spinner>
     </div>
-    <form class="dynamic-form" [formGroup]="form">
+    <form class="dynamic-form" [formGroup]="form" cdkScrollable>
 
         <table mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
-            formArrayName="rows" [trackBy]="trackById">
+            formArrayName="rows" [trackBy]="trackById" cdkDropList (cdkDropListDropped)="drop($event)"
+            cdkDropListData="dataSource" [cdkDropListDisabled]="!dragDropRows"
+            [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep">
             <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef"
                 [sticky]="column.sticky || false">
 
@@ -35,8 +37,8 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
-            <tr mat-row [ngClass]="row | rowPipe"
-                *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row)"></tr>
+            <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;"
+                (click)="onClick(row)" cdkDrag [cdkDragData]="row"></tr>
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
                 </tr>

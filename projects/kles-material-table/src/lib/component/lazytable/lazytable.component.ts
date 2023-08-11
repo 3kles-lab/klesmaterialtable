@@ -13,7 +13,7 @@ import { rowsAnimation } from '../../animations/row.animation';
 @Component({
     selector: 'app-kles-lazytable',
     templateUrl: './lazytable.component.html',
-    styleUrls: ['./lazytable.component.scss'],
+    styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss'],
     animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

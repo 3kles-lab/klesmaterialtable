@@ -23,7 +23,7 @@ import * as uuid from 'uuid';
 @Component({
     selector: 'app-kles-dynamictreetable',
     templateUrl: './treetable.component.html',
-    styleUrls: ['./treetable.component.scss'],
+    styleUrls: ['./treetable.component.scss', '../../styles/dragdrop.scss'],
     animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
