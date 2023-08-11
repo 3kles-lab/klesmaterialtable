@@ -16,8 +16,9 @@ import { DefaultKlesTreetableService } from '../treetable/defaulttreetable.servi
 import { isSome, fold } from 'fp-ts/lib/Option';
 import * as O from 'fp-ts/lib/Option'
 import { pipe } from 'fp-ts/lib/function';
+import { KlesDragDropRowTreeTableService } from '../features/dragdrop/dragdroprowtree.service';
 
-export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService) {
+export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService, KlesDragDropRowTreeTableService) {
 
     constructor(private data: IPagination, private child: ILoadChildren, selection?: ISelection) {
         super
@@ -42,6 +43,10 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
 
     onLineChange(e: any) {
         // super.onLineChange(e);
+    }
+
+    drop(e: any): void {
+        this.onDrop(e);
     }
 
     protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
