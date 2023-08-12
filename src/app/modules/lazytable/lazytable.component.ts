@@ -12,6 +12,18 @@ import { delay, map } from 'rxjs/operators';
 export class LazyTableComponent implements OnInit, AfterViewInit, OnDestroy {
     columnsExample1: KlesColumnConfig[] = [
         {
+            columnDef: '_id',
+            visible: true,
+            headerCell: {
+                name: '_id',
+                component: KlesFormDynamicHeaderFilterComponent,
+            } as IKlesHeaderFieldConfig,
+            cell: {
+                name: '_id',
+                component: KlesFormTextComponent
+            } as IKlesCellFieldConfig
+        },
+        {
             columnDef: 'NUMBER',
             visible: true,
             filterable: true,
@@ -30,6 +42,44 @@ export class LazyTableComponent implements OnInit, AfterViewInit, OnDestroy {
     ];
 
     tableConfigExample1: KlesTableConfig = {
+        id: 'table1',
+        dragDropRowsOptions: {
+            connectedTo: ['table2']
+        },
+        columns: this.columnsExample1,
+        tableComponent: KlesLazyTableComponent,
+        dragDropRows: true,
+        tableService: new KlesLazyTableService(new class implements IPagination {
+            public list(sort: string, order: string, page: number, perPage: number, filter: any): Observable<any> {
+                return of(Array.from(Array(500).keys()).map((i) => ({ NUMBER: `${i}` }))).pipe(
+                    delay(500),
+                    map((list) => {
+                        const lines = list.filter(line => line.NUMBER.includes(filter.NUMBER ? filter.NUMBER : ''));
+
+                        return {
+                            lines: order && order.length > 0 ? lines.sort((a, b) => {
+                                if (order === 'asc') {
+                                    return (+a.NUMBER) - (+b.NUMBER);
+                                }
+                                else {
+                                    return (+b.NUMBER) - (+a.NUMBER);
+                                }
+
+                            }).slice(perPage * page, perPage * page + perPage)
+                                : lines.slice(perPage * page, perPage * page + perPage),
+                            totalCount: lines.length
+                        };
+                    })
+                );
+            }
+        }())
+    };
+
+    tableConfigExample2: KlesTableConfig = {
+        id: 'table2',
+        dragDropRowsOptions: {
+            connectedTo: ['table1']
+        },
         columns: this.columnsExample1,
         tableComponent: KlesLazyTableComponent,
         dragDropRows: true,
