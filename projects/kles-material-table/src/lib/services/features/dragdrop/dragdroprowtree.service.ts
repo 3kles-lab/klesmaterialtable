@@ -11,7 +11,7 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
         return of(row.value._status.depth === rowDrop.value._status.depth && row.value._status.parentId === rowDrop.value._status.parentId)
     }
 
-    public onDrop(event: CdkDragDrop<UntypedFormGroup[]>) {
+    public onDrop(event: CdkDragDrop<any>) {
         this.beforeDrop(event).pipe(take(1)).subscribe((isValid) => {
             if (isValid) {
                 const previousIndex = this.table.getFormArray().controls.findIndex((d) => d.value._id === event.item.data.value._id);

@@ -8,6 +8,7 @@ import { IKlesCellFieldConfig } from './cell.model';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 
 export interface KlesTableConfig {
+    id?: string;
     tableComponent: Type<any>;
     columns: KlesColumnConfig[];
     tableService: AbstractKlesTableService;
@@ -30,5 +31,6 @@ export interface KlesTableConfig {
     dragDropRows?: boolean;
     dragDropRowsOptions?: {
         autoScrollStep?: number;
+        connectedTo?: string[];
     }
 }

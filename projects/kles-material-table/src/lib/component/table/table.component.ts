@@ -66,6 +66,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @ViewChild(MatTable) matTable: MatTable<any>;
 
     /** Input Component */
+    @Input() id: string;
+
     @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) {
         this.updateData(lines);
@@ -94,7 +96,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;
     @Input() dragDropRows: boolean = false;
-    @Input() dragDropRowsOptions: { autoScrollStep: number } = { autoScrollStep: 5 };
+    @Input() dragDropRowsOptions: { autoScrollStep: number, connectedTo?: string[] } = { autoScrollStep: 5 };
 
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];
