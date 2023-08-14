@@ -37,5 +37,8 @@ export interface KlesTableConfig {
             matchSize?: boolean;
             component: Type<any>;
         };
+        dragPlaceholder?: {
+            component: Type<any>;
+        }
     }
 }
