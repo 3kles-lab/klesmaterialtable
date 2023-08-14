@@ -107,7 +107,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         // console.log('Delete Record=', event);
         event.forEach((e: UntypedFormGroup) => {
             const id = e.controls['_id'].value;
-            const index = this.table.getFormArray().value.findIndex(f => f._id === id);
+            const index = this.table.getFormArray().controls.findIndex(f => f.value._id === id);
             this.table.getFormArray().removeAt(index);
             this.table._lines = this.table._lines.filter(f => f._id !== id);
         });
