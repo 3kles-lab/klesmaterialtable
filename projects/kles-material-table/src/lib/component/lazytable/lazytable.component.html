@@ -38,7 +38,7 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
             <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;"
-                (click)="onClick(row)" cdkDrag [cdkDragData]="row"></tr>
+                (click)="onClick(row)" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)"></tr>
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
                 </tr>

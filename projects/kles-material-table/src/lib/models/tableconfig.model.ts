@@ -32,5 +32,6 @@ export interface KlesTableConfig {
     dragDropRowsOptions?: {
         autoScrollStep?: number;
         connectedTo?: string[];
+        dragDisabled?: (row: UntypedFormGroup) => boolean;
     }
 }

@@ -33,6 +33,7 @@ import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytr
 import { RowPipe } from './pipe/row.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RowTreePipe } from './pipe/rowtree.pipe';
+import { RowDragDisabledPipe } from './pipe/rowdragdisabled.pipe';
 
 const components = [
     KlesTableComponent,
@@ -61,12 +62,12 @@ const services = [
     AbstractKlesTreeTableService,
     AbstractKlesLazyTreetableService,
     // KlesTreetableService,
-    DefaultKlesTreetableService, 
+    DefaultKlesTreetableService,
     // KlesLazyTreetableService,
-    ConverterService, 
+    ConverterService,
     TreeService
 ];
-const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe];
+const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe];
 
 @NgModule({
     declarations: [

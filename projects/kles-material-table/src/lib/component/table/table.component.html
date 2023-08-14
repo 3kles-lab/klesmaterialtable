@@ -55,7 +55,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
     <tr mat-row [ngClass]="(row | rowPipe)" *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row)"
-      cdkDrag [cdkDragData]="row"></tr>
+      cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)"></tr>
     <ng-container *ngIf="multiTemplate">
       <ng-container *ngFor="let template of templates">
         <tr mat-row [ngClass]="row | rowPipe"
