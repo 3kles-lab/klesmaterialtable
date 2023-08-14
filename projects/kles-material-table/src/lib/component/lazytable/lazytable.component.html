@@ -44,6 +44,12 @@
                     <ng-container klesComponent [component]="dragDropRowsOptions?.dragPreview?.component" [value]="row">
                     </ng-container>
                 </ng-template>
+
+                <ng-template *ngIf="dragDropRowsOptions?.dragPlaceholder?.component" cdkDragPlaceholder>
+                    <ng-container klesComponent [component]="dragDropRowsOptions?.dragPlaceholder?.component"
+                        [value]="row">
+                    </ng-container>
+                </ng-template>
             </tr>
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
