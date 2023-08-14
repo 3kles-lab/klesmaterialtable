@@ -38,8 +38,14 @@
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
         <tr mat-row [ngClass]="row | rowTreePipe" [@rowsAnimation]="" *matRowDef="let row; columns: displayedColumns;"
-            [class.cdk-visually-hidden]="!row.value._status.isVisible"
-            (click)="onClick(row)" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)"></tr>
+            [class.cdk-visually-hidden]="!row.value._status.isVisible" (click)="onClick(row)" cdkDrag
+            [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)">
+
+            <ng-template *ngIf="dragDropRowsOptions?.dragPreview?.component" cdkDragPreview [matchSize]="true">
+                <ng-container klesComponent [component]="dragDropRowsOptions?.dragPreview?.component" [value]="row">
+                </ng-container>
+            </ng-template>
+        </tr>
 
         <div *ngIf="showFooter">
             <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">

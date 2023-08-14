@@ -33,5 +33,9 @@ export interface KlesTableConfig {
         autoScrollStep?: number;
         connectedTo?: string[];
         dragDisabled?: (row: UntypedFormGroup) => boolean;
+        dragPreview?: {
+            matchSize?: boolean;
+            component: Type<any>;
+        };
     }
 }

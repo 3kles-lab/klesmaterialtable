@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, OnDestroy
+    ChangeDetectorRef, Inject, OnDestroy, Type
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -96,11 +96,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() pageSizeOptions = [5, 10, 20, 25, 50];
     @Input() showFooter: boolean = false;
     @Input() dragDropRows: boolean = false;
-    @Input() dragDropRowsOptions: {
-        autoScrollStep: number,
-        connectedTo?: string[],
-        dragDisabled?: (row) => boolean
-    } = { autoScrollStep: 5 };
+    @Input() dragDropRowsOptions: any = { autoScrollStep: 5 };
 
     @Input() lineValidations: ValidatorFn[];
     @Input() lineAsyncValidations: AsyncValidatorFn[];

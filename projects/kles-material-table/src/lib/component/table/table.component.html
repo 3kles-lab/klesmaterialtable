@@ -55,7 +55,13 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
     <tr mat-row [ngClass]="(row | rowPipe)" *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row)"
-      cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)"></tr>
+      cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)">
+
+      <ng-template *ngIf="dragDropRowsOptions?.dragPreview?.component" cdkDragPreview [matchSize]="true">
+        <ng-container klesComponent [component]="dragDropRowsOptions?.dragPreview?.component" [value]="row">
+        </ng-container>
+      </ng-template>
+    </tr>
     <ng-container *ngIf="multiTemplate">
       <ng-container *ngFor="let template of templates">
         <tr mat-row [ngClass]="row | rowPipe"
@@ -63,6 +69,7 @@
       </ng-container>
 
     </ng-container>
+
     <div *ngIf="showFooter">
       <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
       </tr>

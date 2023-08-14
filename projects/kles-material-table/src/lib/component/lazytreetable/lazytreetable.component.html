@@ -7,7 +7,8 @@
         <table mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
             formArrayName="rows" [trackBy]="trackById" cdkDropList (cdkDropListDropped)="drop($event)"
             [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
-            [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep" [cdkDropListSortPredicate]="sortPredicate()">
+            [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
+            [cdkDropListSortPredicate]="sortPredicate()">
             <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef"
                 [sticky]="column.sticky || false">
 
@@ -39,8 +40,15 @@
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
             <tr mat-row [ngClass]="row | rowTreePipe" [@rowsAnimation]=""
-                *matRowDef="let row; columns: displayedColumns;" [class.cdk-visually-hidden]="!row.value._status.isVisible"
-                (click)="onClick(row)" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)"></tr>
+                *matRowDef="let row; columns: displayedColumns;"
+                [class.cdk-visually-hidden]="!row.value._status.isVisible" (click)="onClick(row)" cdkDrag
+                [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)">
+
+                <ng-template *ngIf="dragDropRowsOptions?.dragPreview?.component" cdkDragPreview [matchSize]="true">
+                    <ng-container klesComponent [component]="dragDropRowsOptions?.dragPreview?.component" [value]="row">
+                    </ng-container>
+                </ng-template>
+            </tr>
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
                 </tr>
