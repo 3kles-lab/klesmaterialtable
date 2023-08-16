@@ -252,4 +252,12 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         this.dataSource.deptDataAccessor = this.tableService.getDepthDataAccessor;
         this.dataSource.parentDataAccessor = this.tableService.getParentDataAccessor;
     }
+
+    public isParent(index, row) {
+        return row.controls._status.controls.depth.value === 0 && row.controls._status.controls.isVisible.value;
+    }
+
+    public isChild(index, row) {
+        return row.controls._status.controls.depth.value > 0 && row.controls._status.controls.isVisible.value;
+    }
 }
