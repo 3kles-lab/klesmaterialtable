@@ -82,7 +82,7 @@
     <ng-container *ngIf="multiTemplate">
 
       <ng-container *ngIf="templateUnfold">
-        <tr mat-row [ngClass]="row | rowPipe"
+        <tr mat-row
           *matRowDef="let row; columns: getTemplateColumns(templateUnfold); when: tableService.unfoldPredicate"></tr>
       </ng-container>
 
