@@ -5,7 +5,7 @@
     <form class="dynamic-form" [formGroup]="form" cdkScrollable>
         <table [id]="id" mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
             formArrayName="rows" [trackBy]="trackById" cdkDropList (cdkDropListDropped)="drop($event)"
-            [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
+            [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows" [multiTemplateDataRows]="multiTemplate"
             [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
             [cdkDropListSortPredicate]="sortPredicate()" [cdkDropListConnectedTo]="dragDropRowsOptions.connectedTo">
             <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef"
@@ -19,13 +19,37 @@
                     </div>
                 </th>
                 <div>
-                    <!-- <td mat-cell *cdkCellDef="let row;let index = index;" klesCellStyle [row]="row" [column]="column" -->
-                    <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
-                        [ngClass]="{'vertical-separator': options.verticalSeparator}">
-                        <ng-container klesDynamicField [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
-                            [siblingFields]="lineFields[row.value._index]">
+                    <ng-container *ngIf="multiTemplate else simpleTemplate">
+                        <td mat-cell *cdkCellDef="let row;let index = dataIndex;" [style]="getCellStyle(row,column)"
+                            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+                            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index"
+                                [group]="index | groupPipe" [siblingFields]="lineFields[row.value._index]"
+                                [column]="column" [config]="{templateUnfold}">
+                            </ng-container>
+                        </td>
+                    </ng-container>
+
+                    <ng-template #simpleTemplate>
+                        <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
+                            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+                            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index"
+                                [group]="index | groupPipe" [siblingFields]="lineFields[row.value._index]"
+                                [column]="column" [config]="{templateUnfold}">
+                            </ng-container>
+                        </td>
+                    </ng-template>
+
+                    <ng-container *ngIf="templateUnfold && multiTemplate">
+                        <ng-container *ngFor="let cell of templateUnfold.cells" [matColumnDef]="cell.name">
+                            <td mat-cell *matCellDef="let row;let index = dataIndex;" [attr.colspan]="cell.colspan"
+                                [attr.rowspan]="cell.rowspan"
+                                [ngClass]="{'vertical-separator': options.verticalSeparator}">
+                                <ng-container klesDynamicField [field]="cell" [group]="index | groupPipe"
+                                    [siblingFields]="lineFields[row.value._index]">
+                                </ng-container>
+                            </td>
                         </ng-container>
-                    </td>
+                    </ng-container>
 
                     <td mat-footer-cell *matFooterCellDef [style]="getFooterStyle(column)">
                         <ng-container *ngIf="column.footerCell" klesDynamicField [field]="column.footerCell"
@@ -51,6 +75,16 @@
                     </ng-container>
                 </ng-template>
             </tr>
+
+            <ng-container *ngIf="multiTemplate">
+
+                <ng-container *ngIf="templateUnfold">
+                    <tr mat-row
+                        *matRowDef="let row; columns: getTemplateColumns(templateUnfold); when: tableService.unfoldPredicate">
+                    </tr>
+                </ng-container>
+            </ng-container>
+
             <div *ngIf="showFooter">
                 <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
                 </tr>

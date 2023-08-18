@@ -7,13 +7,15 @@ import { ISelection } from '../../interfaces/selection.interface';
 import { DefaultKlesTableService } from '../defaulttable.service';
 import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
 import { KlesDragDropRowTableService } from '../features/dragdrop/dragdroprow.service';
+import { KlesUnfoldRowTableService } from '../features/unfoldrow/unfoldrow.service';
 
-export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableLazyService, KlesDragDropRowTableService) {
+export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesSelectionTableLazyService, KlesDragDropRowTableService, KlesUnfoldRowTableService) {
 
     constructor(private pagination: IPagination, selection?: ISelection) {
         super
             (
                 { super: KlesSelectionTableLazyService, arguments: ['#select', selection] },
+                { super: KlesUnfoldRowTableService },
             );
     }
     //Header 
@@ -39,7 +41,10 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
         this.changeSelectionLine(e);
     }
 
-    onLineChange(e: any) { }
+    onLineChange(e: any) {
+        this.unfoldRow(e);
+        this.table.matTable.renderRows();
+    }
 
     //Footer
     onFooterChange(e: any) { }
