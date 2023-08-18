@@ -154,6 +154,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
         if (this.tableConfig.multiTemplate) {
             this.componentRef.instance.multiTemplate = this.tableConfig.multiTemplate;
             this.componentRef.instance.templates = this.tableConfig.templates || [];
+            this.componentRef.instance.templateUnfold = this.tableConfig.templateUnfold;
         }
 
         this.componentRef.instance.dragDropRows = this.tableConfig.dragDropRows;

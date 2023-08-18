@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { AbstractCell } from "./cell.abstract";
+import { AbstractTreeCell } from "./treecell.abstract";
 
 @Component({
     selector: 'app-kles-leaf',
@@ -13,6 +13,6 @@ import { AbstractCell } from "./cell.abstract";
     ]
 })
 
-export class KlesLeafComponent extends AbstractCell {
+export class KlesLeafComponent extends AbstractTreeCell {
 
 }

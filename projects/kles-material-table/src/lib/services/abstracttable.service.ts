@@ -47,6 +47,8 @@ export abstract class AbstractKlesTableService {
     abstract deleteRecord(record);
     abstract updateRecord(record, options?: { emitEvent: boolean, onlySelf: boolean });
 
+    abstract unfoldPredicate: ((index, data) => boolean);
+
     /**Setters */
     public setTable(table: any) {
         this.table = table;

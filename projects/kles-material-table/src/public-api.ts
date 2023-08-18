@@ -18,8 +18,9 @@ export * from './lib/directives/table.directive';
 export * from './lib/directives/resizecolumn.directive';
 export * from './lib/directives/cellstyle.directive';
 export * from './lib/directives/dynamic-component.directive';
-export * from './lib/directives/dynamic-cell.directive';
+export * from './lib/directives/dynamic-treecell.directive';
 export * from './lib/directives/treetable.directive';
+export * from './lib/directives/dynamic-cell.directive';
 
 /**COMPONENT */
 export * from './lib/component/table/table.component';
@@ -27,12 +28,15 @@ export * from './lib/component/lazytable/lazytable.component';
 export * from './lib/component/header/textheader.component';
 export * from './lib/component/header/textheaderfilter.component';
 export * from './lib/component/header/dynamic-headerfilter.component';
-export * from './lib/component/treetable/cell/cell.abstract';
+export * from './lib/component/treetable/cell/treecell.abstract';
 export * from './lib/component/treetable/cell/leaf.component';
 export * from './lib/component/treetable/cell/node.component';
 export * from './lib/component/treetable/mat-treetable-datasource';
 export * from './lib/component/treetable/treetable.component';
 export * from './lib/component/lazytreetable/lazytreetable.component';
+export * from './lib/component/cell/cell.abstract';
+export * from './lib/component/cell/unfoldcell.component';
+
 
 /**SERVICES */
 export * from './lib/services/abstracttable.service';
@@ -60,6 +64,7 @@ export * from './lib/services/features/selection/selectiontable.service';
 export * from './lib/services/features/dragdrop/dragdrop.interface';
 export * from './lib/services/features/dragdrop/dragdroprow.service';
 export * from './lib/services/features/dragdrop/dragdroprowtree.service';
+export * from './lib/services/features/unfoldrow/unfoldrow.service';
 
 /**PIPE */
 export * from './lib/pipe/field.pipe';

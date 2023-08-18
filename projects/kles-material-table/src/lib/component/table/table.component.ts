@@ -105,6 +105,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() multiTemplate: boolean = false;
     @Input() templates: { cells: IKlesCellFieldConfig[], when?: ((index: number, rowData: any) => boolean) }[] = [];
+    @Input() templateUnfold: { cells: IKlesCellFieldConfig[], multiUnfold?: boolean; };
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
@@ -229,8 +230,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         const group = this.fb.group({});
         const idControl = this.fb.control(row._id);
         const indexControl = this.fb.control(row._index);
+        const unfoldControl = this.fb.control(row._unfold || false);
         group.addControl('_id', idControl);
         group.addControl('_index', indexControl);
+        group.addControl('_unfold', unfoldControl);
         const listField = [];
         this.columns.forEach(column => {
             column.cell.name = column.columnDef;
@@ -276,15 +279,24 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         });
         this.lineFields.push(listField);
 
-        if (this.multiTemplate && this.templates?.length) {
-            this.templates.forEach(template => {
-                template.cells.forEach((cell) => {
+        if (this.multiTemplate) {
+            if (this.templateUnfold) {
+                this.templateUnfold.cells.forEach((cell) => {
                     const field: IKlesCellFieldConfig = _.cloneDeep(cell);
                     const control = this.buildControlField(field, row.value[cell.name]);
                     group.addControl(cell.name, control);
                 })
+            }
+            if (this.templates?.length) {
+                this.templates.forEach(template => {
+                    template.cells.forEach((cell) => {
+                        const field: IKlesCellFieldConfig = _.cloneDeep(cell);
+                        const control = this.buildControlField(field, row.value[cell.name]);
+                        group.addControl(cell.name, control);
+                    })
 
-            });
+                });
+            }
         }
 
         group.setValidators(this.lineValidations);

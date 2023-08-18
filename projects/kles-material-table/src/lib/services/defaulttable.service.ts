@@ -10,6 +10,7 @@ import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cel
 })
 export class DefaultKlesTableService extends AbstractKlesTableService {
 
+
     //Header
     onHeaderChange(e: any) { }
     onHeaderCellChange(e: IChangeHeaderFooterCell) { }
@@ -127,27 +128,14 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         }
     }
 
-
-    // deleteRecordById(id: string) {
-    //     const rowIndex = this.table._lines.findIndex(line => line._id === id);
-
-    //     if (rowIndex >= 0) {
-    //         this.table.lineFields = this.table.lineFields.filter(
-    //             (value, index) => {
-    //                 return index !== rowIndex;
-    //             }
-    //         );
-    //         this.table.getFormArray().removeAt(rowIndex);
-    //         this.table._lines = this.table._lines.filter(f => f._id !== id);
-    //     }
-    //     this.updateDataSource();
-    //     this.table.selection.clear();
-
-    // }
-
     protected updateDataSource() {
         this.table.dataSource.data = this.table.getFormArray().controls;
         this.table.dataSource.filteredData = this.table.getFormArray().controls;
+    }
+
+    unfoldPredicate = (index: any, data: any) => {
+        return data.controls._unfold.value;
+
     }
 
     /**Setters */

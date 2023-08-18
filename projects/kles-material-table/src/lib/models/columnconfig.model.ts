@@ -15,6 +15,7 @@ export interface KlesColumnConfig {
     headerCell: IKlesHeaderFieldConfig;
     cell: IKlesCellFieldConfig;
     footerCell?: IKlesCellFieldConfig;
+    canUnfold?: boolean;
 }
 export interface KlesTreeColumnConfig extends KlesColumnConfig {
     canExpand?: boolean;

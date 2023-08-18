@@ -21,7 +21,7 @@ import { KlesFormTextHeaderComponent } from './component/header/textheader.compo
 import { KlesLeafComponent } from './component/treetable/cell/leaf.component';
 import { KlesNodeComponent } from './component/treetable/cell/node.component';
 import { KlesTreetableComponent } from './component/treetable/treetable.component';
-import { KlesDynamicCellDirective } from './directives/dynamic-cell.directive';
+import { KlesDynamicTreeCellDirective } from './directives/dynamic-treecell.directive';
 import { KlesTreetableDirective } from './directives/treetable.directive';
 import { DefaultKlesTreetableService } from './services/treetable/defaulttreetable.service';
 import { ConverterService } from './services/treetable/converter.service';
@@ -31,9 +31,10 @@ import { AbstractKlesLazyTableService } from './services/lazy/abstractlazytable.
 import { AbstractKlesTreeTableService } from './services/treetable/abstracttreetable.service';
 import { AbstractKlesLazyTreetableService } from './services/lazy/abstractlazytreetable.service';
 import { RowPipe } from './pipe/row.pipe';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RowTreePipe } from './pipe/rowtree.pipe';
 import { RowDragDisabledPipe } from './pipe/rowdragdisabled.pipe';
+import { KlesDynamicCellDirective } from './directives/dynamic-cell.directive';
+import { KlesUnfoldCellComponent } from './component/cell/unfoldcell.component';
 
 const components = [
     KlesTableComponent,
@@ -45,14 +46,16 @@ const components = [
     KlesNodeComponent,
     KlesTreetableComponent,
     KlesLazyTreetableComponent,
+    KlesUnfoldCellComponent
 ];
 const directives = [
     KlesTableDirective,
     KlesResizeColumnDirective,
     KlesCellStyleDirective,
     KlesComponentHeaderDirective,
-    KlesDynamicCellDirective,
+    KlesDynamicTreeCellDirective,
     KlesTreetableDirective,
+    KlesDynamicCellDirective
 ];
 const services = [
     AbstractKlesTableService,

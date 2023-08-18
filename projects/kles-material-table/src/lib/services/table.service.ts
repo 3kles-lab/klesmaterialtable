@@ -5,18 +5,21 @@ import { KlesSelectionTableService } from './features/selection/selectiontable.s
 import { PageEvent } from '@angular/material/paginator';
 import { KlesHeaderFilterTableService } from './features/filter/headerfilter-table.service';
 import { KlesDragDropRowTableService } from './features/dragdrop/dragdroprow.service';
+import { KlesUnfoldRowTableService } from './features/unfoldrow/unfoldrow.service';
 
 // @Injectable({
 //     providedIn: 'root'
 // })
 @Injectable()
-export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesHeaderFilterTableService, KlesDragDropRowTableService) {
+export class KlesTableService extends classes(DefaultKlesTableService, KlesSelectionTableService, KlesHeaderFilterTableService,
+    KlesDragDropRowTableService, KlesUnfoldRowTableService) {
 
     constructor() {
         super
             (
                 { super: KlesSelectionTableService, arguments: ['#select'] },
                 { super: KlesHeaderFilterTableService },
+                { super: KlesUnfoldRowTableService },
             );
     }
     //Header 
@@ -40,7 +43,10 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
         return this.sortPredicate(index, item);
     }
 
-    onLineChange(e: any) { }
+    onLineChange(e: any) {
+        this.unfoldRow(e);
+        this.table.matTable.renderRows();
+    }
 
     //Footer
     onFooterChange(e: any) { }

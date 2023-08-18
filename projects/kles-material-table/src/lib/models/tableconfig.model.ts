@@ -24,6 +24,11 @@ export interface KlesTableConfig {
     showFooter?: boolean;
     ngClassRow?: (row: UntypedFormGroup) => any;
     multiTemplate?: boolean;
+    templateUnfold?: {
+        disabled?: (row: UntypedFormGroup) => boolean;
+        cells: (IKlesCellFieldConfig & { colspan?: number, rowspan?: number })[];
+        multiUnfold?: boolean;
+    };
     templates?: {
         cells: (IKlesCellFieldConfig & { colspan?: number, rowspan?: number })[],
         when?: ((index: number, rowData: any) => boolean)

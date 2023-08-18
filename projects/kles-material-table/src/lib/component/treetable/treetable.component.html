@@ -20,7 +20,7 @@
                     <td mat-cell [style]="getCellStyle(row,column)"
                         [ngClass]="{'vertical-separator': options.verticalSeparator}">
 
-                        <ng-container klesDynamicCell [field]="column | fieldPipe:index" [group]="index | groupPipe"
+                        <ng-container klesDynamicTreeCell [field]="column | fieldPipe:index" [group]="index | groupPipe"
                             [row]="row" [column]="column">
                         </ng-container>
                     </td>

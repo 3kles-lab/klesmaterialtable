@@ -1,5 +1,5 @@
 import { Component, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
-import { AbstractCell } from "./cell.abstract";
+import { AbstractTreeCell } from "./treecell.abstract";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormGroup } from "@angular/forms";
 
@@ -58,7 +58,7 @@ import { FormGroup } from "@angular/forms";
     ],
 })
 
-export class KlesNodeComponent extends AbstractCell {
+export class KlesNodeComponent extends AbstractTreeCell {
 
     onNodeClick(row: any): void {
         (this.group.controls._status as FormGroup).controls.paginator?.patchValue({
