@@ -4,7 +4,7 @@
     </div>
     <form class="dynamic-form" [formGroup]="form" cdkScrollable>
         <table [id]="id" mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
-            formArrayName="rows" [trackBy]="trackById" cdkDropList (cdkDropListDropped)="drop($event)"
+            formArrayName="rows" [trackBy]="multiTemplate ? null : trackById" cdkDropList (cdkDropListDropped)="drop($event)"
             [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows" [multiTemplateDataRows]="multiTemplate"
             [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
             [cdkDropListSortPredicate]="sortPredicate()" [cdkDropListConnectedTo]="dragDropRowsOptions.connectedTo">
@@ -61,7 +61,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
-            <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;"
+            <tr mat-row [ngClass]="row | rowPipe" *matRowDef="let row; columns: displayedColumns;" [@rowsAnimation]=""
                 (click)="onClick(row)" cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)">
 
                 <ng-template *ngIf="dragDropRowsOptions?.dragPreview?.component" cdkDragPreview [matchSize]="true">
@@ -79,7 +79,7 @@
             <ng-container *ngIf="multiTemplate">
 
                 <ng-container *ngIf="templateUnfold">
-                    <tr mat-row
+                    <tr mat-row [@rowsAnimation]=""
                         *matRowDef="let row; columns: getTemplateColumns(templateUnfold); when: tableService.unfoldPredicate">
                     </tr>
                 </ng-container>

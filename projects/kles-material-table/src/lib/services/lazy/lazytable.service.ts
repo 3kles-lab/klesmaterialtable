@@ -43,7 +43,7 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
 
     onLineChange(e: any) {
         this.unfoldRow(e);
-        this.table.matTable.renderRows();
+        super.onLineChange(e);
     }
 
     //Footer

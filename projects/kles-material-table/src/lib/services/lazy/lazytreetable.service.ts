@@ -42,7 +42,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     }
 
     onLineChange(e: any) {
-        // super.onLineChange(e);
+        super.onLineChange(e);
     }
 
     drop(e: any): void {

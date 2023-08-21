@@ -30,12 +30,9 @@ import { UntypedFormGroup } from "@angular/forms";
 })
 
 export class KlesUnfoldCellComponent extends AbstractCell<KlesColumnConfig> {
-
     disabled: (row: UntypedFormGroup) => boolean;
 
     onFoldClick(row: any): void {
         row.controls._unfold.patchValue(!row.value._unfold);
     }
-
-
 }

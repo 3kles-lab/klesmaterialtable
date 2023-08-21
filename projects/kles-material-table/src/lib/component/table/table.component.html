@@ -1,7 +1,7 @@
 <form class="dynamic-form" [formGroup]="form" cdkScrollable>
   <table [id]="id" mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
-    formArrayName="rows" [trackBy]="trackById" [multiTemplateDataRows]="multiTemplate" cdkDropList
-    (cdkDropListDropped)="drop($event)" [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
+    formArrayName="rows" [trackBy]="multiTemplate ? null : trackById" [multiTemplateDataRows]="multiTemplate"
+    cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
     [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep" [cdkDropListSortPredicate]="sortPredicate()"
     [cdkDropListConnectedTo]="dragDropRowsOptions.connectedTo">
     <ng-container *ngFor="let column of columns;" [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false">
@@ -67,7 +67,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true;"></tr>
     <tr mat-row [ngClass]="(row | rowPipe)" *matRowDef="let row; columns: displayedColumns;" (click)="onClick(row)"
-      cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)">
+      cdkDrag [cdkDragData]="row" [cdkDragDisabled]="(row | rowDragDisabledPipe)" [@rowsAnimation]="">
 
       <ng-template *ngIf="dragDropRowsOptions?.dragPreview?.component" cdkDragPreview [matchSize]="true">
         <ng-container klesComponent [component]="dragDropRowsOptions?.dragPreview?.component" [value]="row">
@@ -82,12 +82,12 @@
     <ng-container *ngIf="multiTemplate">
 
       <ng-container *ngIf="templateUnfold">
-        <tr mat-row
+        <tr mat-row [@rowsAnimation]=""
           *matRowDef="let row; columns: getTemplateColumns(templateUnfold); when: tableService.unfoldPredicate"></tr>
       </ng-container>
 
       <ng-container *ngFor="let template of templates">
-        <tr mat-row [ngClass]="row | rowPipe"
+        <tr mat-row [ngClass]="row | rowPipe" [@rowsAnimation]=""
           *matRowDef="let row; columns: getTemplateColumns(template); when: template.when"></tr>
       </ng-container>
     </ng-container>

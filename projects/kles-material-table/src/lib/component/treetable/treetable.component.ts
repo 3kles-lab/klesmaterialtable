@@ -81,7 +81,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
     protected updateTree(data: any) {
         this._lines = (Array.isArray(data) ? data : [data]).map((line => {
-            return { _id: uuid.v4(), ...line, }
+            return { _id: uuid.v4(), ...line };
         }));
         this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
     }
@@ -148,7 +148,9 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
     addFormLine(row: TreeTableNode<T>): UntypedFormGroup {
         const group = this.formBuilder.group({});
         const idControl = this.formBuilder.control(row._id);
+        const unfoldControl = this.fb.control(row._unfold || false);
         group.addControl('_id', idControl);
+        group.addControl('_unfold', unfoldControl);
 
         const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
 

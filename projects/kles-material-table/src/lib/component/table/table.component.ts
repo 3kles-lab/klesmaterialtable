@@ -185,7 +185,6 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
 
     trackById(index: number, item: UntypedFormGroup): any {
-        // return `${item.value._id}`;
         return item;
     }
 
@@ -494,12 +493,14 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             const data = { ...l };
             const options = data.options;
             const _id = l._id || uuid.v4();
+            const _unfold = l._unfold || false;
             const _index = index;
 
             delete data._id;
             delete data.options;
             return {
                 _id,
+                _unfold,
                 _index,
                 ...options && { options },
                 value: data,

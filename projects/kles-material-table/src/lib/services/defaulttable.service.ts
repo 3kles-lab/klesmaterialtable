@@ -19,7 +19,11 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
     //Line
     onCellChange(e: IChangeCell) { }
     onStatusCellChange(e: any) { }
-    onLineChange(e: IChangeLine) { }
+    onLineChange(e: IChangeLine) {
+        if (this.table.multiTemplate) {
+            this.table.matTable.renderRows();
+        }
+    }
     onStatusLineChange(e: any) { }
     onClick(e: any) { }
 
@@ -135,7 +139,6 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
 
     unfoldPredicate = (index: any, data: any) => {
         return data.controls._unfold.value;
-
     }
 
     /**Setters */

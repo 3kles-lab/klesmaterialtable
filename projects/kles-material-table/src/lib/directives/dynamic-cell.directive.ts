@@ -1,8 +1,5 @@
-import { IKlesFieldConfig, KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
+import { KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
 import { Directive, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
-import { KlesLeafComponent } from '../component/treetable/cell/leaf.component';
-import { KlesNodeComponent } from '../component/treetable/cell/node.component';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { KlesUnfoldCellComponent } from '../component/cell/unfoldcell.component';
 

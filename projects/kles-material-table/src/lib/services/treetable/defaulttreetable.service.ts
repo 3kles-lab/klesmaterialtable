@@ -58,7 +58,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
 
     onLineChange(e: any) {
         this.changeChildrenVisibility(e.group, e.group.controls._status.value.isExpanded);
-        this.table.matTable.renderRows();
+        super.onLineChange(e);
     }
 
     protected changeChildrenVisibility(node: UntypedFormGroup, visibility: boolean) {
@@ -156,9 +156,7 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         return null;
     }
 
-
-
-    // deleteRecord(event: AbstractControl[]): void {
-    //     /*TODO*/
-    // }
+    unfoldPredicate = (index: any, data: any) => {
+        return data.controls._status.value.isVisible && data.controls._unfold.value;
+    }
 }

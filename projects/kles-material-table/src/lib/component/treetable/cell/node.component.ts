@@ -17,8 +17,8 @@ import { FormGroup } from "@angular/forms";
             </mat-icon>
             <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="25"></mat-spinner>
 
-            <ng-container klesDynamicField [field]="field"
-                [group]="group">
+            <ng-container klesDynamicCell [field]="field"
+                [group]="group" [column]="column">
             </ng-container>
         </div>
 

@@ -5,7 +5,7 @@ import { AbstractTreeCell } from "./treecell.abstract";
     selector: 'app-kles-leaf',
     template: `
         <div [innerHTML]="formatIndentation(row)"></div>
-        <ng-container klesDynamicField [field]="field" [group]="group">
+        <ng-container klesDynamicCell [field]="field" [group]="group" [column]="column">
         </ng-container>
     `,
     styles: [
