@@ -105,7 +105,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() multiTemplate: boolean = false;
     @Input() templates: { cells: IKlesCellFieldConfig[], when?: ((index: number, rowData: any) => boolean) }[] = [];
-    @Input() templateUnfold: { cells: IKlesCellFieldConfig[], multiUnfold?: boolean; };
+    @Input() templateUnfold: { cells: IKlesCellFieldConfig[], multiUnfold?: boolean; disabled?: (row: UntypedFormGroup) => boolean; };
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();

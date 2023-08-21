@@ -1,7 +1,8 @@
 import { Component, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
 import { AbstractTreeCell } from "./treecell.abstract";
 import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { FormGroup } from "@angular/forms";
+import { FormGroup, UntypedFormGroup } from "@angular/forms";
+import { IKlesCellFieldConfig } from "../../../models/cell.model";
 
 @Component({
     selector: 'app-kles-node',
@@ -18,7 +19,7 @@ import { FormGroup } from "@angular/forms";
             <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="25"></mat-spinner>
 
             <ng-container klesDynamicCell [field]="field"
-                [group]="group" [column]="column">
+                [group]="group" [column]="column" [config]="{templateUnfold}">
             </ng-container>
         </div>
 
@@ -59,6 +60,8 @@ import { FormGroup } from "@angular/forms";
 })
 
 export class KlesNodeComponent extends AbstractTreeCell {
+
+    templateUnfold: { cells: IKlesCellFieldConfig[], multiUnfold?: boolean; disabled?: (row: UntypedFormGroup) => boolean; }
 
     onNodeClick(row: any): void {
         (this.group.controls._status as FormGroup).controls.paginator?.patchValue({

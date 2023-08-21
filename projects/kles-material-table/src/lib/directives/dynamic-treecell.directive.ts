@@ -13,6 +13,7 @@ export class KlesDynamicTreeCellDirective extends KlesDynamicFieldDirective impl
 
     @Input() column: KlesTreeColumnConfig;
     @Input() row: UntypedFormGroup;
+    @Input() config?: any;
 
     ngOnInit() {
         this.buildComponent();
@@ -35,5 +36,6 @@ export class KlesDynamicTreeCellDirective extends KlesDynamicFieldDirective impl
         this.componentRef.instance.group = this.group;
         this.componentRef.instance.row = this.row;
         this.componentRef.instance.column = this.column;
+        this.componentRef.instance.templateUnfold = this.config?.templateUnfold;
     }
 }

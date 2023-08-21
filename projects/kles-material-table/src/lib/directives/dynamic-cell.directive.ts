@@ -32,7 +32,7 @@ export class KlesDynamicCellDirective extends KlesDynamicFieldDirective implemen
             this.componentRef.instance.field = this.field;
             this.componentRef.instance.group = this.group;
             this.componentRef.instance.siblingFields = this.siblingFields;
-            this.componentRef.instance.disabled = this.config?.templateUnfold?.disabled;
+            this.componentRef.instance.templateUnfold = this.config?.templateUnfold;
         } else {
             super.buildComponent();
         }
