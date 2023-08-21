@@ -7,29 +7,24 @@ import { take } from "rxjs/operators";
 export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService {
     beforeDrop(event: any): Observable<boolean> {
         const rowDrop = event.item.data;
-        const row = this.table.getFormArray().controls.filter((group: UntypedFormGroup) => (group.controls._status as UntypedFormGroup)
-            .controls.isVisible.value)[event.currentIndex];
+        const row = this.table.getFormArray().controls[event.currentIndex];
         return of(row.value._status.depth === rowDrop.value._status.depth && row.value._status.parentId === rowDrop.value._status.parentId)
     }
 
     public onDrop(event: CdkDragDrop<any>) {
         this.beforeDrop(event).pipe(take(1)).subscribe((isValid) => {
             if (isValid) {
-                const rows = this.table.getFormArray().controls
-                    .filter((group: UntypedFormGroup) => (group.controls._status as UntypedFormGroup).controls.isVisible.value);
-
                 const previousIndex = this.table.getFormArray().controls.findIndex((d) => d.value._id === event.item.data.value._id);
 
                 const currentIndex = (event.previousIndex < event.currentIndex ?
-                    this.findIndexLastChild(rows[event.currentIndex] as UntypedFormGroup) || this.table.getFormArray().controls
-                        .findIndex((d) => d.value._id === (rows[event.currentIndex] as UntypedFormGroup).controls._id.value)
+                    this.findIndexLastChild(this.table.getFormArray().controls[event.currentIndex] as UntypedFormGroup) || event.currentIndex
                     : event.currentIndex);
 
                 moveItemInArray(this.table.getFormArray().controls, previousIndex, currentIndex);
                 this.moveChildren(this.table.getFormArray().controls[currentIndex] as UntypedFormGroup, currentIndex);
                 this.table._onDragDropRow.emit({
                     currentIndex, previousIndex: previousIndex,
-                    group: rows[currentIndex] as UntypedFormGroup
+                    group: this.table.getFormArray().controls[currentIndex] as UntypedFormGroup
                 });
                 this.table.dataSource.data = this.table.getFormArray().controls;
                 this.afterDrop(event);
@@ -62,11 +57,7 @@ export class KlesDragDropRowTreeTableService extends KlesDragDropRowTableService
     }
 
     public sortPredicate(index: number, item: CdkDrag<UntypedFormGroup>): boolean {
-        const rows = this.table.getFormArray().controls
-            .filter((group: UntypedFormGroup) => (group.controls._status as UntypedFormGroup).controls.isVisible.value);
-        return (rows[index] as UntypedFormGroup).controls._status.value.depth === item.data.controls._status.value.depth
-            && (rows[index] as UntypedFormGroup).controls._status.value.parentId === item.data.controls._status.value.parentId;
+        return (this.table.getFormArray().controls[index] as UntypedFormGroup).controls._status.value.depth === item.data.controls._status.value.depth
+            && (this.table.getFormArray().controls[index] as UntypedFormGroup).controls._status.value.parentId === item.data.controls._status.value.parentId;
     }
-
-
 }
