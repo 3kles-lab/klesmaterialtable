@@ -1,21 +1,13 @@
-import { Injectable } from '@angular/core';
-import { UntypedFormArray, UntypedFormGroup } from '@angular/forms';
+import { UntypedFormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
-import { SafeStyle } from '@angular/platform-browser';
 import * as _ from 'lodash';
 import { classes } from 'polytype';
 import { Observable } from 'rxjs';
 import { ILoadChildren } from '../../interfaces/loadChildren.interface';
 import { IPagination } from '../../interfaces/pagination.interface';
 import { ISelection } from '../../interfaces/selection.interface';
-import { KlesColumnConfig } from '../../models/columnconfig.model';
-import { DefaultKlesTableService } from '../defaulttable.service';
-import { KlesSelectionTableService } from '../features/selection/selectiontable.service';
 import { KlesSelectionTableLazyService } from '../features/selection/selectiontablelazy.service';
 import { DefaultKlesTreetableService } from '../treetable/defaulttreetable.service';
-import { isSome, fold } from 'fp-ts/lib/Option';
-import * as O from 'fp-ts/lib/Option'
-import { pipe } from 'fp-ts/lib/function';
 import { KlesDragDropRowTreeTableService } from '../features/dragdrop/dragdroprowtree.service';
 
 export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService, KlesDragDropRowTreeTableService) {
@@ -30,8 +22,19 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
 
     //Header 
     onHeaderChange(e: any) {
-        this.table.filteredValues$.next(this.table.formHeader.value);
+        const value = { ...this.table.formHeader.value };
+
+        this.table.columns.forEach(column => {
+            if (!column.filterable) {
+                delete value[column.columnDef];
+            }
+        });
+
+        if (!_.isEqual(this.table.filteredValues$.getValue(), value)) {
+            this.table.filteredValues$.next(value);
+        }
     }
+
     onHeaderCellChange(e: any) {
         this.changeSelectionHeader(e);
     }
