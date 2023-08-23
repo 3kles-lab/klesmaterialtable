@@ -6,6 +6,7 @@ import { AbstractKlesTableService } from '../services/abstracttable.service';
 import { AsyncValidatorFn, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { IKlesCellFieldConfig } from './cell.model';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { Span } from '../enums/span.enum';
 
 export interface KlesTableConfig {
     id?: string;
@@ -26,11 +27,11 @@ export interface KlesTableConfig {
     multiTemplate?: boolean;
     templateUnfold?: {
         disabled?: (row: UntypedFormGroup) => boolean;
-        cells: (IKlesCellFieldConfig & { colspan?: number, rowspan?: number })[];
+        cells: (IKlesCellFieldConfig & { colspan?: number | Span, rowspan?: number })[];
         multiUnfold?: boolean;
     };
     templates?: {
-        cells: (IKlesCellFieldConfig & { colspan?: number, rowspan?: number })[],
+        cells: (IKlesCellFieldConfig & { colspan?: number | Span, rowspan?: number })[],
         when?: ((index: number, rowData: any) => boolean)
     }[];
     dragDropRows?: boolean;

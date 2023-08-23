@@ -73,6 +73,11 @@ export * from './lib/pipe/elevation.pipe';
 export * from './lib/pipe/row.pipe';
 export * from './lib/pipe/rowtree.pipe';
 export * from './lib/pipe/rowdragdisabled.pipe';
+export * from './lib/pipe/span.pipe';
+
+/**ENUM */
+export * from './lib/enums/align.enum';
+export * from './lib/enums/span.enum';
 
 /**MODULE */
 export * from './lib/table.module';

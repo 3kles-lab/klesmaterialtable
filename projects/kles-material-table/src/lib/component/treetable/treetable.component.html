@@ -45,7 +45,7 @@
 
                 <ng-container *ngIf="templateUnfold && multiTemplate">
                     <ng-container *ngFor="let cell of templateUnfold.cells" [matColumnDef]="cell.name">
-                        <td mat-cell *matCellDef="let row;let index = dataIndex;" [attr.colspan]="cell.colspan"
+                        <td mat-cell *matCellDef="let row;let index = dataIndex;" [attr.colspan]="cell.colspan | spanPipe:displayedColumns.length"
                             [attr.rowspan]="cell.rowspan" [ngClass]="{'vertical-separator': options.verticalSeparator}">
                             <ng-container klesDynamicField [field]="cell" [group]="index | groupPipe">
                             </ng-container>

@@ -1,6 +1,7 @@
 import { IKlesFieldConfig } from '@3kles/kles-material-dynamicforms';
 import { IKlesCellFieldConfig } from './cell.model';
 import { IKlesHeaderFieldConfig } from './header-field.config.model';
+import { AlignCell } from '../enums/align.enum';
 
 export interface KlesColumnConfig {
     columnDef: string;
@@ -16,6 +17,7 @@ export interface KlesColumnConfig {
     cell: IKlesCellFieldConfig;
     footerCell?: IKlesCellFieldConfig;
     canUnfold?: boolean;
+    align?: AlignCell;
 }
 export interface KlesTreeColumnConfig extends KlesColumnConfig {
     canExpand?: boolean;

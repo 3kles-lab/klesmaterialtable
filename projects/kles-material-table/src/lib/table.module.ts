@@ -35,6 +35,7 @@ import { RowTreePipe } from './pipe/rowtree.pipe';
 import { RowDragDisabledPipe } from './pipe/rowdragdisabled.pipe';
 import { KlesDynamicCellDirective } from './directives/dynamic-cell.directive';
 import { KlesUnfoldCellComponent } from './component/cell/unfoldcell.component';
+import { SpanPipe } from './pipe/span.pipe';
 
 const components = [
     KlesTableComponent,
@@ -70,7 +71,7 @@ const services = [
     ConverterService,
     TreeService
 ];
-const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe];
+const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe, SpanPipe];
 
 @NgModule({
     declarations: [
