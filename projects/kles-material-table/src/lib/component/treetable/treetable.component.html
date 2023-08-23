@@ -82,7 +82,6 @@
         </tr>
 
         <ng-container *ngIf="multiTemplate">
-
             <ng-container *ngIf="templateUnfold">
                 <tr mat-row [@rowsAnimation]=""
                     *matRowDef="let row; columns: getTemplateColumns(templateUnfold); when: tableService.unfoldPredicate">

@@ -28,8 +28,11 @@ form {
 }
 
 .mat-header-cell,
+.mat-footer-cell {
+  text-align: center !important;
+}
+
 .mat-cell {
-  // left: 0!important;
   text-align: left !important;
 }
 
