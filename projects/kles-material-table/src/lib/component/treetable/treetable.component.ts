@@ -1,10 +1,10 @@
 import {
-    AfterViewInit, Component, OnInit, OnChanges, ChangeDetectionStrategy, SimpleChanges, Input, EventEmitter, Output, ChangeDetectorRef, Inject
+    Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject
 } from '@angular/core';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { AbstractControl, UntypedFormBuilder, FormControl, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTreetableData } from './mat-treetable-datasource';
@@ -15,7 +15,7 @@ import { TreeService } from '../../services/treetable/tree.service';
 import { KlesTableComponent } from '../table/table.component';
 import { debounceTime, switchMap, take, catchError, takeUntil, map, tap } from 'rxjs/operators';
 import { AbstractKlesTreeTableService } from '../../services/treetable/abstracttreetable.service';
-import { of, combineLatest } from 'rxjs';
+import { of } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 import * as uuid from 'uuid';
@@ -23,7 +23,7 @@ import * as uuid from 'uuid';
 @Component({
     selector: 'app-kles-dynamictreetable',
     templateUrl: './treetable.component.html',
-    styleUrls: ['./treetable.component.scss', '../../styles/dragdrop.scss'],
+    styleUrls: ['./treetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss'],
     animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },

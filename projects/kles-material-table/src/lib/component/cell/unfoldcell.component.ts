@@ -8,8 +8,7 @@ import { IKlesCellFieldConfig } from "../../models/cell.model";
     selector: 'app-kles-fold',
     encapsulation: ViewEncapsulation.None,
     template: `
-       
-            <div style="display:flex; align-items: center; gap:3px">
+            <div>
                 <ng-container *ngIf="(!templateUnfold?.disabled || !templateUnfold?.disabled(group))">
                     <button mat-icon-button aria-label="expand row" (click)="onFoldClick(group); $event.stopPropagation()">
                         <mat-icon> {{group.value._unfold ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </mat-icon>

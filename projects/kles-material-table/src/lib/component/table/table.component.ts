@@ -31,7 +31,7 @@ import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
 @Component({
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
-    styleUrls: ['./table.component.scss', '../../styles/dragdrop.scss'],
+    styleUrls: ['./table.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss'],
     animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },

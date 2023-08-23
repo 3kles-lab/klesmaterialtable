@@ -20,7 +20,7 @@
                 <ng-container *ngIf="multiTemplate else simpleTemplate">
                     <ng-container *cdkCellDef="let row;let index = dataIndex;">
                         <td mat-cell [style]="getCellStyle(row,column)"
-                            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+                            [ngClass]="column | cellPipe">
 
                             <ng-container klesDynamicTreeCell [field]="column | fieldPipe:index"
                                 [group]="index | groupPipe" [row]="row" [column]="column">
@@ -32,7 +32,7 @@
                 <ng-template #simpleTemplate>
                     <ng-container *cdkCellDef="let row;let index = index;">
                         <td mat-cell [style]="getCellStyle(row,column)"
-                            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+                            [ngClass]="column | cellPipe">
 
                             <ng-container klesDynamicTreeCell [field]="column | fieldPipe:index"
                                 [group]="index | groupPipe" [row]="row" [column]="column">

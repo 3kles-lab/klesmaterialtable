@@ -18,7 +18,7 @@
 
         <ng-container *ngIf="multiTemplate else simpleTemplate">
           <td mat-cell *cdkCellDef="let row;let index = dataIndex;" [style]="getCellStyle(row,column)"
-            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+            [ngClass]="column | cellPipe">
             <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
               [siblingFields]="lineFields[index]" [column]="column" [config]="{templateUnfold}">
             </ng-container>
@@ -27,7 +27,7 @@
 
         <ng-template #simpleTemplate>
           <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
-            [ngClass]="{'vertical-separator': options.verticalSeparator}">
+            [ngClass]="column | cellPipe">
             <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
               [siblingFields]="lineFields[row.value._index]" [column]="column" [config]="{templateUnfold}">
             </ng-container>

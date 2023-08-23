@@ -32,17 +32,11 @@ form {
 
 .mat-header-cell,
 .mat-footer-cell {
-  text-align: center !important;
+  text-align: center;
 }
 
 .mat-cell {
-  text-align: left !important;
-}
-
-
-.mat-cell {
-  // left: 0!important;
-  text-align: left !important;
+  text-align: left;
 }
 
 table {
