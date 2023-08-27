@@ -54,13 +54,17 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     protected _onLinesChanges = new Subject<void>();
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
-        this.sort = ms;
-        this.setDataSourceAttributes();
+        if (!this.sort) {
+            this.sort = ms;
+            this.setDataSourceAttributes();
+        }
     }
 
     @ViewChild(MatPaginator, { static: true }) set matPaginator(mp: MatPaginator) {
-        this.paginator = mp;
-        this.setDataSourceAttributes();
+        if (!this.paginator) {
+            this.paginator = mp;
+            this.setDataSourceAttributes();
+        }
     }
 
     @ViewChild(MatTable) matTable: MatTable<any>;
@@ -511,6 +515,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         //            this.showFooter = this.columns.some(column => column.total);
         this.setItems();
     }
+
+
+
 
     setDataSourceAttributes() {
         if (!this.hidePaginator) {

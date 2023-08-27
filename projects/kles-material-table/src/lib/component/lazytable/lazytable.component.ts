@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, concat, merge, of, Subject } from 'rxjs';
-import { catchError, debounceTime, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 import { rowsAnimation } from '../../animations/row.animation';
@@ -56,7 +56,8 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         merge(this.sort.sortChange, this.filteredValues$.pipe(debounceTime(500)), this.reload$)
             .subscribe(() => this.paginator.pageIndex = 0);
 
-        merge(this.reload$, this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
+        merge(this.reload$, this.sort.sortChange.pipe(distinctUntilChanged()),
+            this.paginator.page.pipe(distinctUntilChanged()), this.filteredValues$.pipe(debounceTime(500)))
             .pipe(
                 takeUntil(this._onDestroy),
                 switchMap(() => {
@@ -108,9 +109,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
                     this.paginator.pageIndex = 0;
                 });
             }
-            if (
-                // !this.sortDefault && 
-                this.sortConfig) {
+            if (this.sortConfig) {
                 this.sort.active = this.sortConfig.active;
                 this.sort.direction = this.sortConfig.direction;
                 this.sort.sortChange.emit(this.sortConfig);
