@@ -34,6 +34,7 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { KlesMaterialDatepickerModule } from '@3kles/kles-material-datepicker';
 
 
 @NgModule({
@@ -112,7 +113,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
         MatButtonModule,
         MatSlideToggleModule,
         ColorPickerModule,
-        DragDropModule
+        DragDropModule,
+        KlesMaterialDatepickerModule
     ],
     providers: [
         MatDatepickerModule,
