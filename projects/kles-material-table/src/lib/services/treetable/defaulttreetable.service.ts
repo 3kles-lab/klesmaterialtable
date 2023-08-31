@@ -118,9 +118,10 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
         const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
         const parent = treeTableTree.find(s => s._id === parentId);
         const parentDepth = ~~parent?.depth;
+
         if (parent) {
             const searchableNode = this.table.converterService.toSearchableTree(record);
-            console.log(searchableNode)
+
             const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
             treeNode.depth = ~~parentDepth + 1;
             const groups = this.table.createFormNode(treeNode);
