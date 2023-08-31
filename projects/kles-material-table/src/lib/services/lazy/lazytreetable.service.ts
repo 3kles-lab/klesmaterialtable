@@ -10,6 +10,9 @@ import { KlesSelectionTableLazyService } from '../features/selection/selectionta
 import { DefaultKlesTreetableService } from '../treetable/defaulttreetable.service';
 import { KlesDragDropRowTreeTableService } from '../features/dragdrop/dragdroprowtree.service';
 
+import * as O from "fp-ts/lib/Option";
+import { pipe } from "fp-ts/lib/function";
+
 export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService, KlesDragDropRowTreeTableService) {
 
     constructor(private data: IPagination, private child: ILoadChildren, selection?: ISelection) {
@@ -87,7 +90,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
     addChild(parentId: string, record): UntypedFormGroup {
         const searchableParent = this.table.searchableTree.map(s => {
             return this.table.treeService.getById(s, parentId)
-        })?.[0];
+        }).filter(Boolean)?.[0];
 
         if (searchableParent) {
             const searchableNode = this.table.converterService.toSearchableTree(record);
@@ -95,12 +98,14 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
 
             const treeTableTree = this.table.searchableTree.map(st => this.table.converterService.toTreeTableTree(st));
 
-            const treeTableParent = this.table.treeService.flatten(treeTableTree.find(s => {
+            const treeTableParent = this.table.treeService.flatten(treeTableTree.map(s => {
                 return this.table.treeService.searchById(s, parentId)
-            })).find(row => row._id === parentId);
+            }).find(s => pipe(
+                O.isSome(s)
+            )))[0].value;
 
             const treeNode = this.table.converterService.toTreeTableTree(searchableNode);
-            treeNode.depth = ~~treeTableParent.depth + 1;
+            treeNode.depth = ~~treeTableParent.pathToRoot.length + 1;
 
             const groups = this.table.createFormNode(treeNode);
 
