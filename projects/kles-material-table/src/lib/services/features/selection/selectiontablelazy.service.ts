@@ -41,7 +41,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
             this.table.getFormArray().controls.forEach((row: UntypedFormGroup) => {
               row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false, onlySelf: true });
             });
-
+            this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
             this.table.ref.markForCheck();
           });
       }
