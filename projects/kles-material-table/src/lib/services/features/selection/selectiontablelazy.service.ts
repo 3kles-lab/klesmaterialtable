@@ -6,84 +6,85 @@ import { catchError, map, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 export class KlesSelectionTableLazyService implements KlesTableBaseService {
-    table: KlesTableComponent;
-    columnSelect: string;
+  table: KlesTableComponent;
+  columnSelect: string;
 
-    constructor(column: string, private selection: ISelection) {
-        this.columnSelect = column;
+  constructor(column: string, private selection: ISelection) {
+    this.columnSelect = column;
+  }
+
+  changeSelectionHeader(e: any) {
+    if (this.selection?.selectAll) {
+      if (e.column.columnDef === this.columnSelect) {
+        const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
+
+        const filterHeader = this.table.columns
+          .filter(column => column.filterable)
+          .map(column => {
+            return { [column.columnDef]: this.table.formHeader.controls[column.columnDef].value };
+          })
+          .reduce((a, b) => ({ ...a, ...b }), {});
+
+        this.selection.selectAll(val, filterHeader)
+          .pipe(
+            take(1),
+            map((response) => {
+              return { success: true, ...response };
+            }),
+            catchError(err => {
+              console.error(err);
+              return of({ success: false, indeterminate: false, selected: false });
+            })
+          )
+          .subscribe((response) => {
+
+            this.table.getFormArray().controls.forEach((row: UntypedFormGroup) => {
+              row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false, onlySelf: true });
+            });
+
+            this.table.ref.markForCheck();
+          });
+      }
     }
+  }
 
-    changeSelectionHeader(e: any) {
-        if (this.selection?.selectAll) {
-            if (e.column.columnDef === this.columnSelect) {
-                const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
+  changeSelectionLine(e: any) {
+    if (this.selection?.select) {
+      if (e.column.columnDef === this.columnSelect && e.row) {
+        const val = (e.group as UntypedFormGroup).controls[e.column.columnDef].value;
+        this.selection.select(val, e.group)
+          .pipe(
+            take(1),
+            map((response) => {
+              return { success: true, ...response };
+            }),
+            catchError(err => {
+              console.error(err);
+              return of({ success: false, indeterminate: false, selected: false });
+            })
+          )
+          .subscribe((response) => {
+            if (!response.success) {
+              (e.group as UntypedFormGroup).controls[e.column.columnDef].patchValue(!val, { emitEvent: false });
+            } else if (response.success) {
+              if (response.indeterminate) {
+                this.table.formHeader
+                  .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
+              } else if (response.selected && !response.indeterminate) {
+                this.table.formHeader
+                  .controls[this.columnSelect]?.patchValue(true, { onlySelf: true, emitEvent: false });
+              } else {
+                this.table.formHeader
+                  .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
 
-                const filterHeader = this.table.columns
-                    .filter(column => column.filterable)
-                    .map(column => {
-                        return { [column.columnDef]: this.table.formHeader.controls[column.columnDef].value };
-                    })
-                    .reduce((a, b) => ({ ...a, ...b }), {});
-
-                this.selection.selectAll(val, filterHeader)
-                    .pipe(
-                        take(1),
-                        map((response) => {
-                            return { success: true, ...response };
-                        }),
-                        catchError(err => {
-                            console.error(err);
-                            return of({ success: false, indeterminate: false, selected: false });
-                        })
-                    )
-                    .subscribe((response) => {
-
-                        this.table.getFormArray().controls.forEach((row: UntypedFormGroup) => {
-                            row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false, onlySelf: true });
-                        });
-
-                        this.table.ref.markForCheck();
-                    });
+              }
+              this.table.columns.find(f => f.columnDef === this.columnSelect)
+                .headerCell.indeterminate = response.indeterminate;
+              this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
             }
-        }
+            this.table.ref.markForCheck();
+          });
+      }
     }
-
-    changeSelectionLine(e: any) {
-        if (this.selection?.select) {
-            if (e.column.columnDef === this.columnSelect && e.row) {
-                const val = (e.group as UntypedFormGroup).controls[e.column.columnDef].value;
-                this.selection.select(val, e.group)
-                    .pipe(
-                        take(1),
-                        map((response) => {
-                            return { success: true, ...response };
-                        }),
-                        catchError(err => {
-                            console.error(err);
-                            return of({ success: false, indeterminate: false, selected: false });
-                        })
-                    )
-                    .subscribe((response) => {
-                        if (!response.success) {
-                            (e.group as UntypedFormGroup).controls[e.column.columnDef].patchValue(!val, { emitEvent: false });
-                        } else if (response.success) {
-                            if (response.indeterminate) {
-                                this.table.formHeader
-                                    .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
-                            } else if (response.selected && !response.indeterminate) {
-                                this.table.formHeader
-                                    .controls[this.columnSelect]?.patchValue(true, { onlySelf: true, emitEvent: false });
-                            } else {
-                                this.table.formHeader
-                                    .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
-
-                            }
-                            this.table.columns.find(f => f.columnDef === this.columnSelect)
-                                .headerCell.indeterminate = response.indeterminate;
-                        }
-                        this.table.ref.markForCheck();
-                    });
-            }
-        }
-    }
+  }
 }
