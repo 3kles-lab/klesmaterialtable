@@ -9,7 +9,6 @@
     "@angular/common": "~12.0.1",
     "@angular/compiler": "~12.0.1",
     "@angular/core": "~12.0.1",
-    "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "~12.0.1",
     "@angular/material": "^12.0.1",
     "@angular/material-moment-adapter": "^12.0.1",

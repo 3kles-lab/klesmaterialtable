@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -35,7 +34,6 @@ const DIRECTIVES = [];
         FormsModule,
         ReactiveFormsModule,
         TranslateModule,
-        FlexLayoutModule,
         klesModules,
         NgxMatSelectSearchModule
     ],
@@ -46,7 +44,6 @@ const DIRECTIVES = [];
     ],
     exports: [
         MaterialModule,
-        FlexLayoutModule,
         COMPONENTS,
         PIPES,
         klesModules,
