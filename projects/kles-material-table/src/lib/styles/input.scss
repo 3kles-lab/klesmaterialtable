@@ -1,0 +1,29 @@
+::ng-deep app-kles-dynamictable .mat-mdc-form-field-focus-overlay,
+::ng-deep app-kles-lazytable .mat-mdc-form-field-focus-overlay,
+::ng-deep app-kles-dynamictreetable .mat-mdc-form-field-focus-overlay,
+::ng-deep app-kles-lazytreetable .mat-mdc-form-field-focus-overlay {
+    background-color: transparent !important;
+}
+
+::ng-deep app-kles-dynamictable .mdc-text-field--filled:not(.mdc-text-field--disabled),
+::ng-deep app-kles-lazytable .mdc-text-field--filled:not(.mdc-text-field--disabled),
+::ng-deep app-kles-dynamictreetable .mdc-text-field--filled:not(.mdc-text-field--disabled),
+::ng-deep app-kles-lazytreetable .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent !important;
+}
+
+
+::ng-deep app-kles-dynamictable .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix,
+::ng-deep app-kles-lazytable .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix,
+::ng-deep app-kles-dynamictreetable .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix,
+::ng-deep app-kles-lazytreetable .mdc-text-field--no-label:not(.mdc-text-field--outlined):not(.mdc-text-field--textarea) .mat-mdc-form-field-infix {
+    padding-top: 24px !important;
+    padding-bottom: 8px !important;
+}
+
+::ng-deep app-kles-dynamictable .mdc-text-field:not(.mdc-text-field--outlined),
+::ng-deep app-kles-lazytable .mdc-text-field:not(.mdc-text-field--outlined),
+::ng-deep app-kles-dynamictreetable .mdc-text-field:not(.mdc-text-field--outlined),
+::ng-deep app-kles-lazytreetable .mdc-text-field:not(.mdc-text-field--outlined) {
+    padding: 0 !important;
+}

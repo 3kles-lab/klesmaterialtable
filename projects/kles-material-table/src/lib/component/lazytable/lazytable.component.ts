@@ -13,11 +13,10 @@ import { rowsAnimation } from '../../animations/row.animation';
 @Component({
     selector: 'app-kles-lazytable',
     templateUrl: './lazytable.component.html',
-    styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss'],
+    styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
     animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     loading: boolean;
