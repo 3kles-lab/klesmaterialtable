@@ -1,4 +1,4 @@
-import { PageEvent } from '@angular/material/paginator';
+import { LegacyPageEvent as PageEvent } from '@angular/material/legacy-paginator';
 import * as _ from 'lodash';
 import { classes } from 'polytype';
 import { Observable } from 'rxjs';

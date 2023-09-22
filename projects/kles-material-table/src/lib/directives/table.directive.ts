@@ -3,7 +3,7 @@ import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Dir
 import { BehaviorSubject } from 'rxjs';
 import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
-import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
 
 @Directive({
     selector: '[klesTable]'

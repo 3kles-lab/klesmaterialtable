@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
-import { PageEvent } from "@angular/material/paginator";
+import { LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
 import { DefaultKlesTableService, KlesHeaderFilterTableService, KlesSelectionClickTableService } from "kles-material-table";
 import { classes } from "polytype";
 

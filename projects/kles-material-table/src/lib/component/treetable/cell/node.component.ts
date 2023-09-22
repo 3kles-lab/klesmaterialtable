@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
 import { AbstractTreeCell } from "./treecell.abstract";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
 import { FormGroup, UntypedFormGroup } from "@angular/forms";
 import { IKlesCellFieldConfig } from "../../../models/cell.model";
 

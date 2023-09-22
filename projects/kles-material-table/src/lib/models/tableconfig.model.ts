@@ -5,7 +5,7 @@ import { Options } from './options.model';
 import { AbstractKlesTableService } from '../services/abstracttable.service';
 import { AsyncValidatorFn, UntypedFormGroup, ValidatorFn } from '@angular/forms';
 import { IKlesCellFieldConfig } from './cell.model';
-import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
 import { Span } from '../enums/span.enum';
 
 export interface KlesTableConfig {

@@ -8,7 +8,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { KlesMaterialDialogModule } from '@3kles/kles-material-dialog';
-import { MatPaginatorIntl } from '@angular/material/paginator';
+import { MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
 import { KlesMaterialTableModule } from 'kles-material-table';
 import { MaterialModule } from '../material.module';
 import { PaginatorI18n } from '../util/paginator-i18n';

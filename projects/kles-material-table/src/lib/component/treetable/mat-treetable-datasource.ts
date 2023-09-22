@@ -1,5 +1,5 @@
 import { MatSort } from "@angular/material/sort";
-import { MatTableDataSource } from "@angular/material/table";
+import { MatLegacyTableDataSource as MatTableDataSource } from "@angular/material/legacy-table";
 import { KlesTreetableComponent } from "./treetable.component";
 
 export class MatTreetableData<T> extends MatTableDataSource<T> {
