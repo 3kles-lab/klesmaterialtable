@@ -55,7 +55,6 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
         `app-kles-node .mat-mdc-paginator-range-label { min-width: max-content }`,
         `app-kles-node .mat-mdc-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
         `app-kles-node .paginator { display: flex; width: 100%; justify-content: end; }`,
-        `app-kles-node .mat-mdc-paginator-range-actions .mat-mdc-icon-button { width:30px; height:30px; line-height: 30px;}`,
     ],
 })
 
