@@ -1,6 +1,6 @@
 import { Component, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
 import { AbstractTreeCell } from "./treecell.abstract";
-import { MatLegacyPaginator as MatPaginator, LegacyPageEvent as PageEvent } from "@angular/material/legacy-paginator";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
 import { FormGroup, UntypedFormGroup } from "@angular/forms";
 import { IKlesCellFieldConfig } from "../../../models/cell.model";
 
@@ -42,20 +42,20 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
     styles: [
         'app-kles-node mat-icon {cursor: pointer}',
         `app-kles-node .size-16 {
-        width: 16px;
-        height: 16px;
-        font-size: 16px;
-        color:#404040;
-        background: white;
-        border: 1px solid #C0C0C0;margin-right:4px;}
-        `,
+                 width: 16px;
+                 height: 16px;
+                 font-size: 16px;
+                 color:#404040;
+                 background: white;
+                 border: 1px solid #C0C0C0;margin-right:4px;}
+                 `,
         `app-kles-node { display: inline-flex; align-items: center; flex-direction: row; width: 100%; }`,
-        `app-kles-node .mat-paginator-range-label { margin: 0px }`,
-        `app-kles-node .mat-paginator { background: transparent }`,
-        `app-kles-node .mat-paginator-range-label { min-width: max-content }`,
-        `app-kles-node .mat-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
+        `app-kles-node .mat-mdc-paginator-range-label { margin: 0px }`,
+        `app-kles-node .mat-mdc-paginator { background: transparent }`,
+        `app-kles-node .mat-mdc-paginator-range-label { min-width: max-content }`,
+        `app-kles-node .mat-mdc-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
         `app-kles-node .paginator { display: flex; width: 100%; justify-content: end; }`,
-        `app-kles-node .mat-paginator-range-actions .mat-icon-button { width:30px; height:30px; line-height: 30px;}`,
+        `app-kles-node .mat-mdc-paginator-range-actions .mat-mdc-icon-button { width:30px; height:30px; line-height: 30px;}`,
     ],
 })
 

@@ -11,13 +11,13 @@ form {
   max-height: calc(100vh - 155px);
 }
 
-.mat-paginator {
+.mat-mdc-paginator {
   position: sticky;
   bottom: 0;
   z-index: 1000;
 }
 
-.mat-header-row {
+.mat-mdc-header-row {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
@@ -27,12 +27,12 @@ form {
   background-color: #E2E6EB;
 }
 
-.mat-header-cell,
-.mat-footer-cell {
+.mat-mdc-header-cell,
+.mat-mdc-footer-cell {
   text-align: center;
 }
 
-.mat-cell {
+.mat-mdc-cell {
   text-align: left;
 }
 
@@ -42,23 +42,23 @@ table {
   overflow: auto;
 }
 
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
-td.mat-footer-cell:first-of-type {
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
+td.mat-mdc-footer-cell:first-of-type {
   padding-left: 15px !important;
   padding-right: 15px !important;
 }
 
-th.mat-header-cell:first-of-type,
-td.mat-cell:first-of-type,
-td.mat-footer-cell:first-of-type {
+th.mat-mdc-header-cell:first-of-type,
+td.mat-mdc-cell:first-of-type,
+td.mat-mdc-footer-cell:first-of-type {
   padding-left: 15px !important;
   padding-right: 15px !important;
 }
 
-th.mat-header-cell:last-of-type,
-td.mat-cell:last-of-type,
-td.mat-footer-cell:last-of-type {
+th.mat-mdc-header-cell:last-of-type,
+td.mat-mdc-cell:last-of-type,
+td.mat-mdc-footer-cell:last-of-type {
   padding-right: 0 !important;
 }
 
@@ -79,8 +79,8 @@ td[class*=' mat-column'] {
 }
 
 
-.mat-cell,
-.mat-header-cell {
+.mat-mdc-cell,
+.mat-mdc-header-cell {
   padding: 0px 10px;
 }
 
@@ -93,7 +93,7 @@ td div {
 }
 
 
-.mat-table {
+.mat-mdc-table {
   width: 100%;
 
   &.resizing {
@@ -103,7 +103,7 @@ td div {
     cursor: col-resize;
   }
 
-  .mat-cell {
+  .mat-mdc-cell {
     span {
       display: block;
       overflow: hidden;
@@ -111,7 +111,7 @@ td div {
     }
   }
 
-  .mat-header-cell {
+  .mat-mdc-header-cell {
     position: relative;
 
     &:not(:last-child) {
@@ -127,8 +127,8 @@ td div {
     }
   }
 
-  .mat-cell,
-  .mat-header-cell {
+  .mat-mdc-cell,
+  .mat-mdc-header-cell {
     border-right: 1px solid rgba(0, 0, 0, 0.12);
 
     &:not(:nth-child(1)) {

@@ -19,7 +19,7 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     `,
     styles: [`mat-form-field {width: calc(100%)} 
         mat-icon {font-size: 16px; height:16px; width:16px} 
-        .mat-icon-button {padding-bottom: 4px; min-width: 0; width: 22px; height: 22px; flex-shrink: 0; line-height: 1; border-radius: 50%;}`
+        .mat-mdc-icon-button {padding-bottom: 4px; min-width: 0; width: 22px; height: 22px; flex-shrink: 0; line-height: 1; border-radius: 50%;}`
     ]
 })
 export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract implements OnInit {

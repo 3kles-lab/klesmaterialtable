@@ -11,13 +11,13 @@ form{
   max-height: calc(100vh - 155px);
 }
 
-.mat-paginator{
+.mat-mdc-paginator{
   position: sticky;
   bottom: 0;
   z-index: 1000;
 }
 
-.mat-header-row {
+.mat-mdc-header-row {
     position: sticky;
     position: -webkit-sticky;
     top: 0;
@@ -27,7 +27,7 @@ form{
     background-color: #E2E6EB;
   }
 
-  .mat-header-cell, .mat-cell, .mat-footer-cell{
+  .mat-mdc-header-cell, .mat-mdc-cell, .mat-mdc-footer-cell{
     text-align: center;
   }
 
@@ -37,12 +37,12 @@ table {
     overflow: auto;
   }
 
-  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  th.mat-mdc-header-cell:first-of-type, td.mat-mdc-cell:first-of-type, td.mat-mdc-footer-cell:first-of-type {
     padding-left: 15px !important;
     padding-right: 15px !important;
   }
 
-  th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+  th.mat-mdc-header-cell:first-of-type, td.mat-mdc-cell:first-of-type, td.mat-mdc-footer-cell:first-of-type {
     padding-left: 15px !important;
     padding-right: 15px !important;
   }
@@ -72,7 +72,7 @@ table {
   }
 
   
-  .mat-cell, .mat-header-cell {
+  .mat-mdc-cell, .mat-mdc-header-cell {
     padding: 0px 10px;
   }
   
@@ -96,7 +96,7 @@ table {
   }
   
 
-  .mat-table {
+  .mat-mdc-table {
     width: 100%;
     &.resizing {
       -moz-user-select: none;
@@ -104,14 +104,14 @@ table {
       user-select: none;
       cursor: col-resize;
     }
-    .mat-cell {
+    .mat-mdc-cell {
       span {       
         display: block; 
         overflow: hidden;
         text-overflow: ellipsis;
       }
     }
-    .mat-header-cell {
+    .mat-mdc-header-cell {
       position: relative;      
       &:not(:last-child) {
         .resize-holder {
@@ -125,8 +125,8 @@ table {
         }
       }
     }
-    .mat-cell,
-    .mat-header-cell {
+    .mat-mdc-cell,
+    .mat-mdc-header-cell {
       border-right: 1px solid rgba(0, 0, 0, 0.12);
       &:not(:nth-child(1)) {
         padding: 0 10px;
@@ -143,6 +143,6 @@ table {
   justify-content:center;
 }
 
-tr.mat-footer-row {
+tr.mat-mdc-footer-row {
   font-weight: bold;
 }
