@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -88,7 +88,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                     this.updateData(response.value.lines);
                     this.paginator.length = response.value.totalCount;
                 }
-                this.ref.markForCheck();
+                // this.ref.markForCheck();
             });
 
     }
@@ -151,7 +151,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         group.addControl('_id', idControl);
         group.addControl('_unfold', unfoldControl);
 
-        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
+        const paginator = (this.columns as Signal<KlesTreeColumnConfig[]>)().find(c => c.paginator && c.canExpand);
 
         const statusControl = this.formBuilder.group({
             isVisible: row.isVisible,
@@ -205,7 +205,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
         const rowValue = row.value;
         const listField = [];
-        this.columns.forEach(column => {
+        this.columns().forEach(column => {
             column.cell.name = column.columnDef;
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, rowValue[colCell.name]);

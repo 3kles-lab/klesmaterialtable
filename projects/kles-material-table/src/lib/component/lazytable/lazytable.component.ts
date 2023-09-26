@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges, signal } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -19,7 +19,7 @@ import { rowsAnimation } from '../../animations/row.animation';
 })
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-    loading: boolean;
+    loading = signal(false);
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
     reload$ = new Subject<void>();
 
@@ -39,7 +39,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         super.ngOnInit();
 
         this.filteredValues$.next(
-            this.columns
+            this.columns()
                 .filter(column => column.filterable)
                 .map(column => {
                     return { [column.columnDef]: this.formHeader.controls[column.columnDef].value };
@@ -75,9 +75,9 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
             )
             .subscribe((response) => {
                 if (response.loading) {
-                    this.loading = true;
+                    this.loading.set(true);
                 } else {
-                    this.loading = false;
+                    this.loading.set(false);
 
                     if (this.showFooter && response.value.footer) {
                         this.formFooter.patchValue(response.value.footer);
@@ -89,7 +89,6 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
                     this.paginator.length = response.value.totalCount;
 
                 }
-                this.ref.markForCheck();
             });
 
     }

@@ -25,12 +25,12 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
     protected createFilter() {
         const myFilterPredicate = (data: UntypedFormGroup, filter: string): boolean => {
             let searchString = JSON.parse(filter);
-            const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
+            const filterableColumn = this.table.columns().filter(f => f.filterable).map(m => m.columnDef);
 
             searchString = _.pick(searchString, filterableColumn);
             return Object.keys(searchString).filter(f => searchString[f] && filterableColumn.includes(f)).every(key => {
                 let keyValue = data?.controls[key]?.value;
-                const column: KlesColumnConfig = this.table.columns.find(col => col.columnDef === key);
+                const column: KlesColumnConfig = this.table.columns().find(col => col.columnDef === key);
 
                 if (keyValue && typeof (keyValue) === 'object' && column.cell.property) {
                     keyValue = keyValue[column.cell.property];

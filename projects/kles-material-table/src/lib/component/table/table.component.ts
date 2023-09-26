@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, OnDestroy, Type
+    ChangeDetectorRef, Inject, OnDestroy, Type, signal, Signal, computed
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -31,7 +31,7 @@ import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
 @Component({
     selector: 'app-kles-dynamictable',
     templateUrl: './table.component.html',
-    styleUrls: ['./table.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss','../../styles/input.scss'],
+    styleUrls: ['./table.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
     animations: [rowsAnimation],
     providers: [
         { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
@@ -84,7 +84,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         }
     }
 
-    @Input() columns = [] as KlesColumnConfig[];
+    @Input() columns = signal<KlesColumnConfig[]>([]);
     @Input() set selectionMode(selectionMode: boolean) {
         this.selection = new SelectionModel<any>(selectionMode);
     }
@@ -134,7 +134,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     renderedData: any[]; // data from the datasource
 
-    displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+    displayedColumns = computed(() => this.columns().filter(e => e.visible).map(c => c.columnDef));
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
@@ -195,7 +195,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Form Header */
     initFormHeader() {
         const group = this.fb.group({});
-        this.columns.forEach(column => {
+        this.columns().forEach(column => {
             const colCellHeader = _.cloneDeep(column.headerCell);
             colCellHeader.name = column.columnDef;
             const control = this.buildControlField(colCellHeader, colCellHeader.value || '');
@@ -238,7 +238,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         group.addControl('_index', indexControl);
         group.addControl('_unfold', unfoldControl);
         const listField = [];
-        this.columns.forEach(column => {
+        this.columns().forEach(column => {
             column.cell.name = column.columnDef;
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, row.value[colCell.name]);
@@ -318,7 +318,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     public updateFormCell(index: number, cell: IKlesCellFieldConfig) {
         const cellIndex = this.lineFields[index].findIndex(field => field.name === cell.name);
-        const column = this.columns.find(col => col.columnDef === cell.name);
+        const column = this.columns().find(col => col.columnDef === cell.name);
 
         const group = ((this.form.controls.rows as UntypedFormArray).controls
             .find((c: UntypedFormGroup) => c.controls._index.value === index));
@@ -379,7 +379,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     /** Form Footer */
     initFormFooter() {
         const group = this.fb.group({});
-        this.columns
+        this.columns()
             .filter((column) => column.footerCell)
             .forEach(column => {
                 const colCellFooter = column.footerCell;
@@ -465,24 +465,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this.form = this.fb.group({
             rows: this.initFormArray()
         });
-        // this.dataSource.data = this._lines.map(l => l.value);
 
         this.dataSource.data = this.getFormArray().controls;
         this.dataSource.filteredData = this.getFormArray().controls;
 
-        // this.getFormArray();
-        // .map(l => {
-        //     return this.columns.filter(c => c.visible).map(c => c.columnDef).reduce((a, b) => {
-        //         return {
-        //             ...a,
-        //             [b]: l[b]
-        //         }
-        //     }, {});
-        // });
-        this.getFormArray().valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(e => {
-            // console.log('Value change on rows in form table=', e);
-            //this.tableService.onLineChange(e);
-        });
         this._onLoaded.emit();
         this.tableService.onDataLoaded();
     }
@@ -511,13 +497,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
             };
         });
-        this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
-        //            this.showFooter = this.columns.some(column => column.total);
         this.setItems();
     }
-
-
-
 
     setDataSourceAttributes() {
         if (!this.hidePaginator) {
@@ -583,12 +564,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
 
     public setVisible(name: string, visible: boolean): void {
-        const column = this.columns.find(col => col.columnDef === name);
-        if (column) {
-            column.visible = visible;
-        }
-        this.displayedColumns = this.columns.filter(c => c.visible).map(c => c.columnDef);
-        this.ref.markForCheck();
+        this.columns.mutate((columns) => {
+            const column = columns.find(col => col.columnDef === name);
+            if (column) {
+                column.visible = visible;
+            }
+        });
     }
 
     public pageChanged(event: PageEvent) {

@@ -1,5 +1,5 @@
 import { EnumType, KlesFormColorComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormSelectSearchComponent } from '@3kles/kles-material-dynamicforms';
-import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { ViewContainerRef, Injector, ComponentFactoryResolver, ComponentRef, Directive, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter, signal } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
@@ -82,7 +82,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
         this.componentRef = this.container.createComponent(factory, 0, injector);
 
-        this.componentRef.instance.columns = this.tableConfig.columns.map(m => {
+        this.componentRef.instance.columns = signal(this.tableConfig.columns.map(m => {
             const obj = { ...m };
             obj.headerCell.filterable = obj.filterable;
             obj.headerCell.sortable = obj.sortable;
@@ -116,7 +116,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
             }
 
             return obj;
-        });
+        }));
         if (this.tableConfig.options) {
             this.componentRef.instance.options = this.tableConfig.options;
         }

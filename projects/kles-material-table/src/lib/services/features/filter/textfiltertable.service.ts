@@ -18,7 +18,7 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
     protected createFilter() {
         const myFilterPredicate = (data: UntypedFormGroup, filter: string): boolean => {
             let searchString = JSON.parse(filter);
-            const filterableColumn = this.table.columns.filter(f => f.filterable).map(m => m.columnDef);
+            const filterableColumn = this.table.columns().filter(f => f.filterable).map(m => m.columnDef);
 
             searchString = _.pick(searchString, filterableColumn);
 
@@ -34,7 +34,7 @@ export class KlesTextFilterTableService implements KlesTableBaseService {
                     return true;
                 }
 
-                const column = this.table.columns.find(col => col.columnDef === key);
+                const column = this.table.columns().find(col => col.columnDef === key);
 
                 if (column.cell.property) {
                     keyValue = data?.controls[key]?.value[column.cell.property];

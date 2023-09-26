@@ -1,6 +1,6 @@
 {
   "name": "@3kles/kles-material-table",
-  "version": "16.0.0",
+  "version": "16.1.0",
   "scripts": {
     "build:lib": "ng build kles-material-table --prod",
     "publish:lib": "cd dist/kles-material-table && npm publish --registry 'http://192.168.111.61:8081/repository/npm-3kles/'  --force",
@@ -15,7 +15,7 @@
   "private": true,
   "dependencies": {
     "@3kles/kles-material-dialog": "^16.0.0",
-    "@3kles/kles-material-dynamicforms": "^16.1.0",
+    "@3kles/kles-material-dynamicforms": "^16.1.2",
     "@3kles/kles-material-datepicker": "16.0.0",
     "@angular/animations": "^16.2.6",
     "@angular/cdk": "^16.2.5",

@@ -18,7 +18,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
       if (e.column.columnDef === this.columnSelect) {
         const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
 
-        const filterHeader = this.table.columns
+        const filterHeader = this.table.columns()
           .filter(column => column.filterable)
           .map(column => {
             return { [column.columnDef]: this.table.formHeader.controls[column.columnDef].value };
@@ -78,11 +78,13 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
                   .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
 
               }
-              this.table.columns.find(f => f.columnDef === this.columnSelect)
-                .headerCell.indeterminate = response.indeterminate;
+
+              this.table.columns.mutate((columns) => {
+                columns.find(f => f.columnDef === this.columnSelect).headerCell.indeterminate = response.indeterminate;
+              });
+
               this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
             }
-            this.table.ref.markForCheck();
           });
       }
     }

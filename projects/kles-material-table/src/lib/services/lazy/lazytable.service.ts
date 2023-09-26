@@ -22,7 +22,7 @@ export class KlesLazyTableService extends classes(DefaultKlesTableService, KlesS
     onHeaderChange(e: any) {
         const value = { ...this.table.formHeader.value };
 
-        this.table.columns.forEach(column => {
+        this.table.columns().forEach(column => {
             if (!column.filterable) {
                 delete value[column.columnDef];
             }

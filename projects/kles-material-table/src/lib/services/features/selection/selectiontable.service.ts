@@ -44,19 +44,29 @@ export class KlesSelectionTableService implements KlesTableBaseService {
         }
       }
       if (this.isAllSelected()) {
-        this.table.columns.filter(f => f.columnDef === this.columnSelect).map(m => m.headerCell.indeterminate = false);
+
+        this.table.columns.mutate((columns) => {
+          columns.filter(f => f.columnDef === this.columnSelect).forEach(m => m.headerCell.indeterminate = false);
+        });
+
         this.table.formHeader.controls[this.columnSelect]?.patchValue(true, { onlySelf: true, emitEvent: false });
         this.table.tableService.onSelectIndeterminate.next(false);
 
       } else {
-        this.table.columns.filter(f => f.columnDef === this.columnSelect)
+        this.table.columns().filter(f => f.columnDef === this.columnSelect)
           .map(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
+
+        this.table.columns.mutate((columns) => {
+          columns.filter(f => f.columnDef === this.columnSelect)
+            .forEach(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
+        });
+
         this.table.tableService.onSelectIndeterminate.next(!this.table.selection.isEmpty());
         if (this.table.selection.isEmpty()) {
           this.table.formHeader.controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
         }
       }
-      this.table.ref.markForCheck();
+
     }
   }
 

@@ -1,5 +1,5 @@
 import {
-    Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject
+    Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject, Signal
 } from '@angular/core';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
@@ -75,7 +75,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
     updateData(lines: any[]) {
         this.updateTree(lines);
-        this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
+        // this.displayedColumns = this.columns.filter(e => e.visible).map(c => c.columnDef);
         this.setItems();
     }
 
@@ -152,7 +152,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         group.addControl('_id', idControl);
         group.addControl('_unfold', unfoldControl);
 
-        const paginator = (this.columns as KlesTreeColumnConfig[]).find(c => c.paginator && c.canExpand);
+        const paginator = (this.columns as Signal<KlesTreeColumnConfig[]>)().find(c => c.paginator && c.canExpand);
 
         const statusControl = this.formBuilder.group({
             parentId: row.parentId,
@@ -174,7 +174,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
 
         const rowValue = row?.value;
         const listField = [];
-        this.columns.forEach(column => {
+        this.columns().forEach(column => {
             column.cell.name = column.columnDef;
             const colCell = _.cloneDeep(column.cell);
             const control = this.buildControlField(colCell, rowValue[colCell.name]);
