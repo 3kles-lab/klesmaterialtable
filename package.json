@@ -14,9 +14,9 @@
   },
   "private": true,
   "dependencies": {
+    "@3kles/kles-material-datepicker": "^14.0.3",
     "@3kles/kles-material-dialog": "^14.0.1",
     "@3kles/kles-material-dynamicforms": "^14.10.0",
-    "@3kles/kles-material-datepicker": "^14.0.3",
     "@angular/animations": "^14.2.11",
     "@angular/cdk": "^14.2.7",
     "@angular/common": "^14.2.11",
@@ -25,6 +25,7 @@
     "@angular/flex-layout": "^9.0.0-beta.29",
     "@angular/forms": "^14.2.11",
     "@angular/material": "^14.2.7",
+    "@angular/material-luxon-adapter": "^16.2.6",
     "@angular/material-moment-adapter": "^14.2.7",
     "@angular/platform-browser": "^14.2.11",
     "@angular/platform-browser-dynamic": "^14.2.11",
