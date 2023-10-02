@@ -13,7 +13,9 @@ export class KlesSelectionTableService implements KlesTableBaseService {
   changeSelectionHeader(e: any) {
     if (e.column.columnDef === this.columnSelect) {
       const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
-      this.table.getFormArray().controls.forEach((e: UntypedFormGroup) => {
+      this.table.getFormArray().controls
+      .filter((e) => e.enabled)
+      .forEach((e: UntypedFormGroup) => {
         e.controls[this.columnSelect]?.patchValue(val);
       });
     }
