@@ -14,10 +14,10 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     if (e.column.columnDef === this.columnSelect) {
       const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
       this.table.getFormArray().controls
-      .filter((e) => e.enabled)
-      .forEach((e: UntypedFormGroup) => {
-        e.controls[this.columnSelect]?.patchValue(val);
-      });
+        .filter((e: UntypedFormGroup) => e.controls[this.columnSelect]?.enabled)
+        .forEach((e: UntypedFormGroup) => {
+          e.controls[this.columnSelect]?.patchValue(val);
+        });
     }
   }
 
