@@ -32,6 +32,10 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
                 let keyValue = data?.controls[key]?.value;
                 const column: KlesColumnConfig = this.table.columns.find(col => col.columnDef === key);
 
+                if (column.headerCell.filterPredicate) {
+                    return column.headerCell.filterPredicate(keyValue, searchString[key]) || false;
+                }
+
                 if (keyValue && typeof (keyValue) === 'object' && column.cell.property) {
                     keyValue = keyValue[column.cell.property];
                 }
