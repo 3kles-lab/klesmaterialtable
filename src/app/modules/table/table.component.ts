@@ -1,4 +1,4 @@
-import { EnumType, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormInputComponent, KlesFormSelectSearchComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
+import { EnumType, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormInputComponent, KlesFormSelectComponent, KlesFormSelectSearchComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
 import { AfterViewInit, Component, OnDestroy, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
 import { IChangeCell, IKlesCellFieldConfig, IKlesHeaderFieldConfig, KlesColumnConfig, KlesFormDynamicHeaderFilterComponent, KlesFormTextHeaderComponent, KlesTableComponent, KlesTableConfig, KlesTableDirective, KlesTableService } from 'kles-material-table';
@@ -28,16 +28,25 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: '#select',
+                disabled: true,
                 component: KlesFormCheckboxComponent
             } as IKlesCellFieldConfig
         },
         {
             columnDef: 'NAME',
             visible: true,
+            filterable: true,
             headerCell: {
                 name: 'NAME',
                 label: 'Name',
-                component: KlesFormTextHeaderComponent
+                component: KlesFormDynamicHeaderFilterComponent,
+                filterComponent: KlesFormSelectComponent,
+                options: ['Léo', 'Arthur'],
+                multiple: true,
+                filterPredicate: (value, filter) => {
+                    return !filter.length || filter.includes(value);
+                }
+
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: 'NAME',
@@ -78,9 +87,11 @@ export class TableComponent implements AfterViewInit, OnDestroy {
         showFooter: true,
         multiTemplate: true,
         templates: [
-            { cells: [ { name: 'test', component: KlesFormTextComponent, colspan: 3}], when: (index, rowData) => {
-                return rowData.value.test;
-            } }
+            {
+                cells: [{ name: 'test', component: KlesFormTextComponent, colspan: 3 }], when: (index, rowData) => {
+                    return rowData.value.test;
+                }
+            }
         ]
     };
 
