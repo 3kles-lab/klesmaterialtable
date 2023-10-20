@@ -87,7 +87,7 @@
         </ng-container>
 
         <div *ngIf="showFooter">
-            <tr mat-footer-row *matFooterRowDef="displayedColumns;sticky: true">
+            <tr mat-footer-row *matFooterRowDef="displayedColumns();sticky: true">
             </tr>
         </div>
     </table>
