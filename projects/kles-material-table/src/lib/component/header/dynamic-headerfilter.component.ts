@@ -30,7 +30,7 @@ export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract impl
     ngOnInit(): void {
         super.ngOnInit();
 
-        this.filterField = this.field;
+        this.filterField = Object.assign({}, this.field);
         delete this.filterField['label'];
     }
 
