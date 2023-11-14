@@ -13,7 +13,7 @@
             [cdkDropListSortPredicate]="sortPredicate()">
             @for (column of columns(); track column.columnDef) {
                 <ng-container [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false">
-                    <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.class}}"
+                    <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.ngClass}}"
                         [ngClass]="{'vertical-separator': options.verticalSeparator}">
                         <div style="display: inline-flex;">
                             <ng-container klesDynamicField [field]="column.headerCell" [group]="formHeader">

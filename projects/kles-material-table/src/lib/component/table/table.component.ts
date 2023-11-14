@@ -26,6 +26,7 @@ import { of, Subject } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 
 import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
+import { Span } from '../../enums/span.enum';
 
 
 @Component({
@@ -108,8 +109,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     @Input() ngClassRow: (row: UntypedFormGroup) => any = ((row) => ({ 'highlight-on-hover': this.options.highlightRowOnHover }));
 
     @Input() multiTemplate: boolean = false;
-    @Input() templates: { cells: IKlesCellFieldConfig[], when?: ((index: number, rowData: any) => boolean) }[] = [];
-    @Input() templateUnfold: { cells: IKlesCellFieldConfig[], multiUnfold?: boolean; disabled?: (row: UntypedFormGroup) => boolean; };
+    @Input() templates: { cells: (IKlesCellFieldConfig & { colspan?: number | Span, rowspan?: number })[], when?: ((index: number, rowData: any) => boolean) }[] = [];
+    @Input() templateUnfold: { cells: (IKlesCellFieldConfig & { colspan?: number | Span, rowspan?: number })[], multiUnfold?: boolean; disabled?: (row: UntypedFormGroup) => boolean; };
 
     /** Output Component */
     @Output() _onLoaded = new EventEmitter();
