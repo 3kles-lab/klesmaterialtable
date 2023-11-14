@@ -257,6 +257,7 @@ export class TableComponent implements AfterViewInit, OnDestroy {
         tableService: new SelectTableService(),
         ngClassRow: (row: UntypedFormGroup) => {
             if (row.controls['#select'].value) {
+                console.log('ICI');
                 return 'selected';
             }
             else if (row.status === 'VALID') {
