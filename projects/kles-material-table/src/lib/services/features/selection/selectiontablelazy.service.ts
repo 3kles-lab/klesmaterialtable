@@ -79,8 +79,9 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
 
               }
 
-              this.table.columns.mutate((columns) => {
+              this.table.columns.update((columns) => {
                 columns.find(f => f.columnDef === this.columnSelect).headerCell.indeterminate = response.indeterminate;
+                return columns;
               });
 
               this.table.tableService.onSelectIndeterminate.next(response.indeterminate);

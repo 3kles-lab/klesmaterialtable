@@ -564,11 +564,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
 
     public setVisible(name: string, visible: boolean): void {
-        this.columns.mutate((columns) => {
+        this.columns.update((columns) => {
             const column = columns.find(col => col.columnDef === name);
             if (column) {
                 column.visible = visible;
             }
+            return columns;
         });
     }
 
