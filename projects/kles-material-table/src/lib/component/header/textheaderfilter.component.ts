@@ -9,30 +9,35 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     template: `
     <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
     <mat-form-field [formGroup]="group" class="form-element">
-        <ng-container *ngIf="field.autocomplete; else notAutoComplete">
+        @if (field.autocomplete) {
             <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType"
             [matAutocomplete]="auto">
 
             <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let option of filteredOption | async" [value]="option">{{option}}</mat-option>
             </mat-autocomplete>
-        </ng-container>
-        <ng-template #notAutoComplete>
+        }
+        @else {
             <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType">
-        </ng-template>
+        }
 
-        <button mat-button matSuffix mat-icon-button aria-label="Clear"
-                        (click)="group.controls[field.name].reset(''); stopPropagation($event)">
-                        <mat-icon>close</mat-icon>
-                     </button>
+        <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="group.controls[field.name].reset(''); stopPropagation($event)">
+            <mat-icon>close</mat-icon>
+        </button>
 
-        <mat-spinner matSuffix mode="indeterminate" *ngIf="isPending()" diameter="17"></mat-spinner>
+        @if (isPending()) {
+            <mat-spinner matSuffix mode="indeterminate" diameter="17"></mat-spinner>
+        }
 
         <ng-container *ngFor="let validation of field.validations;" ngProjectAs="mat-error">
-            <mat-error *ngIf="group.get(field.name).hasError(validation.name)">{{validation.message | translate}}</mat-error>
+            @if (group.get(field.name).hasError(validation.name)) {
+                <mat-error>{{validation.message | translate}}</mat-error>
+            }
         </ng-container>
         <ng-container *ngFor="let validation of field.asyncValidations;" ngProjectAs="mat-error">
-            <mat-error *ngIf="group.get(field.name).hasError(validation.name)">{{validation.message | translate}}</mat-error>
+            @if (group.get(field.name).hasError(validation.name)) {
+                <mat-error>{{validation.message | translate}}</mat-error>
+            }
         </ng-container>
     </mat-form-field>
     `,

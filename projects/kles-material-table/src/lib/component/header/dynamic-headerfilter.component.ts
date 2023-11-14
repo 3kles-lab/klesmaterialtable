@@ -6,16 +6,20 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     selector: 'kles-form-textheaderfilter',
     template: `
     <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
-    <div (click)="stopPropagation($event)" *ngIf="field.filterComponent" style="display: inline-flex;">
+    @if (field.filterComponent) {
+        <div (click)="stopPropagation($event)" style="display: inline-flex;">
             <ng-container klesComponentHeader [component]="field.filterComponent" [group]="group" [field]="filterField" >
             </ng-container>
             <span style="padding-top: 10px;">
-                <button *ngIf="field.filterClearable && group.get(field.name).value" mat-button mat-icon-button aria-label="Clear" type="button"
-                    (click)="group.controls[field.name].reset();">
-                    <mat-icon>close</mat-icon>
-                </button>
+                @if (field.filterClearable && group.get(field.name).value) {
+                    <button mat-button mat-icon-button aria-label="Clear" type="button"
+                        (click)="group.controls[field.name].reset();">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                }
             </span>
     </div>
+    }
     `,
     styles: [`mat-form-field {width: calc(100%)} 
         mat-icon {font-size: 16px; height:16px; width:16px} 

@@ -10,13 +10,19 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
     template: `
         <div style="display: flex; flex-direction: column; flex: auto;">
         <div style="display:flex; align-items: center; gap:3px">
-            <div *ngIf="column.canExpand" [innerHTML]="formatIndentation(row)"></div>
+            @if (column.canExpand) {
+                <div [innerHTML]="formatIndentation(row)"></div>
+            }
         
-            <mat-icon *ngIf="!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter>0"
-                class="size-16" (click)="onNodeClick(row)">
-                {{row.value._status.isExpanded ? 'remove' : 'add'}}
-            </mat-icon>
-            <mat-spinner *ngIf="row.getRawValue()?._status?.isBusy && column.canExpand" diameter="25"></mat-spinner>
+            @if (!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter > 0) {
+                <mat-icon class="size-16" (click)="onNodeClick(row)">
+                    {{row.value._status.isExpanded ? 'remove' : 'add'}}
+                </mat-icon>
+            }
+
+            @if (row.getRawValue()?._status?.isBusy && column.canExpand) {
+                <mat-spinner diameter="25"></mat-spinner>
+            }
 
             <ng-container klesDynamicCell [field]="field"
                 [group]="group" [column]="column" [config]="{templateUnfold}">
@@ -24,15 +30,17 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
         </div>
 
         <div class="paginator">
-            <mat-paginator #treePaginator *ngIf="column.paginator && row.value._status.childrenCounter>0 && row.value._status.isExpanded"
-                [length]="row.value._status.paginator?.length"
-                [pageSize]="row.value._status.paginator?.pageSize"
-                [showFirstLastButtons]="column.paginatorOption?.showFirstLastButtons"
-                [hidePageSize]="column.paginatorOption?.hidePageSize === undefined ? true : column.paginatorOption?.hidePageSize"
-                [pageSizeOptions]="column.paginatorOption?.pageSizeOptions || [5, 10, 25, 100]"
-                [pageIndex]="row.value._status.paginator?.pageIndex"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
+            @if (column.paginator && row.value._status.childrenCounter>0 && row.value._status.isExpanded) {
+                <mat-paginator #treePaginator
+                    [length]="row.value._status.paginator?.length"
+                    [pageSize]="row.value._status.paginator?.pageSize"
+                    [showFirstLastButtons]="column.paginatorOption?.showFirstLastButtons"
+                    [hidePageSize]="column.paginatorOption?.hidePageSize === undefined ? true : column.paginatorOption?.hidePageSize"
+                    [pageSizeOptions]="column.paginatorOption?.pageSizeOptions || [5, 10, 25, 100]"
+                    [pageIndex]="row.value._status.paginator?.pageIndex"
+                    (page)="handlePageEvent($event)">
+                </mat-paginator>
+            }
         </div>
 
         </div>

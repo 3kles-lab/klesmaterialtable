@@ -9,12 +9,11 @@ import { IKlesCellFieldConfig } from "../../models/cell.model";
     encapsulation: ViewEncapsulation.None,
     template: `
             <div>
-                <ng-container *ngIf="(!templateUnfold?.disabled || !templateUnfold?.disabled(group))">
+                @if ((!templateUnfold?.disabled || !templateUnfold?.disabled(group))) {
                     <button mat-icon-button aria-label="expand row" (click)="onFoldClick(group); $event.stopPropagation()">
                         <mat-icon> {{group.value._unfold ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </mat-icon>
                     </button>
-                </ng-container>
-                
+                }
 
                 <ng-container klesDynamicField [field]="field"
                     [group]="group" [siblingFields]="siblingFields">
