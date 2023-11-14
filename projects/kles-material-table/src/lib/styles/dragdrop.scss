@@ -1,9 +1,5 @@
 @use '@angular/material' as mat;
 
-// @import '@angular/material/prebuilt-themes';
-
-// @import '../../../../../node_modules/@angular/material/core/theming/_theming.scss';
-
 .cdk-drag-preview {
     box-sizing: border-box;
     display: table;
@@ -11,17 +7,15 @@
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
         0 8px 10px 1px rgba(0, 0, 0, 0.14),
         0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    background: mat-color(mat-light-theme-background, background);
+    background: mat.get-color-from-palette(mat.$light-theme-background-palette, background);
 }
 
 .cdk-drag-preview td {
     vertical-align: middle;
 }
 
-@mixin color($theme) {
-    .cdk-drag-placeholder {
-        background: mat.get-theme-color($theme, 300);
-    }
+.cdk-drag-placeholder {
+    background: mat.get-color-from-palette(mat.$grey-palette, 300);
 }
 
 .cdk-drag-animating {
