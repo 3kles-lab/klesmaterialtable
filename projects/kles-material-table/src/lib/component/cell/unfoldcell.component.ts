@@ -8,20 +8,24 @@ import { IKlesCellFieldConfig } from "../../models/cell.model";
     selector: 'app-kles-fold',
     encapsulation: ViewEncapsulation.None,
     template: `
-            <div>
+            <div class="fold-cell">
                 @if ((!templateUnfold?.disabled || !templateUnfold?.disabled(group))) {
                     <button mat-icon-button aria-label="expand row" (click)="onFoldClick(group); $event.stopPropagation()">
                         <mat-icon> {{group.value._unfold ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}} </mat-icon>
                     </button>
                 }
 
-                <ng-container klesDynamicField [field]="field"
+                <div class="fold-field">
+                    <ng-container klesDynamicField [field]="field"
                     [group]="group" [siblingFields]="siblingFields">
-                </ng-container>
+                    </ng-container>
+                </div>
+
             </div>
     `,
     styles: [
-
+        `.fold-field {flex-grow: 1;}`,
+        `.fold-cell {display:flex; align-items:center}`
     ],
 })
 
