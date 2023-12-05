@@ -4,6 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 import { KlesFormDynamicHeaderFilterComponent } from '../../public-api';
 import { KlesTableConfig } from '../models/tableconfig.model';
 import { MatPaginatorIntl } from '@angular/material/paginator';
+import { SubscriptSizing } from "@angular/material/form-field";
 
 @Directive({
     selector: '[klesTable]'
@@ -114,7 +115,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
                 }
             }
-
+            obj.headerCell.subscriptSizing = obj.headerCell.subscriptSizing || 'dynamic';
             return obj;
         }));
         if (this.tableConfig.options) {
