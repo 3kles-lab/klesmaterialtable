@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,7 +25,7 @@ import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-    loading: boolean;
+    loading = signal(false);
 
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
 
@@ -74,9 +74,9 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
             )
             .subscribe((response) => {
                 if (response.loading) {
-                    this.loading = true;
+                    this.loading.set(true);
                 } else {
-                    this.loading = false;
+                    this.loading.set(false);
 
                     if (this.showFooter && response.value.footer) {
                         this.formFooter.patchValue(response.value.footer);
