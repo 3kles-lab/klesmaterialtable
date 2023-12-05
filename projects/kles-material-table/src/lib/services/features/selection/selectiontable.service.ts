@@ -70,7 +70,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
           this.table.formHeader.controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
         }
       }
-
+      this.table.ref.markForCheck();
     }
   }
 
