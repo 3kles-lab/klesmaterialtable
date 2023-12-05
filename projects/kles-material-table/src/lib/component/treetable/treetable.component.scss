@@ -154,3 +154,7 @@ td div {
 tr.mat-mdc-footer-row {
   font-weight: bold;
 }
+
+::ng-deep .mdc-data-table__row:last-child .mat-mdc-cell {
+  border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
+}
