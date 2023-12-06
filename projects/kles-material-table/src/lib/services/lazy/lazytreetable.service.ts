@@ -177,4 +177,8 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
 
     }
 
+    public reload(): void {
+        this.table.reload$.next();
+    }
+
 }
