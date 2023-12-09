@@ -1,0 +1,45 @@
+mat-form-field {
+    width: calc(100%)
+}
+
+.mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+}
+
+.filterHeader {
+    display: inline-flex;
+    padding-bottom: 10px;
+    // align-items: baseline;
+    gap: 2px;
+}
+
+.icon-button {
+    margin-top: 24px;
+}
+
+button[mat-icon-button] {
+    $small-size-button: 24px;
+    $small-size-icon: 18px;
+
+    &.icon-button-small {
+        width: $small-size-button;
+        height: $small-size-button;
+        line-height: $small-size-button;
+        padding: 0;
+
+        .mat-icon {
+            font-size: $small-size-icon;
+            width: $small-size-icon;
+            height: $small-size-icon;
+            line-height: $small-size-icon;
+        }
+
+        .mat-mdc-button-ripple {
+            font-size: inherit;
+            width: inherit;
+            height: inherit;
+            line-height: inherit;
+        }
+    }
+}

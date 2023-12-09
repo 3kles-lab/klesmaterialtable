@@ -87,7 +87,7 @@ export class KlesTableDirective implements OnInit, OnChanges {
             const obj = { ...m };
             obj.headerCell.filterable = obj.filterable;
             obj.headerCell.sortable = obj.sortable;
-
+            obj.headerCell.clearable = false;
             if ((obj.filterable || obj.headerCell.filterable) && !obj.headerCell.component && obj.headerCell.type) {
                 obj.headerCell.component = KlesFormDynamicHeaderFilterComponent;
                 switch (obj.headerCell.type) {

@@ -6,27 +6,24 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     selector: 'kles-form-dynamicheaderfilter',
     template: `
     <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
-    @if (field.filterComponent) {
-        <div (click)="stopPropagation($event)" style="display: inline-flex; padding-bottom: 10px">
+    @if (field.filterComponent && filterField) {
+        <div (click)="stopPropagation($event)" class="filterHeader">
             <ng-container klesComponentHeader [component]="field.filterComponent" [group]="group" [field]="filterField" >
             </ng-container>
-
-            <span style="padding-top: 10px;">
-                @if (field.filterClearable && group.get(field.name).value) {
-                    <button mat-button mat-icon-button aria-label="Clear" type="button"
-                        (click)="group.controls[field.name].reset();">
+            
+            @if (field.filterClearable && group.get(field.name).value) {
+                <div class="icon-button">
+                    <button mat-icon-button aria-label="Clear" type="button" class="icon-button-small"
+                    (click)="group.controls[field.name].reset();">
                         <mat-icon>close</mat-icon>
                     </button>
-                }
-            </span>
+                </div>
+               
+            }
     </div>
     }
     `,
-    styles: [`mat-form-field {width: calc(100%)} 
-        mat-icon {font-size: 16px; height:16px; width:16px} 
-        .mat-mdc-icon-button {padding-bottom: 4px; min-width: 0; width: 22px; height: 22px; flex-shrink: 0; line-height: 1; border-radius: 50%;}
-        .mat-sort-header-container {display: flex; justify-content: center;}`,
-    ],
+    styleUrl: './dynamic-headerfilter.component.scss',
 })
 export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
     field: IKlesHeaderFieldConfig;
