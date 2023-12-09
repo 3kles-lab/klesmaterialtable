@@ -13,7 +13,8 @@
                 [multiTemplateDataRows]="multiTemplate" [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
                 [cdkDropListSortPredicate]="sortPredicate()" [cdkDropListConnectedTo]="dragDropRowsOptions.connectedTo">
                 @for (column of columns(); track column.columnDef) {
-                <ng-container [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false">
+                <ng-container [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false"
+                    [stickyEnd]="column.stickyEnd || false">
                     <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable"
                         class="{{column.ngClass}}" [ngClass]="{'vertical-separator': options.verticalSeparator}">
                         <div style="display: inline-flex;">

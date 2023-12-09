@@ -6,6 +6,7 @@ import { AlignCell } from '../enums/align.enum';
 export interface KlesColumnConfig {
     columnDef: string;
     sticky?: boolean;
+    stickyEnd?: boolean;
     visible: boolean;
     disabled?: boolean;
     name?: string;
