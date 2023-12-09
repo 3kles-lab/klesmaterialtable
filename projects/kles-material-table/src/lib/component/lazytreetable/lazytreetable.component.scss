@@ -1,17 +1,44 @@
 :host {
-  display: block;
+  // display: block;
   // overflow: auto;
-  height: inherit;
+  // height: inherit;
   // max-height: calc(100vh - 155px);
+}
+
+.container-table {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh);
+  // height: inherit;
+  margin: 6px;
+
+  &.fullsize {
+    margin: 0;
+    height: 100%;
+  }
+}
+
+.container-loading{
+  position: relative;
+  display: inherit;
+  flex-direction: inherit;
+  // height: 100%;
+  overflow: hidden;
+  // height: inherit;
+  // max-height: inherit;
 }
 
 form {
   overflow: auto;
-  height: inherit;
-  min-height: 200px;
-  max-height: calc(100vh - 155px);
-  position: relative;
-  // max-height: calc(100vh - 201px);
+
+  // height: inherit;
+  min-height: 220px;
+  // max-height: calc(100vh - 155px);
+  // position: relative;
+
+  &.fullsize {
+    // flex-grow: 1;
+  }
 }
 
 .mat-mdc-paginator {
