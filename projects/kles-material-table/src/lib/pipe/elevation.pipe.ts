@@ -10,6 +10,6 @@ export class ElevationPipe implements PipeTransform {
     }
 
     transform(elevation: number): any {
-        return `mat-elevation-z${elevation}`;
+        return `mat-elevation-z${elevation || 0}`;
     }
 }
