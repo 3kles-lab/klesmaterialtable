@@ -19,7 +19,7 @@
   }
 }
 
-.container-loading{
+.container-loading {
   position: relative;
   display: inherit;
   flex-direction: inherit;
@@ -31,14 +31,18 @@
 
 form {
   overflow: auto;
-
+  height: auto;
   // height: inherit;
-  min-height: 220px;
+  // min-height: 220px;
   // max-height: calc(100vh - 155px);
   // position: relative;
 
   &.fullsize {
     // flex-grow: 1;
+  }
+
+  &.loading {
+    min-height: 220px;
   }
 }
 
@@ -197,7 +201,7 @@ tr.mat-mdc-footer-row {
 }
 
 
-.loading {
+.loading-spinner {
   position: absolute;
   width: 100%;
   height: 100%;
