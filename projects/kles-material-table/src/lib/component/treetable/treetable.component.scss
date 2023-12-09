@@ -1,14 +1,29 @@
 :host {
-  display: block;
+  // display: block;
   // overflow: auto;
-  height: inherit;
+  // height: inherit;
   // max-height: calc(100vh - 155px);
+}
+
+.container-table {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100vh);
+  // height: inherit;
+  margin: 6px;
+
+  &.fullsize {
+    margin: 0;
+    height: 100%;
+  }
 }
 
 form {
   overflow: auto;
-  height: inherit;
-  max-height: calc(100vh - 155px);
+
+  &.fullsize {
+    // flex-grow: 1;
+  }
 }
 
 .mat-mdc-paginator {

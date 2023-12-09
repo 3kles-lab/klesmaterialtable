@@ -13,6 +13,7 @@
 
   &.fullsize {
     margin: 0;
+    height: 100%;
   }
 }
 
@@ -20,7 +21,7 @@ form {
   overflow: auto;
 
   &.fullsize {
-    flex-grow: 1;
+    // flex-grow: 1;
   }
 }
 
