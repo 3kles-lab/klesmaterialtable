@@ -7,7 +7,7 @@
         </div>
         }
         <form class="dynamic-form" [ngClass]="{fullsize: options.fullsize}" [formGroup]="form" cdkScrollable>
-            <table [id]="id" mat-table matSort [dataSource]="dataSource" [ngClass]="options.elevation | elevationPipe"
+            <table [id]="id" mat-table matSort [dataSource]="dataSource"
                 formArrayName="rows" [trackBy]="multiTemplate ? null : trackById" cdkDropList
                 (cdkDropListDropped)="drop($event)" [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
                 [multiTemplateDataRows]="multiTemplate" [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
