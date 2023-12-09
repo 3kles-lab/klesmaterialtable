@@ -93,8 +93,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         verticalSeparator: true,
         capitalisedHeader: true,
         highlightRowOnHover: true,
-        elevation: 5
+        elevation: 4,
+        fullsize: false
     };
+
     @Input() sortConfig: Sort;
     @Input() hidePaginator: boolean = false;
     @Input() pageSize = 10;
