@@ -21,6 +21,7 @@ export * from './lib/directives/dynamic-component.directive';
 export * from './lib/directives/dynamic-treecell.directive';
 export * from './lib/directives/treetable.directive';
 export * from './lib/directives/dynamic-cell.directive';
+export * from './lib/directives/dynamic-header.directive';
 
 /**COMPONENT */
 export * from './lib/component/table/table.component';

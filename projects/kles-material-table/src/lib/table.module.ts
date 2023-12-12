@@ -37,6 +37,7 @@ import { KlesDynamicCellDirective } from './directives/dynamic-cell.directive';
 import { KlesUnfoldCellComponent } from './component/cell/unfoldcell.component';
 import { SpanPipe } from './pipe/span.pipe';
 import { CellPipe } from './pipe/cell.pipe';
+import { KlesDynamicHeaderDirective } from './directives/dynamic-header.directive';
 
 const components = [
     KlesTableComponent,
@@ -57,7 +58,8 @@ const directives = [
     KlesComponentHeaderDirective,
     KlesDynamicTreeCellDirective,
     KlesTreetableDirective,
-    KlesDynamicCellDirective
+    KlesDynamicCellDirective,
+    KlesDynamicHeaderDirective
 ];
 const services = [
     AbstractKlesTableService,
