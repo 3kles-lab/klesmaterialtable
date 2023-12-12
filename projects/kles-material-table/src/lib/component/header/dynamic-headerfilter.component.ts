@@ -10,7 +10,7 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
         <div (click)="stopPropagation($event)" class="filterHeader">
             <ng-container klesDynamicField [group]="group" [field]="filterField" >
             </ng-container>
-            
+
             @if (field.filterClearable && group.get(field.name).value) {
                 <div class="icon-button">
                     <button mat-icon-button aria-label="Clear" type="button" class="icon-button-small"
