@@ -8,7 +8,7 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
     @if (field.filterComponent && filterField) {
         <div (click)="stopPropagation($event)" class="filterHeader">
-            <ng-container klesComponentHeader [component]="field.filterComponent" [group]="group" [field]="filterField" >
+            <ng-container klesDynamicField [group]="group" [field]="filterField" >
             </ng-container>
             
             @if (field.filterClearable && group.get(field.name).value) {
@@ -31,9 +31,7 @@ export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract impl
 
     ngOnInit(): void {
         super.ngOnInit();
-
-        this.filterField = Object.assign({}, this.field);
-        delete this.filterField['label'];
+        this.filterField = Object.assign({}, { ...this.field, component: this.field.filterComponent, label: null });
     }
 
     stopPropagation(event) {
