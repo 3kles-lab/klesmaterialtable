@@ -7,21 +7,20 @@
         </div>
         }
 
-        <form class="dynamic-form"  [ngClass]="{fullsize: options.fullsize, loading: loading()}" [formGroup]="form" cdkScrollable>
-            <table mat-table matSort [dataSource]="dataSource"
-                formArrayName="rows" [trackBy]="multiTemplate ? null : trackById" cdkDropList
-                [multiTemplateDataRows]="multiTemplate" (cdkDropListDropped)="drop($event)" [cdkDropListData]="this"
-                [cdkDropListDisabled]="!dragDropRows" [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
+        <form class="dynamic-form" [ngClass]="{fullsize: options.fullsize, loading: loading()}" [formGroup]="form"
+            cdkScrollable>
+            <table mat-table matSort [dataSource]="dataSource" formArrayName="rows"
+                [trackBy]="multiTemplate ? null : trackById" cdkDropList [multiTemplateDataRows]="multiTemplate"
+                (cdkDropListDropped)="drop($event)" [cdkDropListData]="this" [cdkDropListDisabled]="!dragDropRows"
+                [cdkDropListAutoScrollStep]="dragDropRowsOptions.autoScrollStep"
                 [cdkDropListSortPredicate]="sortPredicate()">
                 @for (column of columns(); track column.columnDef) {
                 <ng-container [cdkColumnDef]="column.columnDef" [sticky]="column.sticky || false"
                     [stickyEnd]="column.stickyEnd || false">
                     <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable"
                         class="{{column.ngClass}}" [ngClass]="{'vertical-separator': options.verticalSeparator}">
-                        <div style="display: inline-flex;">
-                            <ng-container klesDynamicHeader [field]="column.headerCell" [group]="formHeader">
-                            </ng-container>
-                        </div>
+                        <ng-container klesDynamicHeader [field]="column.headerCell" [group]="formHeader">
+                        </ng-container>
                     </th>
                     @if (column.visible) {
                     <div>
