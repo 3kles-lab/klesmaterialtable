@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -38,9 +38,10 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         public _adapter: DateAdapter<any>,
         public treeService: TreeService,
         public converterService: ConverterService,
-        @Inject('tableService') public tableService: AbstractKlesLazyTreetableService) {
+        @Inject('tableService') public tableService: AbstractKlesLazyTreetableService,
+        protected _elementRef: ElementRef) {
         super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, treeService, converterService
-            , tableService);
+            , tableService, _elementRef);
     }
 
     ngOnInit(): void {

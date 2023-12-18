@@ -1,5 +1,5 @@
 import {
-    Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject, Signal
+    Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject, Signal, OnInit, OnChanges, OnDestroy, AfterViewChecked, ElementRef, AfterViewInit
 } from '@angular/core';
 import * as _ from 'lodash';
 import { TranslateService } from '@ngx-translate/core';
@@ -37,7 +37,7 @@ import * as uuid from 'uuid';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class KlesTreetableComponent<T> extends KlesTableComponent {
+export class KlesTreetableComponent<T> extends KlesTableComponent implements OnInit, OnChanges,AfterViewInit, OnDestroy {
 
 
     @Output() _onLineOpen = new EventEmitter();
@@ -56,8 +56,9 @@ export class KlesTreetableComponent<T> extends KlesTableComponent {
         public _adapter: DateAdapter<any>,
         public treeService: TreeService,
         public converterService: ConverterService,
-        @Inject('tableService') public tableService: AbstractKlesTreeTableService) {
-        super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService);
+        @Inject('tableService') public tableService: AbstractKlesTreeTableService,
+        protected _elementRef: ElementRef) {
+        super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
     }
 
 

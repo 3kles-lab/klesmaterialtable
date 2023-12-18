@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges, signal } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, signal } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -9,6 +9,7 @@ import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUnt
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 import { rowsAnimation } from '../../animations/row.animation';
+import { MatTable } from '@angular/material/table';
 
 @Component({
     selector: 'app-kles-lazytable',
@@ -23,6 +24,8 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
     reload$ = new Subject<void>();
 
+    @ViewChild(MatTable) matTable: MatTable<any>;
+
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
         private fb1: UntypedFormBuilder,
@@ -30,9 +33,10 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
         protected dialog: MatDialog,
         public sanitizer: DomSanitizer,
         public _adapter: DateAdapter<any>,
-        @Inject('tableService') public tableService: AbstractKlesLazyTableService
+        @Inject('tableService') public tableService: AbstractKlesLazyTableService,
+        protected _elementRef: ElementRef
     ) {
-        super(translate, adapter, fb1, ref, dialog, sanitizer, _adapter, tableService);
+        super(translate, adapter, fb1, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
     }
 
     ngOnInit(): void {
@@ -89,6 +93,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
                     this.paginator.length = response.value.totalCount;
 
                 }
+                this.matTable?.updateStickyColumnStyles();
             });
 
     }

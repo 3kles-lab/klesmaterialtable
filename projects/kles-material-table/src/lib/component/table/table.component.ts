@@ -2,7 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import {
     AfterViewInit, Component, OnInit, ViewChild, EventEmitter,
     Input, Output, OnChanges, SimpleChanges, ChangeDetectionStrategy,
-    ChangeDetectorRef, Inject, OnDestroy, Type, signal, Signal, computed
+    ChangeDetectorRef, Inject, OnDestroy, Type, signal, Signal, computed, AfterViewChecked, ElementRef
 } from '@angular/core';
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -139,6 +139,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     displayedColumns = computed(() => this.columns().filter(e => e.visible).map(c => c.columnDef));
 
+    protected _resizeObserver: ResizeObserver;
+
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
         protected fb: UntypedFormBuilder,
@@ -147,7 +149,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         public sanitizer: DomSanitizer,
         public _adapter: DateAdapter<any>,
         //@Inject('tableService') public tableService: DefaultKlesTableService
-        @Inject('tableService') public tableService: AbstractKlesTableService
+        @Inject('tableService') public tableService: AbstractKlesTableService,
+        protected _elementRef: ElementRef
     ) {
         this.tableService.setTable(this);
     }
@@ -157,9 +160,16 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this._onDestroy.next();
         this._onLinesChanges.complete();
         this._onDestroy.complete();
+
+        this._resizeObserver.disconnect()
     }
 
     ngOnInit() {
+        this._resizeObserver = new ResizeObserver(() => {
+            this.matTable?.updateStickyColumnStyles()
+        });
+        this._resizeObserver.observe(this._elementRef.nativeElement);
+
         this.dataSource.connect().subscribe(d => {
             this.renderedData = d;
         });
@@ -188,6 +198,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     ngAfterViewInit() {
         this.matTable?.updateStickyColumnStyles();
+
     }
 
 
