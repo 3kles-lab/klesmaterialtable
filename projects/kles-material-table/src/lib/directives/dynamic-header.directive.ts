@@ -2,6 +2,7 @@ import { IKlesFieldConfig, KlesDynamicFieldDirective, KlesFormClearComponent, co
 import { Directive, Injector, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, StaticProvider, Type, ViewContainerRef } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
 import { DateAdapter, MAT_DATE_LOCALE, MAT_DATE_FORMATS } from "@angular/material/core";
+import { Options } from "../models/options.model";
 
 @Directive({
     selector: '[klesDynamicHeader]'
@@ -10,6 +11,7 @@ export class KlesDynamicHeaderDirective extends KlesDynamicFieldDirective implem
     @Input() field: IKlesFieldConfig;
     @Input() group: UntypedFormGroup;
     @Input() siblingFields: IKlesFieldConfig[];
+    @Input() options?: Options<any>;
 
 
     constructor(container: ViewContainerRef, private i: Injector) {
@@ -57,6 +59,7 @@ export class KlesDynamicHeaderDirective extends KlesDynamicFieldDirective implem
         this.componentRef.instance.field = this.field;
         this.componentRef.instance.group = this.group;
         this.componentRef.instance.siblingFields = this.siblingFields;
+        this.componentRef.instance.tableOptions = this.options;
     }
 
 }

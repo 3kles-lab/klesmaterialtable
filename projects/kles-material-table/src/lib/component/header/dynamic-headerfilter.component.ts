@@ -1,11 +1,21 @@
 import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
 import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
+import { Options } from '../../models/options.model';
 
 @Component({
     selector: 'kles-form-dynamicheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
+    <div mat-sort-header [disabled]="!field.sortable">
+        @if(tableOptions?.capitalisedHeader){
+            <span>{{ field.label | translate | titlecase}}</span>
+        }@else if(tableOptions?.uppercasedHeader){
+            <span>{{ field.label | translate | uppercase}}</span>
+        }@else{
+            <span>{{ field.label | translate}}</span>
+        }
+        
+    </div>
     @if (field.filterComponent && filterField) {
         <div (click)="stopPropagation($event)" class="filterHeader">
             <ng-container klesDynamicField [group]="group" [field]="filterField" >
@@ -28,6 +38,7 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
     field: IKlesHeaderFieldConfig;
     filterField: IKlesHeaderFieldConfig;
+    tableOptions: Options<any>;
 
     ngOnInit(): void {
         super.ngOnInit();

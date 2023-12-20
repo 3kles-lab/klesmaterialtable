@@ -25,15 +25,9 @@ export class KlesTableDirective implements OnInit, OnChanges {
 
     componentRef: ComponentRef<any>;
 
-    constructor(private resolver: ComponentFactoryResolver,
-        private container: ViewContainerRef) { }
+    constructor(private container: ViewContainerRef) { }
 
     ngOnInit() {
-        // console.log('Directive KlesTable OnInit=', this.tableConfig);
-        // if (this.tableConfig) {
-        //     console.log('Directive KlesTable OnInit BuildComp=', this.tableConfig);
-        //     this.buildComponent();
-        // }
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -73,21 +67,18 @@ export class KlesTableDirective implements OnInit, OnChanges {
             ]
         };
         const injector: Injector = Injector.create(options);
-        const factory = this.resolver.resolveComponentFactory(
-            this.tableConfig.tableComponent
-        );
 
         if (this.componentRef) {
             this.componentRef.destroy();
         }
 
-        this.componentRef = this.container.createComponent(factory, 0, injector);
+        this.componentRef = this.container.createComponent(this.tableConfig.tableComponent, { injector });
 
         this.componentRef.instance.columns = signal(this.tableConfig.columns.map(m => {
             const obj = { ...m };
             obj.headerCell.filterable = obj.filterable;
             obj.headerCell.sortable = obj.sortable;
-            
+
             if ((obj.filterable || obj.headerCell.filterable) && !obj.headerCell.component && obj.headerCell.type) {
                 obj.headerCell.component = KlesFormDynamicHeaderFilterComponent;
                 switch (obj.headerCell.type) {
@@ -112,7 +103,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
                         obj.headerCell.filterComponent = KlesFormInputClearableComponent;
                         obj.headerCell.inputType = obj.headerCell.type;
                         break;
-
                 }
             }
             obj.headerCell.subscriptSizing = obj.headerCell.subscriptSizing || 'dynamic';

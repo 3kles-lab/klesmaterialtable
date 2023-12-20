@@ -12,7 +12,7 @@
         <th mat-header-cell *matHeaderCellDef [klesResizeColumn]="column.resizable" class="{{column.ngClass}}"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
 
-          <ng-container klesDynamicHeader [field]="column.headerCell" [group]="formHeader">
+          <ng-container klesDynamicHeader [field]="column.headerCell" [group]="formHeader" [options]="options">
           </ng-container>
 
         </th>
