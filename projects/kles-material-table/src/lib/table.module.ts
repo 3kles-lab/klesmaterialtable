@@ -38,6 +38,7 @@ import { KlesUnfoldCellComponent } from './component/cell/unfoldcell.component';
 import { SpanPipe } from './pipe/span.pipe';
 import { CellPipe } from './pipe/cell.pipe';
 import { KlesDynamicHeaderDirective } from './directives/dynamic-header.directive';
+import { CapitalizePipe } from './pipe/capitalize.pipe';
 
 const components = [
     KlesTableComponent,
@@ -74,7 +75,7 @@ const services = [
     ConverterService,
     TreeService
 ];
-const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe, SpanPipe, CellPipe];
+const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe, SpanPipe, CellPipe, CapitalizePipe];
 
 @NgModule({
     declarations: [

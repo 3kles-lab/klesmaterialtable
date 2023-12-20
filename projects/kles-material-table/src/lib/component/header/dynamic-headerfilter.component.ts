@@ -8,7 +8,7 @@ import { Options } from '../../models/options.model';
     template: `
     <div mat-sort-header [disabled]="!field.sortable">
         @if(tableOptions?.capitalisedHeader){
-            <span>{{ field.label | translate | titlecase}}</span>
+            <span>{{ field.label | translate | capitalize}}</span>
         }@else if(tableOptions?.uppercasedHeader){
             <span>{{ field.label | translate | uppercase}}</span>
         }@else{
