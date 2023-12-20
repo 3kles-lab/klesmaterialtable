@@ -104,6 +104,7 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         }
 
         this.updateDataSource();
+        this.table.matTable?.updateStickyColumnStyles();
 
         return group;
     }
