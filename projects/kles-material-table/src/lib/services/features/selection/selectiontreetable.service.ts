@@ -48,6 +48,7 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
             }
 
             this.table.form.updateValueAndValidity();
+            this.table.ref.markForCheck();
         }
     }
 

@@ -1,4 +1,4 @@
-import { KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
+import { KlesFormCheckboxComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesTreetableComponent, KlesTreetableService, KlesTreeColumnConfig } from 'kles-material-table';
 
@@ -9,6 +9,18 @@ import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConf
 })
 export class TreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
     columnsExample1: KlesTreeColumnConfig[] = [
+        {
+            columnDef: '#select',
+            visible: true,
+            headerCell: {
+                name: '#select',
+                component: KlesFormCheckboxComponent
+            } as IKlesHeaderFieldConfig,
+            cell: {
+                name: '#select',
+                component: KlesFormCheckboxComponent
+            } as IKlesCellFieldConfig
+        },
         {
             columnDef: 'NAME',
             visible: true,
