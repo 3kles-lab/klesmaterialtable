@@ -583,7 +583,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             if (column) {
                 column.visible = visible;
             }
-            return columns;
+            return [...columns];
         });
     }
 
