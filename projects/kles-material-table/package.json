@@ -1,6 +1,6 @@
 {
   "name": "@3kles/kles-material-table",
-  "version": "17.1.6",
+  "version": "17.1.7",
   "peerDependencies": {
     "@3kles/kles-material-dynamicforms": "^17.0.0",
     "@3kles/kles-material-datepicker": "^16.0.0",
