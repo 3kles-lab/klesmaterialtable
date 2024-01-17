@@ -55,7 +55,7 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
                 } else if (!searchString[key]) {
                     return true;
                 }
-                return keyValue && keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toLowerCase()) !== -1;
+                return keyValue && keyValue.toString().trim().toLowerCase().indexOf(searchString[key].toString().toLowerCase()) !== -1;
             });
         };
         return myFilterPredicate;
