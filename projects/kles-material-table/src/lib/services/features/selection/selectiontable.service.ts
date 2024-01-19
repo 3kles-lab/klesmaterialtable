@@ -49,7 +49,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
 
         this.table.columns.update((columns) => {
           columns.filter(f => f.columnDef === this.columnSelect).forEach(m => m.headerCell.indeterminate = false);
-          return columns;
+          return [...columns];
         });
 
         this.table.formHeader.controls[this.columnSelect]?.patchValue(true, { onlySelf: true, emitEvent: false });
@@ -62,7 +62,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
         this.table.columns.update((columns) => {
           columns.filter(f => f.columnDef === this.columnSelect)
             .forEach(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
-          return columns;
+          return [...columns];
         });
 
         this.table.tableService.onSelectIndeterminate.next(!this.table.selection.isEmpty());

@@ -91,7 +91,6 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
                     }
                     this.updateData(response.value.lines);
                     this.paginator.length = response.value.totalCount;
-
                 }
                 this.matTable?.updateStickyColumnStyles();
             });

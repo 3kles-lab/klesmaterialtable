@@ -166,7 +166,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     ngOnInit() {
         this._resizeObserver = new ResizeObserver(() => {
-            this.matTable?.updateStickyColumnStyles()
+            this.matTable?.updateStickyColumnStyles();
         });
         this._resizeObserver.observe(this._elementRef.nativeElement);
 
