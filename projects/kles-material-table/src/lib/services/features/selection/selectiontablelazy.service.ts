@@ -80,18 +80,19 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
               } else {
                 this.table.formHeader
                   .controls[this.columnSelect]?.patchValue(false, { onlySelf: true, emitEvent: false });
-
               }
 
               this.table.columns.update((columns) => {
-                columns.find(f => f.columnDef === this.columnSelect).headerCell.indeterminate = response.indeterminate;
+                const idx = columns.findIndex(f => f.columnDef === this.columnSelect);
+                if (idx != -1) {
+                  columns[idx].headerCell = { ...columns[idx].headerCell, indeterminate: response.indeterminate };
+                }
                 return [...columns];
               });
 
               if ('footer' in response) {
                 this.table.formFooter.patchValue(response.footer);
               }
-
               this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
             }
           });
