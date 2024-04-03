@@ -19,7 +19,7 @@ export class ConverterService {
     toSearchableTree<T>(tree: Node): SearchableNode<T> {
         const treeClone = cloneDeep<any>(tree) as SearchableNode<T>;
         this.treeService.traverse(treeClone, (node: SearchableNode<T>) => {
-            node._id = node._id ? node._id : uuidv4();
+            node._id = node.value?._id ? node.value?._id : uuidv4();
         });
         return treeClone;
     }
