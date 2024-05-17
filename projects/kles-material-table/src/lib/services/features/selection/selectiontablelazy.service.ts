@@ -1,12 +1,12 @@
 import { UntypedFormGroup } from '@angular/forms';
-import { KlesTableComponent } from '../../../component/table/table.component';
 import { ISelection } from '../../../interfaces/selection.interface';
 import { KlesTableBaseService } from '../tableservice.interface';
 import { catchError, map, take } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { KlesLazyTableComponent } from '../../../component/lazytable/lazytable.component';
 
 export class KlesSelectionTableLazyService implements KlesTableBaseService {
-  table: KlesTableComponent;
+  table: KlesLazyTableComponent;
   columnSelect: string;
 
   constructor(column: string, private selection: ISelection) {
@@ -46,6 +46,7 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
               this.table.formFooter.patchValue(response.footer);
             }
             this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
+            this.table._onSelectedResponse.emit(response);
             this.table.ref.markForCheck();
           });
       }
@@ -106,8 +107,11 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
               if ('footer' in response) {
                 this.table.formFooter.patchValue(response.footer);
               }
+              // this.table.tableService.
               this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
             }
+
+            this.table._onSelectedLineResponse.emit(response);
           });
       }
     }

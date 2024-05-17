@@ -101,7 +101,6 @@ export class KlesTableDirective implements OnInit, OnChanges {
                         break;
                     default:
                         obj.headerCell.filterComponent = KlesFormInputClearableComponent;
-                        obj.headerCell.inputType = obj.headerCell.type;
                         break;
                 }
             }

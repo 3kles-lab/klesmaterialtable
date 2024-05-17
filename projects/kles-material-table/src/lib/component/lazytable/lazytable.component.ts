@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild, signal } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, signal } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -25,6 +25,9 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
     reload$ = new Subject<void>();
 
     @ViewChild(MatTable) matTable: MatTable<any>;
+
+    @Output() _onSelectedLineResponse = new EventEmitter<any>();
+    @Output() _onSelectedResponse = new EventEmitter<any>();
 
     constructor(protected translate: TranslateService,
         protected adapter: DateAdapter<any>,
