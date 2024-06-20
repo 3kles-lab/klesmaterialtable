@@ -144,7 +144,8 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             headerCell: {
                 name: 'QTY',
                 label: 'Quantity',
-                component: KlesFormTextHeaderComponent
+                tooltip: 'QUANTITY TOOLTIP',
+                component: KlesFormDynamicHeaderFilterComponent
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: 'QTY',

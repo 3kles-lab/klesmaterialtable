@@ -6,7 +6,7 @@ import { Options } from '../../models/options.model';
 @Component({
     selector: 'kles-form-dynamicheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable">
+    <div mat-sort-header [disabled]="!field.sortable" matTooltip="{{ field.tooltip }}" matTooltipPosition="above">
         @if(tableOptions?.capitalisedHeader){
             <span>{{ field.label | translate | capitalize}}</span>
         }@else if(tableOptions?.uppercasedHeader){
@@ -14,11 +14,10 @@ import { Options } from '../../models/options.model';
         }@else{
             <span>{{ field.label | translate}}</span>
         }
-        
     </div>
     @if (field.filterComponent && filterField) {
         <div (click)="stopPropagation($event)" class="filterHeader">
-            <ng-container klesDynamicField [group]="group" [field]="filterField" >
+            <ng-container klesDynamicField [group]="group" [field]="filterField">
             </ng-container>
 
             @if (field.filterClearable && group.get(field.name).value) {
