@@ -6,7 +6,7 @@ import { Options } from '../../models/options.model';
 @Component({
     selector: 'kles-form-dynamicheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable" matTooltip="{{ field.tooltip }}" matTooltipPosition="above">
+    <div mat-sort-header [disabled]="!field.sortable" [matTooltip]="field.tooltip" matTooltipPosition="above">
         @if(tableOptions?.capitalisedHeader){
             <span>{{ field.label | translate | capitalize}}</span>
         }@else if(tableOptions?.uppercasedHeader){
@@ -41,7 +41,7 @@ export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract impl
 
     ngOnInit(): void {
         super.ngOnInit();
-        this.filterField = Object.assign({}, { ...this.field, component: this.field.filterComponent, label: null });
+        this.filterField = Object.assign({}, { ...this.field, component: this.field.filterComponent, label: null, tooltip: null });
     }
 
     stopPropagation(event) {
