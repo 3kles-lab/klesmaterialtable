@@ -1,6 +1,7 @@
-import { UntypedFormGroup } from "@angular/forms";
+import { FormGroup, UntypedFormGroup } from "@angular/forms";
 import { KlesTableComponent } from "../../../component/table/table.component";
 import { KlesTableBaseService } from "../tableservice.interface";
+import { SelectionChange } from "@angular/cdk/collections";
 
 export class KlesSelectionTableService implements KlesTableBaseService {
   table: KlesTableComponent;
@@ -8,6 +9,17 @@ export class KlesSelectionTableService implements KlesTableBaseService {
 
   constructor(column: string) {
     this.columnSelect = column;
+  }
+
+  updateSelection(changed: SelectionChange<any>) {
+    changed.removed.forEach((group: FormGroup) => {
+      group.controls[this.columnSelect].patchValue(false, { emitEvent: false });
+    });
+    this.table.columns().filter(f => f.columnDef === this.columnSelect)
+      .map(m => m.headerCell.indeterminate = !this.table.selection.isEmpty());
+    if (this.table.selection.isEmpty()) {
+      this.table.formHeader.controls[this.columnSelect]?.patchValue(false, { emitEvent: false });
+    }
   }
 
   changeSelectionHeader(e: any) {

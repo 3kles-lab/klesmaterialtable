@@ -5,11 +5,17 @@ import { SafeStyle } from '@angular/platform-browser';
 import { AbstractKlesTableService } from './abstracttable.service';
 import * as uuid from 'uuid';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
+import { SelectionChange } from '@angular/cdk/collections';
 @Injectable({
     providedIn: 'root'
 })
 export class DefaultKlesTableService extends AbstractKlesTableService {
 
+
+    //Selection
+    onSelectionChange(changed: SelectionChange<any>) {
+
+    }
 
     //Header
     onHeaderChange(e: any) { }

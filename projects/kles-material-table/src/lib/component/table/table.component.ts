@@ -53,6 +53,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     protected _onDestroy = new Subject<void>();
     protected _onLinesChanges = new Subject<void>();
+    protected _onSelectionModeChanges = new Subject<void>();
 
     @ViewChild(MatSort, { static: false }) set matSort(ms: MatSort) {
         if (!this.sort) {
@@ -87,7 +88,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() columns = signal<KlesColumnConfig[]>([]);
     @Input() set selectionMode(selectionMode: boolean) {
+        this._onSelectionModeChanges.next();
         this.selection = new SelectionModel<any>(selectionMode);
+        this.listenSelection();
+
     }
     @Input() options: Options<any> = {
         verticalSeparator: true,
@@ -158,8 +162,10 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     ngOnDestroy(): void {
         this._onLinesChanges.next();
         this._onDestroy.next();
+        this._onSelectionModeChanges.next();
         this._onLinesChanges.complete();
         this._onDestroy.complete();
+        this._onSelectionModeChanges.complete();
 
         this._resizeObserver.disconnect()
     }
@@ -176,6 +182,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
         this.formHeader = this.initFormHeader();
         this.formFooter = this.initFormFooter();
+        this.listenSelection();
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -576,6 +583,16 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         return column.sortable || false;
     }
 
+    public listenSelection() {
+        this.selection.changed
+            .pipe(
+                takeUntil(this._onSelectionModeChanges)
+            )
+            .subscribe((changed) => {
+                console.log('vvcxvxcvxc')
+                this.tableService.onSelectionChange(changed)
+            })
+    }
 
     public setVisible(name: string, visible: boolean): void {
         this.columns.update((columns) => {

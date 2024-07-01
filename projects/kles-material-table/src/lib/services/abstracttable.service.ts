@@ -5,6 +5,7 @@ import { SafeStyle } from '@angular/platform-browser';
 import { IChangeCell, IChangeHeaderFooterCell, IChangeLine } from '../models/cell.model';
 import { KlesColumnConfig } from '../models/columnconfig.model';
 import { Subject } from 'rxjs';
+import { SelectionChange } from '@angular/cdk/collections';
 @Injectable({
     providedIn: 'root'
 })
@@ -12,6 +13,9 @@ export abstract class AbstractKlesTableService {
 
     protected table: any;
     public onSelectIndeterminate: Subject<boolean> = new Subject<boolean>();
+
+    //Selection
+    abstract onSelectionChange(changed: SelectionChange<any>);
 
     //Header
     abstract onHeaderChange(e: any);

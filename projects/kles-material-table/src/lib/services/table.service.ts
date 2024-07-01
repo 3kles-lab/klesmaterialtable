@@ -7,6 +7,7 @@ import { KlesHeaderFilterTableService } from './features/filter/headerfilter-tab
 import { KlesDragDropRowTableService } from './features/dragdrop/dragdroprow.service';
 import { KlesUnfoldRowTableService } from './features/unfoldrow/unfoldrow.service';
 import { interval } from 'rxjs';
+import { SelectionChange } from '@angular/cdk/collections';
 
 // @Injectable({
 //     providedIn: 'root'
@@ -23,6 +24,12 @@ export class KlesTableService extends classes(DefaultKlesTableService, KlesSelec
                 { super: KlesUnfoldRowTableService },
             );
     }
+
+    //Selection
+    onSelectionChange(changed: SelectionChange<any>) {
+        this.updateSelection(changed);
+    }
+
     //Header 
     onHeaderChange(e: any) {
         this.filterData();
