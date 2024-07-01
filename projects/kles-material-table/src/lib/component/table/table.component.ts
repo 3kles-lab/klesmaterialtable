@@ -589,9 +589,8 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
                 takeUntil(this._onSelectionModeChanges)
             )
             .subscribe((changed) => {
-                console.log('vvcxvxcvxc')
                 this.tableService.onSelectionChange(changed)
-            })
+            });
     }
 
     public setVisible(name: string, visible: boolean): void {

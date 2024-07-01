@@ -20,6 +20,7 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     if (this.table.selection.isEmpty()) {
       this.table.formHeader.controls[this.columnSelect]?.patchValue(false, { emitEvent: false });
     }
+    this.table.ref.markForCheck();
   }
 
   changeSelectionHeader(e: any) {
