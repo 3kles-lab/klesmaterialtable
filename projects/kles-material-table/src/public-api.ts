@@ -12,6 +12,7 @@ export * from './lib/models/header-field.config.model';
 export * from './lib/interfaces/pagination.interface';
 export * from './lib/interfaces/selection.interface';
 export * from './lib/interfaces/loadChildren.interface';
+export * from './lib/models/treetableconfig.model';
 
 /**DIRECTIVE */
 export * from './lib/directives/table.directive';
