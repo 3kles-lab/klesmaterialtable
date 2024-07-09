@@ -63,9 +63,13 @@ form {
 }
 
 .mat-mdc-header-cell,
-.mat-mdc-cell,
 .mat-mdc-footer-cell {
   text-align: center;
+}
+
+.mat-mdc-cell{
+  text-align: center;
+  justify-content: center;
 }
 
 table {
