@@ -174,3 +174,7 @@ tr.mat-mdc-footer-row {
 ::ng-deep .mdc-data-table__row:last-child .mat-mdc-cell {
   border-bottom: 1px solid rgba(0, 0, 0, .12) !important;
 }
+
+.mat-mdc-header-cell{
+  height: 0;
+}

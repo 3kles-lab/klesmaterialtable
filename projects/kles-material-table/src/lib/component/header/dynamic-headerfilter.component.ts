@@ -6,7 +6,7 @@ import { Options } from '../../models/options.model';
 @Component({
     selector: 'kles-form-dynamicheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable" [matTooltip]="field.tooltip" matTooltipPosition="above">
+    <div class="header" mat-sort-header [disabled]="!field.sortable" [matTooltip]="field.tooltip" matTooltipPosition="above">
         @if(tableOptions?.capitalisedHeader){
             <span>{{ field.label | translate | capitalize}}</span>
         }@else if(tableOptions?.uppercasedHeader){
