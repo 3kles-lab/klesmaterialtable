@@ -29,8 +29,8 @@ export class KlesTableDatasource<T, P extends MatPaginator = MatPaginator> exten
                 valueA = this.sortingDataAccessor(a, active);
                 valueB = this.sortingDataAccessor(b, active);
                 if (column?.cell?.property) {
-                    valueA = valueA[column.cell?.property];
-                    valueB = valueB[column.cell?.property];
+                    valueA = valueA?.[column.cell?.property];
+                    valueB = valueB?.[column.cell?.property];
                 }
             }
 
