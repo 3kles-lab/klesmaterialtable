@@ -15,7 +15,7 @@
   "private": true,
   "dependencies": {
     "@3kles/kles-material-dialog": "^17.0.0",
-    "@3kles/kles-material-dynamicforms": "^17.7.3",
+    "@3kles/kles-material-dynamicforms": "^17.7.9",
     "@3kles/kles-material-datepicker": "16.0.0",
     "@angular/animations": "^17.2.0",
     "@angular/cdk": "^17.2.0",
