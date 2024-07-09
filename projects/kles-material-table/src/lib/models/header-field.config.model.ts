@@ -7,4 +7,5 @@ export interface IKlesHeaderFieldConfig extends IKlesFieldConfig {
     filterable?: boolean;
     filterPredicate?: (value: any, filter: any) => boolean; //override default predicate only for this field
     sortable?: boolean;
+    sortPredicate?: (data: any) => string | number; //override default sort predicate only for this field
 }

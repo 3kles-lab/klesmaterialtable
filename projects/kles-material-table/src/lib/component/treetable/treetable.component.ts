@@ -45,7 +45,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
 
   searchableTree: SearchableNode<T>[];
 
-  dataSource = new MatTreetableData<AbstractControl>([]);
+  dataSource = new MatTreetableData<AbstractControl>([], []);
 
   constructor(protected translate: TranslateService,
     protected adapter: DateAdapter<any>,

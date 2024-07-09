@@ -27,6 +27,7 @@ import { rowsAnimation } from '../../animations/row.animation';
 
 import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
 import { Span } from '../../enums/span.enum';
+import { KlesTableDatasource } from './table.datasource';
 
 
 @Component({
@@ -136,7 +137,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     formFooter: UntypedFormGroup;
 
     lineFields: IKlesFieldConfig[][];
-    dataSource = new MatTableDataSource<AbstractControl>([]);
+    dataSource = new KlesTableDatasource<AbstractControl>([], []);
     selection = new SelectionModel<AbstractControl>(true);
 
     renderedData: any[]; // data from the datasource
@@ -180,6 +181,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
             this.renderedData = d;
         });
 
+        this.dataSource.updateColumns(this.columns());
         this.formHeader = this.initFormHeader();
         this.formFooter = this.initFormFooter();
         this.listenSelection();
