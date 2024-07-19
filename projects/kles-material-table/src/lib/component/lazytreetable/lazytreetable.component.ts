@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnChanges, OnDestroy, OnInit, Signal, SimpleChanges, signal } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnChanges, OnDestroy, OnInit, Output, Signal, SimpleChanges, signal } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -24,7 +24,8 @@ import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 })
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {
-
+    @Output() _onSelectedLineResponse = new EventEmitter<any>();
+    
     loading = signal(false);
     reload$ = new Subject<void>();
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
