@@ -87,11 +87,10 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
                 this.table.getFormArray().controls.forEach((row: UntypedFormGroup, index) => {
                   const childSelection = (response.children as any[])?.find((f) => f._id === row.getRawValue()._id);
                   if (childSelection) {
-                    // const fieldSelection = this.table.lineFields[index];
                     row.controls[this.columnSelect]?.patchValue(
                       (childSelection.indeterminate) ? -1 : childSelection.selected,
                       { emitEvent: false, onlySelf: true });
-                    // fieldSelection.find(f => f.name === this.columnSelect).indeterminate = !!childSelection.indeterminate;
+                    this.table.ref.markForCheck();
                   }
                 });
               }
