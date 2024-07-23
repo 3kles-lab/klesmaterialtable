@@ -77,6 +77,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
     @Input() _lines: Node[] = [];
     @Input() set lines(lines: any | any[]) {
+        this.selection?.clear();
         this.updateData(lines);
     }
 
