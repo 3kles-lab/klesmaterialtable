@@ -86,3 +86,6 @@ export * from './lib/enums/span.enum';
 
 /**MODULE */
 export * from './lib/table.module';
+
+/**DECORATOR */
+export * from './lib/decorators/header.decorator';

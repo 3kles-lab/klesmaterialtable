@@ -1,8 +1,18 @@
-import { KlesFieldAbstract } from '@3kles/kles-material-dynamicforms';
+import { componentMapper, EnumType, FieldMapper, KlesFieldAbstract, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
 import { OnInit, Component } from '@angular/core';
 import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 import { Options } from '../../models/options.model';
+import { HeaderMapper } from '../../decorators/header.decorator';
 
+@HeaderMapper({
+    type: 'dynamicHeader', factory: (field: IKlesHeaderFieldConfig) => {
+        if (field.filterComponent) {
+            return componentMapper.find(c => c.component === field.filterComponent)?.factory ?
+                componentMapper.find(c => c.component === field.filterComponent)?.factory(field) : klesFieldControlFactory(field);
+        }
+        return klesFieldControlFactory(field);
+    }
+})
 @Component({
     selector: 'kles-form-dynamicheaderfilter',
     template: `
