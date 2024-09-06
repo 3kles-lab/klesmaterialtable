@@ -39,13 +39,19 @@ export class KlesHeaderFilterTableService implements KlesTableBaseService {
                 if (keyValue && typeof (keyValue) === 'object' && column.cell.property) {
                     keyValue = keyValue[column.cell.property];
                 }
-                if (searchString[key] && typeof (searchString[key]) === 'object' && (column.headerCell.property || column.cell.property)) {
+                if (searchString[key] && typeof (searchString[key]) === 'object') {
                     if (Array.isArray(searchString[key])) {
-                        if (!searchString[key].length) return true;
-                        const list = (searchString[key] as Array<any>).map(m => m[column.headerCell.property || column.cell.property].toLowerCase());
+                        if (!searchString[key].length) {
+                            return true;
+                        }
+                        const list = (column.headerCell.property || column.cell.property) ?
+                            (searchString[key] as Array<any>).map(m => m[column.headerCell.property || column.cell.property].toLowerCase()) :
+                            (searchString[key] as Array<any>).map(m => m.toLowerCase());
                         return keyValue && list.includes(keyValue.toString().trim().toLowerCase());
                     } else {
-                        searchString[key] = searchString[key][column.headerCell.property || column.cell.property];
+                        if (column.headerCell.property || column.cell.property) {
+                            searchString[key] = searchString[key][column.headerCell.property || column.cell.property];
+                        }
                     }
                 }
                 if (!keyValue && searchString[key].length === 0) {

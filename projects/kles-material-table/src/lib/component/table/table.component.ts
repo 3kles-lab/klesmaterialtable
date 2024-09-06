@@ -222,7 +222,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
         this.columns().forEach(column => {
             const colCellHeader = _.cloneDeep(column.headerCell);
             colCellHeader.name = column.columnDef;
-            const control = this.buildControlField(colCellHeader, colCellHeader.value || '');
+            const control = this.buildControlField(colCellHeader, colCellHeader.value);
             control.valueChanges.pipe(takeUntil(this._onDestroy),
                 debounceTime(colCellHeader.debounceTime || 0)
             ).subscribe(e => {
