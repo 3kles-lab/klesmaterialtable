@@ -39,7 +39,6 @@ import * as uuid from 'uuid';
 
 export class KlesTreetableComponent<T> extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
-
   @Output() _onLineOpen = new EventEmitter();
   @Output() _onLineClose = new EventEmitter();
 
@@ -81,8 +80,12 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
   }
 
   protected updateTree(data: any) {
-    this._lines = (Array.isArray(data) ? data : [data]).map(((line) => {
-      return { _id: line?.value?._id || uuid.v4(), ...line };
+    this._lines = (Array.isArray(data) ? data : [data]).map(((line, _index) => {
+      return {
+        _id: line?.value?._id || uuid.v4(),
+        ...line,
+        _index
+      };
     }));
     this.searchableTree = this._lines.map(t => this.converterService.toSearchableTree(t));
   }

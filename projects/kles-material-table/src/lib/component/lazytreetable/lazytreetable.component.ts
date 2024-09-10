@@ -25,7 +25,7 @@ import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {
     @Output() _onSelectedLineResponse = new EventEmitter<any>();
-    
+
     loading = signal(false);
     reload$ = new Subject<void>();
     filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
@@ -280,7 +280,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
                 });
             }
             if (
-                // !this.sortDefault && 
+                // !this.sortDefault &&
                 this.sortConfig) {
                 this.sort.active = this.sortConfig.active;
                 this.sort.direction = this.sortConfig.direction;

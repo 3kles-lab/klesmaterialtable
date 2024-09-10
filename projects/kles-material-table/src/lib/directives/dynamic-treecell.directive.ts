@@ -39,6 +39,7 @@ export class KlesDynamicTreeCellDirective extends KlesDynamicCellDirective imple
       this.componentRef.instance.row = this.row;
       this.componentRef.instance.column = this.column;
       this.componentRef.instance.templateUnfold = this.config?.templateUnfold;
+      this.componentRef.instance.siblingFields = this.siblingFields;
     }
   }
 }
