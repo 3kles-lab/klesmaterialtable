@@ -40,6 +40,7 @@
                   [siblingFields]="lineFields[row.value._index]" [row]="row" [column]="column"
                   [config]="{templateUnfold}">
                 </ng-container>
+
               </td>
 
             </ng-container>
@@ -64,7 +65,7 @@
             [attr.colspan]="cell.colspan | spanPipe:displayedColumns().length" [attr.rowspan]="cell.rowspan"
             [ngClass]="{'vertical-separator': options.verticalSeparator}">
             <ng-container klesDynamicField [field]="cell" [group]="index | groupPipe"
-              [siblingFields]="lineFields[row.value._index]" [siblingFields]="lineFields[row.value._index]">
+              [siblingFields]="lineFields[row.value._index]">
             </ng-container>
           </td>
         </ng-container>

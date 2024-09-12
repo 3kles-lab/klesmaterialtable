@@ -13,7 +13,7 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
             @if (column.canExpand) {
                 <div [innerHTML]="formatIndentation(row)"></div>
             }
-        
+
             @if (!row.getRawValue()?._status?.isBusy && row.value._status.childrenCounter > 0) {
                 <mat-icon class="size-16" (click)="onNodeClick(row)">
                     {{row.value._status.isExpanded ? 'remove' : 'add'}}
@@ -25,7 +25,7 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
             }
 
             <ng-container klesDynamicCell [field]="field"
-                [group]="group" [column]="column" [config]="{templateUnfold}">
+                [group]="group" [column]="column" [config]="{templateUnfold}" [siblingFields]="siblingFields">
             </ng-container>
         </div>
 
@@ -44,8 +44,8 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
         </div>
 
         </div>
-    
-    
+
+
     `,
     styles: [
         'app-kles-node mat-icon {cursor: pointer}',

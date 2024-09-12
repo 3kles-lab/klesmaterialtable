@@ -1,4 +1,3 @@
-import { KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
 import { Directive, OnInit, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { KlesLeafComponent } from '../component/treetable/cell/leaf.component';
