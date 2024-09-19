@@ -1,7 +1,7 @@
 export interface Node {
   value: any;
   _unfold?: boolean;
-  _index?: number;
+  _index: number;
   _id: string;
   options?: { [key: string]: string };
   children?: Node[];

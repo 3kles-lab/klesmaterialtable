@@ -94,6 +94,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
   initFormArray() {
     const treeTableTree = this.searchableTree.map(st => this.converterService.toTreeTableTree(st));
     this.lineFields = [];
+    this.listFields = [];
     const array = this.formBuilder.array(
       treeTableTree.flatMap(node => {
         return this.createFormNode(node);
@@ -238,6 +239,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
       group.addControl(column.cell.name, control);
     });
     this.lineFields.push(listField);
+    this.listFields.push({ _id: row._id, fields: listField });
 
     group.setValidators(this.lineValidations);
     group.setAsyncValidators(this.lineAsyncValidations);

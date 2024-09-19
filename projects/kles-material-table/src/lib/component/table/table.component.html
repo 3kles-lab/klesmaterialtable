@@ -20,16 +20,16 @@
           @if (multiTemplate) {
           <td mat-cell *cdkCellDef="let row;let index = dataIndex;" [style]="getCellStyle(row,column)"
             [ngClass]="column | cellPipe">
-            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
-              [siblingFields]="lineFields[index]" [column]="column" [config]="{templateUnfold}">
+            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._id" [group]="row.value._id | groupPipe"
+              [siblingFields]="getSiblingFields(row)" [column]="column" [config]="{templateUnfold}">
             </ng-container>
           </td>
           }
           @else {
           <td mat-cell *cdkCellDef="let row;let index = index;" [style]="getCellStyle(row,column)"
             [ngClass]="column | cellPipe">
-            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._index" [group]="index | groupPipe"
-              [siblingFields]="lineFields[row.value._index]" [column]="column" [config]="{templateUnfold}">
+            <ng-container klesDynamicCell [field]="column | fieldPipe:row.value._id" [group]="row.value._id | groupPipe"
+              [siblingFields]="getSiblingFields(row)" [column]="column" [config]="{templateUnfold}">
             </ng-container>
           </td>
           }
@@ -51,8 +51,8 @@
         <td mat-cell *matCellDef="let row;let index = dataIndex;"
           [attr.colspan]="cell.colspan | spanPipe:displayedColumns().length" [attr.rowspan]="cell.rowspan"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
-          <ng-container klesDynamicField [field]="cell" [group]="index | groupPipe"
-            [siblingFields]="lineFields[row.value._index]">
+          <ng-container klesDynamicField [field]="cell" [group]="row.value._id | groupPipe"
+            [siblingFields]="getSiblingFields(row)">
           </ng-container>
         </td>
       </ng-container>
@@ -65,7 +65,7 @@
         <td mat-cell *matCellDef="let row;let index = dataIndex;"
           [attr.colspan]="cell.colspan | spanPipe: displayedColumns().length" [attr.rowspan]="cell.rowspan"
           [ngClass]="{'vertical-separator': options.verticalSeparator}">
-          <ng-container klesDynamicField [field]="cell" [group]="index | groupPipe">
+          <ng-container klesDynamicField [field]="cell" [group]="row.value._id | groupPipe">
           </ng-container>
         </td>
       </ng-container>

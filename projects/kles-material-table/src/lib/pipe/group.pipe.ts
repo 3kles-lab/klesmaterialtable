@@ -1,20 +1,21 @@
 import { Pipe, PipeTransform, ChangeDetectorRef, EmbeddedViewRef, Type } from '@angular/core';
 @Pipe({
-    name: 'groupPipe',
-    pure: true
+  name: 'groupPipe',
+  pure: true
 })
 export class GroupPipe implements PipeTransform {
 
-    private context: any;
+  private context: any;
 
-    constructor(cdRef: ChangeDetectorRef) {
-        this.context = ((cdRef as EmbeddedViewRef<Type<any>>).context);
-    }
+  constructor(cdRef: ChangeDetectorRef) {
+    this.context = ((cdRef as EmbeddedViewRef<Type<any>>).context);
+  }
 
-    transform(index: number): any {
-        if (this.context) {
-            return this.context.getControls(index);
-        }
-        return null;
+  transform(index: any): any {
+    if (this.context) {
+      console.log('Index group pipe=', index)
+      return this.context.getControls(index);
     }
+    return null;
+  }
 }
