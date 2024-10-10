@@ -57,7 +57,13 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
     if (this.selection?.select) {
       if (e.column.columnDef === this.columnSelect && e.row) {
         const val = (e.group as UntypedFormGroup).controls[e.column.columnDef].value;
-        this.selection.select(val, e.group)
+        const filterHeader = this.table.columns()
+          .filter(column => column.filterable)
+          .map(column => {
+            return { [column.columnDef]: this.table.formHeader.controls[column.columnDef].value };
+          })
+          .reduce((a, b) => ({ ...a, ...b }), {});
+        this.selection.select(val, e.group, filterHeader)
           .pipe(
             take(1),
             map((response) => {
