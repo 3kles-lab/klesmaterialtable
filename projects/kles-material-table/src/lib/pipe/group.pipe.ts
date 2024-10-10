@@ -13,7 +13,6 @@ export class GroupPipe implements PipeTransform {
 
   transform(index: any): any {
     if (this.context) {
-      console.log('Index group pipe=', index)
       return this.context.getControls(index);
     }
     return null;
