@@ -29,7 +29,12 @@ export class KlesSelectionTableService implements KlesTableBaseService {
     if (e.column.columnDef === this.columnSelect) {
       const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
       if (val) {
-        this.table.selection.select(...this.table.dataSource.filteredData);
+        if (!this.table.selection.isMultipleSelection() && this.table.dataSource.filteredData.length) {
+          this.table.selection.select(this.table.dataSource.filteredData?.[0]);
+        } else {
+          this.table.selection.select(...this.table.dataSource.filteredData);
+        }
+
       } else {
         this.table.selection.deselect(...this.table.dataSource.filteredData);
       }
@@ -61,7 +66,8 @@ export class KlesSelectionTableService implements KlesTableBaseService {
       indeterminate = false;
       selectAll = false;
     } else {
-      if (this.table.dataSource.filteredData.every((record) => this.table.selection.isSelected(record))) {
+      if ((!this.table.selection.isMultipleSelection() && this.table.selection.hasValue())
+        || (this.table.selection.isMultipleSelection() && this.table.dataSource.filteredData.every((record) => this.table.selection.isSelected(record)))) {
         indeterminate = false;
         selectAll = true;
 
