@@ -193,21 +193,21 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
         switchMap(() => {
           if (statusControl.controls.isExpanded.value) {
             return concat(
-              of({ loading: true, value: { lines: [], totalCount: 0 } }),
+              of({ loading: true, value: { lines: [], totalCount: 0 }, isExpanded: true }),
               this.tableService.loadChild(group, this.sort.active, this.sort.direction, statusControl.controls.paginator?.value.pageIndex,
                 statusControl.controls.paginator?.value.pageSize, this.filteredValues$.getValue()).pipe(
-                  map(value => ({ loading: false, value })),
+                  map(value => ({ loading: false, value, isExpanded: true })),
                   catchError((err) => {
                     console.error(err);
-                    return of({ loading: false, value: { lines: [], totalCount: 0 } });
+                    return of({ loading: false, value: { lines: [], totalCount: 0 }, isExpanded: true });
                   })
                 )
             );
           }
-          return of({ loading: false, value: { lines: [], totalCount: 0 } })
+          return of({ loading: false, value: { lines: [], totalCount: 0 }, isExpanded: false })
 
         })
-      ).subscribe(({ loading, value }) => {
+      ).subscribe(({ loading, value, isExpanded }) => {
         if (!loading) {
           this.tableService.deleteChildren(row._id);
           if (value.lines.length) {
@@ -216,6 +216,12 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
           statusControl.controls.paginator?.patchValue({ length: value.totalCount }, { emitEvent: false });
         }
         statusControl.patchValue({ isBusy: loading }, { emitEvent: false });
+
+        if (isExpanded) {
+          this._onLineOpen.next(group.getRawValue());
+        } else {
+          this._onLineClose.next(group.getRawValue());
+        }
 
         this.ref.markForCheck();
       })
