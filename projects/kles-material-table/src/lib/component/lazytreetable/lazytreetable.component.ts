@@ -166,8 +166,6 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     group.addControl('_index', indexControl);
     group.addControl('_unfold', unfoldControl);
 
-    console.log('Row AddFormLine=', row);
-
     const paginator = (this.columns as Signal<KlesTreeColumnConfig[]>)().find(c => c.paginator && c.canExpand);
 
     const statusControl = this.formBuilder.group({
