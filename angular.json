@@ -121,7 +121,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/kles-material-table/tsconfig.lib.json",
             "project": "projects/kles-material-table/ng-package.json"
