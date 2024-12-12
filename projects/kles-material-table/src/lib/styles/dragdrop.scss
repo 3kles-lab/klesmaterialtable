@@ -7,7 +7,7 @@
     box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
         0 8px 10px 1px rgba(0, 0, 0, 0.14),
         0 3px 14px 2px rgba(0, 0, 0, 0.12);
-    background: mat.get-color-from-palette(mat.$light-theme-background-palette, background);
+    background: mat.m2-get-color-from-palette(mat.$m2-light-theme-background-palette, background);
 }
 
 .cdk-drag-preview td {
@@ -15,7 +15,7 @@
 }
 
 .cdk-drag-placeholder {
-    background: mat.get-color-from-palette(mat.$grey-palette, 300);
+    background: mat.m2-get-color-from-palette(mat.$m2-grey-palette, 300);
 }
 
 .cdk-drag-animating {
