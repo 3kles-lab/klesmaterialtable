@@ -1,4 +1,4 @@
-import { UntypedFormArray, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { KlesTreetableComponent } from "../../../component/treetable/treetable.component";
 import { KlesSelectionTableService } from "./selectiontable.service";
 import * as O from "fp-ts/lib/Option";
@@ -21,16 +21,11 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
           this.updateChildrens(e.column, e.group, selected);
           this.updateParent(e.column, e.group);
 
-          this.table.selection.clear();
-
-          /* TODO not sure about this*/
-          (this.table.form.controls.rows as UntypedFormArray).controls
-            .filter((group: UntypedFormGroup) => group.controls[this.columnSelect].value === true)
-            .forEach(control => {
-              this.table.selection.select(control);
-            });
-          /* ***************** */
-          this.table._onSelected.emit(this.table.selection.selected);
+          if ((e.group as UntypedFormGroup).controls[e.column.columnDef].value) {
+            this.table.selection.select(e.group);
+          } else {
+            this.table.selection.deselect(e.group);
+          }
         }
       }
 
@@ -99,6 +94,12 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
       const childGroup = this.table.dataSource.data.find(row => row.value._id === children._id) as UntypedFormGroup;
       if (childGroup.controls[column.columnDef].value !== selected) {
         childGroup.controls[column.columnDef].patchValue(selected, { emitEvent: false });
+
+        if (childGroup.controls[column.columnDef].value) {
+          this.table.selection.select(childGroup);
+        } else {
+          this.table.selection.deselect(childGroup);
+        }
       }
       this.updateChildrens(column, childGroup, selected);
     });
@@ -144,14 +145,17 @@ export class KlesSelectionTreetableService extends KlesSelectionTableService {
 
           if (this.childrenIsAllSelected(column, parentGroup)) {
             parentGroup.controls[column.columnDef].patchValue(true, { emitEvent: false });
+            this.table.selection.select(parentGroup);
           } else if (this.childrenAtLeastOneSelected(column, parentGroup)) {
             // this.table.lineFields[index].find(field => field.name === column.columnDef).indeterminate = true;
             if (listField) {
               listField.fields.find(field => field.name === column.columnDef).indeterminate = false;
             }
             parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+            this.table.selection.deselect(parentGroup);
           } else {
             parentGroup.controls[column.columnDef].patchValue(false, { emitEvent: false });
+            this.table.selection.deselect(parentGroup);
           }
 
         })

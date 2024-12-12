@@ -3,6 +3,7 @@ import { classes } from "polytype";
 import { KlesSelectionTreetableService } from "../features/selection/selectiontreetable.service";
 import { DefaultKlesTreetableService } from "./defaulttreetable.service";
 import { KlesDragDropRowTreeTableService } from "../features/dragdrop/dragdroprowtree.service";
+import { SelectionChange } from "@angular/cdk/collections";
 
 @Injectable()
 export class KlesTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTreetableService, KlesDragDropRowTreeTableService) {
@@ -12,6 +13,10 @@ export class KlesTreetableService extends classes(DefaultKlesTreetableService, K
             (
                 { super: KlesSelectionTreetableService, arguments: ['#select'] },
             );
+    }
+
+    onSelectionChange(changed: SelectionChange<any>): void {
+        this.updateSelection(changed);
     }
 
     onHeaderCellChange(e: any) {

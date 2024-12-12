@@ -1,6 +1,6 @@
 import { KlesFormCheckboxComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesTreetableComponent, KlesTreetableService, KlesTreeColumnConfig } from 'kles-material-table';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesTreetableComponent, KlesTreetableService, KlesTreeColumnConfig, KlesTreetableDirective } from 'kles-material-table';
 
 @Component({
     selector: 'app-treetable',
@@ -8,6 +8,16 @@ import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConf
     styleUrls: ['./treetable.component.scss']
 })
 export class TreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild(KlesTreetableDirective) set tableDirective(content: KlesTreetableDirective) {
+        if (content && content.componentRef) {
+            const table: KlesTreetableComponent<any> = content.componentRef.instance;
+
+            table._onSelected.subscribe(response => {
+                // console.log(response);
+            });
+        }
+    }
+
     columnsExample1: KlesTreeColumnConfig[] = [
         {
             columnDef: '#select',
