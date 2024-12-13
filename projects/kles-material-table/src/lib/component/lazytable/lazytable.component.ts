@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, concat, merge, of, Subject } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, map, switchMap, takeUntil } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, skip, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 import { rowsAnimation } from '../../animations/row.animation';
@@ -59,11 +59,15 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
   ngAfterViewInit(): void {
     super.ngAfterViewInit();
 
-    merge(this.sort.sortChange, this.filteredValues$.pipe(debounceTime(500)), this.reload$)
-      .subscribe(() => this.paginator.pageIndex = 0);
+    const events$ = merge(
+      this.reload$,
+      this.sort.sortChange,
+      this.filteredValues$.pipe(skip(1), debounceTime(500), startWith(this.filteredValues$.getValue()))
+    ).pipe(
+      tap(() => this.paginator.pageIndex = 0)
+    );
 
-    merge(this.reload$, this.sort.sortChange.pipe(distinctUntilChanged()),
-      this.paginator.page.pipe(distinctUntilChanged()), this.filteredValues$.pipe(debounceTime(500)))
+    merge(events$, this.paginator.page.pipe(distinctUntilChanged()))
       .pipe(
         takeUntil(this._onDestroy),
         switchMap(() => {
