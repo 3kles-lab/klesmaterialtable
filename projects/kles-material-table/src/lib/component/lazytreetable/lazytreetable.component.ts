@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
-import { BehaviorSubject, Subject, concat, merge, of } from 'rxjs';
-import { catchError, debounceTime, switchMap, tap, take, takeUntil, filter, map } from 'rxjs/operators';
+import { BehaviorSubject, Subject, combineLatest, concat, merge, of } from 'rxjs';
+import { catchError, debounceTime, switchMap, tap, take, takeUntil, filter, map, startWith, skip, withLatestFrom, distinctUntilChanged } from 'rxjs/operators';
 import { TreeTableNode } from '../../models/node.model';
 import { AbstractKlesLazyTreetableService } from '../../services/lazy/abstractlazytreetable.service';
 import { ConverterService } from '../../services/treetable/converter.service';
@@ -58,10 +58,15 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     super.ngAfterViewInit();
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
 
-    merge(this.sort.sortChange, this.filteredValues$.pipe(debounceTime(500)), this.reload$)
-      .subscribe(() => this.paginator.pageIndex = 0);
+    const events$ = merge(
+      this.reload$,
+      this.sort.sortChange.pipe(distinctUntilChanged()),
+      this.filteredValues$.pipe(skip(1), debounceTime(500), startWith(this.filteredValues$.getValue()))
+    ).pipe(
+      tap(() => this.paginator.pageIndex = 0)
+    );
 
-    merge(this.reload$, this.sort.sortChange, this.paginator.page, this.filteredValues$.pipe(debounceTime(500)))
+    merge(events$, this.paginator.page.pipe(distinctUntilChanged()))
       .pipe(
         takeUntil(this._onDestroy),
         switchMap(() => {
