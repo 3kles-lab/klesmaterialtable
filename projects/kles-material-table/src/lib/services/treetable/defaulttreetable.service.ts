@@ -127,7 +127,6 @@ export class DefaultKlesTreetableService extends DefaultKlesTableService {
             const groups = this.table.createFormNode(treeNode);
             const indexParent = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
             const index = indexParent;
-            + (parent.children?.length || 0);
 
             if (parent.children) {
                 parent.children.push({ value: groups[0].getRawValue() });

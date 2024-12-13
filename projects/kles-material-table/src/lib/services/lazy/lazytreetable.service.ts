@@ -110,6 +110,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             const groups = this.table.createFormNode(treeNode);
 
             const parentIndex = this.table.getFormArray().controls.findIndex((group: UntypedFormGroup) => group.value._id === parentId);
+            const nbSibling = this.table.getFormArray().controls[parentIndex].value._status?.children?.length || 0;
 
             this.table.getFormArray().controls[parentIndex].controls._status.patchValue({
                 children: (this.table.getFormArray().controls[parentIndex].controls._status.value.children || []).concat([treeNode]),
@@ -117,7 +118,7 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
             }, { emitEvent: false });
 
             groups.forEach((group, index) => {
-                this.table.getFormArray().insert(parentIndex + index + 1, group);
+                this.table.getFormArray().insert(parentIndex + nbSibling + index + 1, group);
             });
 
             this.updateDataSource();
