@@ -135,7 +135,8 @@ export class DefaultKlesTableService extends AbstractKlesTableService {
         if (updateForm) {
             updateForm.patchValue(record, options);
             this.updateDataSource();
-            this.table.ref.detectChanges();
+            this.table.ref.markForCheck();
+            return updateForm;
         }
     }
 
