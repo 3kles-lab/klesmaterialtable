@@ -2,7 +2,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import * as _ from 'lodash';
 import { classes } from 'polytype';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ILoadChildren } from '../../interfaces/loadChildren.interface';
 import { IPagination } from '../../interfaces/pagination.interface';
 import { ISelection } from '../../interfaces/selection.interface';
@@ -12,6 +12,7 @@ import { KlesDragDropRowTreeTableService } from '../features/dragdrop/dragdropro
 
 import * as O from "fp-ts/lib/Option";
 import { pipe } from "fp-ts/lib/function";
+import { catchError, shareReplay, take } from 'rxjs/operators';
 
 export class KlesLazyTreetableService extends classes(DefaultKlesTreetableService, KlesSelectionTableLazyService, KlesDragDropRowTreeTableService) {
 
@@ -80,7 +81,22 @@ export class KlesLazyTreetableService extends classes(DefaultKlesTreetableServic
 
     load(sort: string, order: string, page: number, perPage: number, filter?: { [key: string]: any; }):
         Observable<{ lines: any[], totalCount: number, footer?: any, header?: any }> {
-        return this.data.list(sort, order, page, perPage, filter);
+        const obs = this.data.list(sort, order, page, perPage, filter).pipe(shareReplay(1));
+        obs.pipe(
+            take(1),
+            catchError(() => {
+                return of({ indeterminate: false });
+            })
+        ).subscribe((response) => {
+            this.table.columns.update((columns) => {
+                const idx = columns.findIndex(f => f.columnDef === this.columnSelect);
+                if (idx != -1) {
+                    columns[idx].headerCell = { ...columns[idx].headerCell, indeterminate: response.indeterminate };
+                }
+                return [...columns];
+            });
+        })
+        return obs;
     }
 
     loadChild(parentId: string, sort?: string, order?: string, page?: number, perPage?: number, filter?: { [key: string]: any; }): Observable<{ lines: any[], totalCount: number }> {
