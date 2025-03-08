@@ -49,6 +49,13 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
 
   ngOnInit(): void {
     super.ngOnInit();
+    this.filteredValues$.next(
+      this.columns()
+        .filter(column => column.filterable)
+        .map(column => {
+          return { [column.columnDef]: this.formHeader.controls[column.columnDef].value };
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {}));
   }
 
   ngOnChanges(changes: SimpleChanges): void {
