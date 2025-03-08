@@ -1,5 +1,5 @@
 import { componentMapper, EnumType, FieldMapper, KlesFieldAbstract, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
-import { OnInit, Component } from '@angular/core';
+import { OnInit, Component, ViewEncapsulation } from '@angular/core';
 import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 import { Options } from '../../models/options.model';
 import { HeaderMapper } from '../../decorators/header.decorator';
@@ -27,7 +27,7 @@ import { HeaderMapper } from '../../decorators/header.decorator';
     </div>
     @if (field.filterComponent && filterField) {
         <div (click)="stopPropagation($event)" class="filterHeader">
-            <ng-container klesDynamicField [group]="group" [field]="filterField">
+            <ng-container klesDynamicHeader [group]="group" [field]="filterField">
             </ng-container>
 
             @if (field.filterClearable && group.get(field.name).value) {
@@ -43,6 +43,7 @@ import { HeaderMapper } from '../../decorators/header.decorator';
     }
     `,
     styleUrl: './dynamic-headerfilter.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
     field: IKlesHeaderFieldConfig;

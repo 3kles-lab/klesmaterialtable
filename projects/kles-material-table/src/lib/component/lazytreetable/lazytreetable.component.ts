@@ -26,6 +26,7 @@ import { IKlesCellFieldConfig } from '../../models/cell.model';
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Output() _onSelectedLineResponse = new EventEmitter<any>();
+  @Output() _onSelectedResponse = new EventEmitter<any>();
 
   loading = signal(false);
   reload$ = new Subject<void>();

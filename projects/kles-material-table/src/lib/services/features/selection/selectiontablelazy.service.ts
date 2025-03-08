@@ -1,19 +1,22 @@
 import { UntypedFormGroup } from '@angular/forms';
 import { ISelection } from '../../../interfaces/selection.interface';
 import { KlesTableBaseService } from '../tableservice.interface';
-import { catchError, map, take } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { catchError, map, take, takeUntil } from 'rxjs/operators';
+import { concat, of, Subject } from 'rxjs';
 import { KlesLazyTableComponent } from '../../../component/lazytable/lazytable.component';
 
 export class KlesSelectionTableLazyService implements KlesTableBaseService {
   table: KlesLazyTableComponent;
   columnSelect: string;
 
+  private _onSelectionChange = new Subject<void>();
+
   constructor(column: string, private selection: ISelection) {
     this.columnSelect = column;
   }
 
   changeSelectionHeader(e: any) {
+    this._onSelectionChange.next();
     if (this.selection?.selectAll) {
       if (e.column.columnDef === this.columnSelect) {
         const val = (e.group as UntypedFormGroup).controls[this.columnSelect].value;
@@ -25,30 +28,37 @@ export class KlesSelectionTableLazyService implements KlesTableBaseService {
           })
           .reduce((a, b) => ({ ...a, ...b }), {});
 
-        this.selection.selectAll(val, filterHeader)
-          .pipe(
-            take(1),
-            map((response) => {
-              return { success: true, ...response };
-            }),
-            catchError(err => {
-              console.error(err);
-              return of({ success: false, indeterminate: false, selected: false });
-            })
-          )
-          .subscribe((response) => {
-
+        concat(
+          of({ loading: true }),
+          this.selection.selectAll(val, filterHeader)
+            .pipe(
+              take(1),
+              takeUntil(this._onSelectionChange),
+              map((response) => {
+                return { loading: false, success: true, ...response };
+              }),
+              catchError(err => {
+                console.error(err);
+                return of({ loading: false, success: false, indeterminate: false, selected: false });
+              })
+            )
+        ).subscribe((response: any) => {
+          this.table.loading.set(response.loading);
+          if (!response.loading) {
             this.table.getFormArray().controls.forEach((row: UntypedFormGroup) => {
-              row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false, onlySelf: true });
+              row.controls[this.columnSelect]?.patchValue(response.selected, { emitEvent: false });
             });
 
             if ('footer' in response) {
               this.table.formFooter.patchValue(response.footer);
             }
             this.table.tableService.onSelectIndeterminate.next(response.indeterminate);
-            this.table._onSelectedResponse.emit(response);
-            this.table.ref.markForCheck();
-          });
+            this.table._onSelectedResponse?.emit(response);
+          }
+
+
+          this.table.ref.markForCheck();
+        });
       }
     }
   }
