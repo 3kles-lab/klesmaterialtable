@@ -27,7 +27,7 @@ import { HeaderMapper } from '../../decorators/header.decorator';
     </div>
     @if (field.filterComponent && filterField) {
         <div (click)="stopPropagation($event)" class="filterHeader">
-            <ng-container klesDynamicHeader [group]="group" [field]="filterField">
+            <ng-container klesDynamicHeaderFilter [group]="group" [field]="filterField">
             </ng-container>
 
             @if (field.filterClearable && group.get(field.name).value) {

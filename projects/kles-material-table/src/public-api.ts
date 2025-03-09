@@ -23,6 +23,7 @@ export * from './lib/directives/dynamic-treecell.directive';
 export * from './lib/directives/treetable.directive';
 export * from './lib/directives/dynamic-cell.directive';
 export * from './lib/directives/dynamic-header.directive';
+export * from './lib/directives/dynamic-header-filter.directive';
 
 /**COMPONENT */
 export * from './lib/component/table/table.component';

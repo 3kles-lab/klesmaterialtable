@@ -39,6 +39,7 @@ import { SpanPipe } from './pipe/span.pipe';
 import { CellPipe } from './pipe/cell.pipe';
 import { KlesDynamicHeaderDirective } from './directives/dynamic-header.directive';
 import { CapitalizePipe } from './pipe/capitalize.pipe';
+import { KlesDynamicHeaderFilterDirective } from './directives/dynamic-header-filter.directive';
 
 const components = [
     KlesTableComponent,
@@ -60,7 +61,8 @@ const directives = [
     KlesDynamicTreeCellDirective,
     KlesTreetableDirective,
     KlesDynamicCellDirective,
-    KlesDynamicHeaderDirective
+    KlesDynamicHeaderDirective,
+    KlesDynamicHeaderFilterDirective
 ];
 const services = [
     AbstractKlesTableService,
