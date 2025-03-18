@@ -28,7 +28,7 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: '#select',
-                disabled: true,
+                // disabled: true,
                 component: KlesFormCheckboxComponent
             } as IKlesCellFieldConfig
         },
@@ -284,7 +284,8 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             table._onSelected.pipe(
                 takeUntil(this._onDestroy)
             ).subscribe(selection => {
-                table.formFooter.patchValue({ NAME: selection.map((group: FormGroup) => group.value.NAME.length).reduce((acc, value) => acc + value, 0), AGE: selection.map((group: FormGroup) => group.value.AGE).reduce((acc, value) => acc + value, 0) });
+                // table.formFooter.patchValue({ NAME: selection.map((group: FormGroup) => group.value.NAME.length).reduce((acc, value) => acc + value, 0), AGE: selection.map((group: FormGroup) => group.value.AGE).reduce((acc, value) => acc + value, 0) });
+                this.footerExample1 = { NAME: selection.map((group: FormGroup) => group.value.NAME.length).reduce((acc, value) => acc + value, 0), AGE: selection.map((group: FormGroup) => group.value.AGE).reduce((acc, value) => acc + value, 0) };
             });
         }
 
