@@ -518,7 +518,13 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
   updateFooter(footer: any) {
     this._footer = { ...footer };
-    this.formFooter = this.initFormFooter();
+
+    if (!this.formFooter) {
+      this.formFooter = this.initFormFooter();
+    }
+    else {
+      this.formFooter.patchValue(footer);
+    }
   }
 
   updateData(lines: any[]) {
