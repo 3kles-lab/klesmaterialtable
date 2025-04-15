@@ -27,3 +27,10 @@
 ::ng-deep app-kles-lazytreetable .mdc-text-field:not(.mdc-text-field--outlined) {
     padding: 0 !important;
 }
+
+::ng-deep app-kles-dynamictable .mdc-text-field--filled.mdc-text-field--disabled,
+::ng-deep app-kles-lazytable .mdc-text-field--filled.mdc-text-field--disabled,
+::ng-deep app-kles-dynamictreetable .mdc-text-field--filled.mdc-text-field--disabled,
+::ng-deep app-kles-lazytreetable .mdc-text-field--filled.mdc-text-field--disabled {
+    background: inherit;
+}

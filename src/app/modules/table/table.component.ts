@@ -135,6 +135,7 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: 'STYLE',
+                disabled: true,
                 component: KlesFormInputComponent
             } as IKlesCellFieldConfig
         },
