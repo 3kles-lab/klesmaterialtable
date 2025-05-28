@@ -4,6 +4,7 @@ import { UntypedFormGroup } from '@angular/forms';
 import { KlesTreeColumnConfig, KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesLazyTreetableComponent, KlesLazyTreetableService, IPagination, ILoadChildren } from 'kles-material-table';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
+import { AgePipe } from '../../pipes/age.pipe';
 
 @Component({
   selector: 'app-lazytreetable',
@@ -92,6 +93,11 @@ export class LazyTreeTableComponent implements OnInit, AfterViewInit, OnDestroy 
       } as IKlesHeaderFieldConfig,
       cell: {
         name: 'AGE',
+        pipeTransform: [
+          {
+            pipe: this.agePipe
+          }
+        ],
         component: KlesFormTextComponent
       } as IKlesCellFieldConfig
     },
@@ -112,7 +118,7 @@ export class LazyTreeTableComponent implements OnInit, AfterViewInit, OnDestroy 
   linesExample2$: Observable<any[]>;
   tableConfigExample2: KlesTableConfig;
 
-  constructor() {
+  constructor(private agePipe: AgePipe) {
   }
 
   ngOnInit(): void {

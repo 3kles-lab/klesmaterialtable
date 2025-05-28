@@ -28,6 +28,7 @@ import { rowsAnimation } from '../../animations/row.animation';
 import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
 import { Span } from '../../enums/span.enum';
 import { KlesTableDatasource } from './table.datasource';
+import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
 
 
 @Component({
@@ -220,7 +221,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
   initFormHeader() {
     const group = this.fb.group({});
     this.columns().forEach(column => {
-      const colCellHeader = _.cloneDeep(column.headerCell);
+      const { pipeTransform, ...tmpCell } = column.headerCell;
+      let colCellHeader: IKlesHeaderFieldConfig = _.cloneDeep(tmpCell);
+      colCellHeader = { pipeTransform, ...colCellHeader };
       colCellHeader.name = column.columnDef;
       const control = this.buildControlField(colCellHeader, colCellHeader.value);
       control.valueChanges.pipe(takeUntil(this._onDestroy),
@@ -265,7 +268,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     const listField = [];
     this.columns().forEach(column => {
       column.cell.name = column.columnDef;
-      const colCell = _.cloneDeep(column.cell);
+      const { pipeTransform, ...tmpCell } = column.cell;
+      let colCell: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+      colCell = { pipeTransform, ...colCell };
       const control = this.buildControlField(colCell, row.value[colCell.name]);
       listField.push(colCell);
       control.valueChanges.pipe(
@@ -311,7 +316,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
     if (this.multiTemplate) {
       if (this.templateUnfold) {
         this.templateUnfold.cells.forEach((cell) => {
-          const field: IKlesCellFieldConfig = _.cloneDeep(cell);
+          const { pipeTransform, ...tmpCell } = cell;
+          let field: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+          field = { pipeTransform, ...field };
           const control = this.buildControlField(field, row.value[cell.name]);
           group.addControl(cell.name, control);
         })
@@ -319,7 +326,9 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
       if (this.templates?.length) {
         this.templates.forEach(template => {
           template.cells.forEach((cell) => {
-            const field: IKlesCellFieldConfig = _.cloneDeep(cell);
+            const { pipeTransform, ...tmpCell } = cell;
+            let field: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+            field = { pipeTransform, ...field };
             const control = this.buildControlField(field, row.value[cell.name]);
             group.addControl(cell.name, control);
           })
@@ -350,8 +359,12 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
       .find((c: UntypedFormGroup) => c.controls._index.value === index));
 
     if (cellIndex >= 0 && column && group) {
-      this.lineFields[index][cellIndex] = _.cloneDeep(cell);
-      const colCell = _.cloneDeep(cell);
+      const { pipeTransform, ...tmpCell } = cell;
+      let lineField: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+      lineField = { pipeTransform, ...lineField };
+      this.lineFields[index][cellIndex] = lineField;
+      let colCell: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+      colCell = { pipeTransform, ...colCell };
 
       const control = this.buildControlField(colCell, group.value[cell.name] || cell.value);
 

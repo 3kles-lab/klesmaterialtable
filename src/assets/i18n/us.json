@@ -7,6 +7,7 @@
     "RANGE_PAGE_LABEL_1": "of {{length}}",
     "RANGE_PAGE_LABEL_2": "{{startIndex}} of {{endIndex}}",
     "Cancel": "Cancel",
+    "year": "years",
     "close": {
         "text": "Close"
     },

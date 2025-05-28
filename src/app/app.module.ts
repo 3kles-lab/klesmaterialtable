@@ -18,6 +18,7 @@ import { LazyTreeTableModule } from './modules/lazytreetable/lazytreetable.modul
 import { TableModule } from './modules/table/table.module';
 import { TreeTableModule } from './modules/treetable/treetable.module';
 import { SharedModule } from './modules/shared/shared.module';
+import { AgePipe } from './pipes/age.pipe';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -41,7 +42,7 @@ import { SharedModule } from './modules/shared/shared.module';
         TableModule,
         LazyTableModule,
         TreeTableModule,
-        LazyTreeTableModule], providers: [TranslateService, FakeApiService, provideHttpClient(withInterceptorsFromDi())] })
+        LazyTreeTableModule], providers: [TranslateService, FakeApiService, AgePipe, provideHttpClient(withInterceptorsFromDi())] })
 
 export class AppModule { }
 

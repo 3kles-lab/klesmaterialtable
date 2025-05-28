@@ -8,6 +8,7 @@ import { StyleService } from './style.service';
 import { FakeApiService } from 'src/app/services/fakemi.service';
 import { SelectTableService } from './select.service';
 import { CustomPaginator } from './custom-paginator.component';
+import { AgePipe } from '../../pipes/age.pipe';
 
 @Component({
     selector: 'app-table',
@@ -63,10 +64,22 @@ export class TableComponent implements AfterViewInit, OnDestroy {
             headerCell: {
                 name: 'AGE',
                 label: 'Age',
-                component: KlesFormTextHeaderComponent
+                pipeTransform: [
+                    {
+                        pipe: this.agePipe
+                    }
+                ],
+                component: KlesFormDynamicHeaderFilterComponent,
+                filterComponent: KlesFormSelectComponent,
+                options: Array(500).fill(1)
             } as IKlesHeaderFieldConfig,
             cell: {
                 name: 'AGE',
+                pipeTransform: [
+                    {
+                        pipe: this.agePipe
+                    }
+                ],
                 component: KlesFormTextComponent
             } as IKlesCellFieldConfig,
             footerCell: {
@@ -274,7 +287,7 @@ export class TableComponent implements AfterViewInit, OnDestroy {
 
     private _onDestroy = new Subject<void>();
 
-    constructor(private miService: FakeApiService) {
+    constructor(private agePipe: AgePipe, private miService: FakeApiService) {
     }
 
     ngAfterViewInit(): void {

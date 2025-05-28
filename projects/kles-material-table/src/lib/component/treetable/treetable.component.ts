@@ -19,6 +19,7 @@ import { of } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 import * as uuid from 'uuid';
+import { IKlesCellFieldConfig } from '../../models/cell.model';
 
 @Component({
   selector: 'app-kles-dynamictreetable',
@@ -183,7 +184,9 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
     const listField = [];
     this.columns().forEach(column => {
       column.cell.name = column.columnDef;
-      const colCell = _.cloneDeep(column.cell);
+      const { pipeTransform, ...tmpCell } = column.cell;
+      let colCell: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+      colCell = { pipeTransform, ...colCell };
       const control = this.buildControlField(colCell, rowValue[colCell.name]);
       listField.push({ ...column.cell });
       control.valueChanges.pipe(

@@ -241,7 +241,9 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     const listField = [];
     this.columns().forEach(column => {
       column.cell.name = column.columnDef;
-      const colCell = _.cloneDeep(column.cell);
+      const { pipeTransform, ...tmpCell } = column.cell;
+      let colCell: IKlesCellFieldConfig = _.cloneDeep(tmpCell);
+      colCell = { pipeTransform, ...colCell };
       const control = this.buildControlField(colCell, rowValue[colCell.name]);
       listField.push(colCell);
       control.valueChanges.pipe(
