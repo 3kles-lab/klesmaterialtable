@@ -1,9 +1,9 @@
 {
   "name": "@3kles/kles-material-table",
-  "version": "18.1.4",
+  "version": "18.1.5",
   "repository": {
     "type": "git",
-    "url": "https://github.com/3kles-lab/kles-material-table"
+    "url": "https://github.com/3kles-lab/klesmaterialtable"
   },
   "keywords": [
     "3KLES",
@@ -13,9 +13,9 @@
   "author": "3Kles Lab",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/3kles-lab/kles-material-table/issues"
+    "url": "https://github.com/3kles-lab/klesmaterialtable/issues"
   },
-  "homepage": "https://github.com/3kles-lab/kles-material-table",
+  "homepage": "https://github.com/3kles-lab/klesmaterialtable",
   "peerDependencies": {
     "@3kles/kles-material-dynamicforms": "^18.0.5",
     "@3kles/kles-material-datepicker": "^18.0.0",
