@@ -22,20 +22,21 @@ import * as uuid from 'uuid';
 import { IKlesCellFieldConfig } from '../../models/cell.model';
 
 @Component({
-  selector: 'app-kles-dynamictreetable',
-  templateUrl: './treetable.component.html',
-  styleUrls: ['./treetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
-  animations: [rowsAnimation],
-  providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
-    {
-      provide: DateAdapter,
-      useClass: MomentDateAdapter,
-      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
-    },
-    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-kles-dynamictreetable',
+    templateUrl: './treetable.component.html',
+    styleUrls: ['./treetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
+    animations: [rowsAnimation],
+    providers: [
+        { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
+        {
+            provide: DateAdapter,
+            useClass: MomentDateAdapter,
+            deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+        },
+        { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class KlesTreetableComponent<T> extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {

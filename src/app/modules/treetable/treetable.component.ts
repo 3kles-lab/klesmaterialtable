@@ -6,7 +6,8 @@ import { AgePipe } from '../../pipes/age.pipe';
 @Component({
     selector: 'app-treetable',
     templateUrl: './treetable.component.html',
-    styleUrls: ['./treetable.component.scss']
+    styleUrls: ['./treetable.component.scss'],
+    standalone: false
 })
 export class TreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(KlesTreetableDirective) set tableDirective(content: KlesTreetableDirective) {

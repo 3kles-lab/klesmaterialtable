@@ -3,7 +3,8 @@ import { UntypedFormGroup } from "@angular/forms";
 
 @Pipe({
     name: 'rowDragDisabledPipe',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class RowDragDisabledPipe implements PipeTransform {
 

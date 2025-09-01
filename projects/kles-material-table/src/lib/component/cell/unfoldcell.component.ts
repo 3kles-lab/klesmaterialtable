@@ -27,6 +27,7 @@ import { IKlesCellFieldConfig } from "../../models/cell.model";
         `.fold-field {flex-grow: 1;}`,
         `.fold-cell {display:flex; align-items:center}`
     ],
+    standalone: false
 })
 
 export class KlesUnfoldCellComponent extends AbstractCell<KlesColumnConfig> {

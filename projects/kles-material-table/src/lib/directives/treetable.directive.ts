@@ -4,7 +4,8 @@ import { KlesTreeTableConfig } from "../models/treetableconfig.model";
 import { Input } from "@angular/core";
 
 @Directive({
-  selector: '[klesTreetable]'
+    selector: '[klesTreetable]',
+    standalone: false
 })
 export class KlesTreetableDirective extends KlesTableDirective {
   @Input() tableConfig: KlesTreeTableConfig;

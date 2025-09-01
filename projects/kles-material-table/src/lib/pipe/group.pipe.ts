@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform, ChangeDetectorRef, EmbeddedViewRef, Type } from '@angular/core';
 @Pipe({
-  name: 'groupPipe',
-  pure: true
+    name: 'groupPipe',
+    pure: true,
+    standalone: false
 })
 export class GroupPipe implements PipeTransform {
 

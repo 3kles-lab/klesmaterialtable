@@ -12,11 +12,12 @@ import { rowsAnimation } from '../../animations/row.animation';
 import { MatTable } from '@angular/material/table';
 
 @Component({
-  selector: 'app-kles-lazytable',
-  templateUrl: './lazytable.component.html',
-  styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
-  animations: [rowsAnimation],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-kles-lazytable',
+    templateUrl: './lazytable.component.html',
+    styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
+    animations: [rowsAnimation],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 

@@ -3,7 +3,8 @@ import { Directive, Input, OnInit, ComponentFactoryResolver, ViewContainerRef, C
 import { UntypedFormGroup } from '@angular/forms';
 
 @Directive({
-    selector: '[klesComponentHeader]'
+    selector: '[klesComponentHeader]',
+    standalone: false
 })
 export class KlesComponentHeaderDirective implements OnInit, OnChanges {
     @Input() component: Type<any>;

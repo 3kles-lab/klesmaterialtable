@@ -14,7 +14,8 @@ import { AgePipe } from '../../pipes/age.pipe';
     selector: 'app-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class TableComponent implements AfterViewInit, OnDestroy {
     @ViewChildren(KlesTableDirective) listDirective: QueryList<KlesTableDirective>;

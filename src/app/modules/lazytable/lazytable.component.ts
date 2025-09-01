@@ -7,7 +7,8 @@ import { delay, map } from 'rxjs/operators';
 @Component({
     selector: 'app-lazytable',
     templateUrl: './lazytable.component.html',
-    styleUrls: ['./lazytable.component.scss']
+    styleUrls: ['./lazytable.component.scss'],
+    standalone: false
 })
 export class LazyTableComponent implements OnInit, AfterViewInit, OnDestroy {
     columnsExample1: KlesColumnConfig[] = [

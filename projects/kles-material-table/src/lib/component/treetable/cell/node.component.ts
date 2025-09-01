@@ -64,6 +64,7 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
         `app-kles-node .mat-mdc-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
         `app-kles-node .paginator { display: flex; width: 100%; justify-content: end; }`,
     ],
+    standalone: false
 })
 
 export class KlesNodeComponent extends AbstractTreeCell {

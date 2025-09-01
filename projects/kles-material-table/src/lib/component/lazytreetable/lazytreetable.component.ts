@@ -17,11 +17,12 @@ import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 import { IKlesCellFieldConfig } from '../../models/cell.model';
 
 @Component({
-  selector: 'app-kles-lazytreetable',
-  templateUrl: './lazytreetable.component.html',
-  styleUrls: ['./lazytreetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
-  animations: [rowsAnimation],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'app-kles-lazytreetable',
+    templateUrl: './lazytreetable.component.html',
+    styleUrls: ['./lazytreetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
+    animations: [rowsAnimation],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {

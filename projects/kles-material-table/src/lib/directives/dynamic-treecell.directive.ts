@@ -7,7 +7,8 @@ import { KlesDynamicCellDirective } from './dynamic-cell.directive';
 
 
 @Directive({
-  selector: '[klesDynamicTreeCell]'
+    selector: '[klesDynamicTreeCell]',
+    standalone: false
 })
 export class KlesDynamicTreeCellDirective extends KlesDynamicCellDirective implements OnInit, OnChanges, OnDestroy {
 

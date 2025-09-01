@@ -2,8 +2,9 @@ import { ChangeDetectorRef, EmbeddedViewRef, Pipe, PipeTransform, Type } from '@
 import { KlesColumnConfig } from '../models/columnconfig.model';
 
 @Pipe({
-  name: 'fieldPipe',
-  pure: false
+    name: 'fieldPipe',
+    pure: false,
+    standalone: false
 })
 export class FieldPipe implements PipeTransform {
 

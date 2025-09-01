@@ -3,6 +3,7 @@ import { KlesColumnConfig } from '../models/columnconfig.model';
 
 @Pipe({
     name: 'cellPipe',
+    standalone: false
 })
 export class CellPipe implements PipeTransform {
 

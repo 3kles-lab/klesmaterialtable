@@ -3,7 +3,8 @@ import { UntypedFormGroup } from '@angular/forms';
 
 @Pipe({
     name: 'rowPipe',
-    pure: false
+    pure: false,
+    standalone: false
 })
 export class RowPipe implements PipeTransform {
 

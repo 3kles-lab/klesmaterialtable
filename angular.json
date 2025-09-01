@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "KlesMaterialTable:build"
+            "buildTarget": "KlesMaterialTable:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "KlesMaterialTable:build:production"
+              "buildTarget": "KlesMaterialTable:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "KlesMaterialTable:build"
+            "buildTarget": "KlesMaterialTable:build"
           }
         },
         "test": {

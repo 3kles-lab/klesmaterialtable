@@ -47,7 +47,8 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
         }
     </mat-form-field>
     `,
-    styles: ['mat-form-field {width: calc(100%)}']
+    styles: ['mat-form-field {width: calc(100%)}'],
+    standalone: false
 })
 export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
 

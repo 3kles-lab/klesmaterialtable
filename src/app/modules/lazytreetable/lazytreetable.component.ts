@@ -7,9 +7,10 @@ import { delay, map } from 'rxjs/operators';
 import { AgePipe } from '../../pipes/age.pipe';
 
 @Component({
-  selector: 'app-lazytreetable',
-  templateUrl: './lazytreetable.component.html',
-  styleUrls: ['./lazytreetable.component.scss']
+    selector: 'app-lazytreetable',
+    templateUrl: './lazytreetable.component.html',
+    styleUrls: ['./lazytreetable.component.scss'],
+    standalone: false
 })
 export class LazyTreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
   columnsExample1: KlesTreeColumnConfig[] = [

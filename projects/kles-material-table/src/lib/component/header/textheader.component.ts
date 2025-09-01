@@ -7,7 +7,8 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
     template: `
     <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
     `,
-    styles: ['mat-form-field {width: calc(100%)}']
+    styles: ['mat-form-field {width: calc(100%)}'],
+    standalone: false
 })
 export class KlesFormTextHeaderComponent extends KlesFieldAbstract implements OnInit {
     field: IKlesHeaderFieldConfig;

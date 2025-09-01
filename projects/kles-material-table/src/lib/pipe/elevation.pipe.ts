@@ -2,7 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
     name: 'elevationPipe',
-    pure: true
+    pure: true,
+    standalone: false
 })
 export class ElevationPipe implements PipeTransform {
 

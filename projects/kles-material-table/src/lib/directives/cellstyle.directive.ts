@@ -3,7 +3,8 @@ import { Directive } from '@angular/core';
 import { SafeStyle } from '@angular/platform-browser';
 
 @Directive({
-    selector: "[klesCellStyle]"
+    selector: "[klesCellStyle]",
+    standalone: false
 })
 export class KlesCellStyleDirective implements OnChanges {
 

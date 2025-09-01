@@ -43,7 +43,8 @@ import { HeaderMapper } from '../../decorators/header.decorator';
     }
     `,
     styleUrl: './dynamic-headerfilter.component.scss',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class KlesFormDynamicHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
     field: IKlesHeaderFieldConfig;

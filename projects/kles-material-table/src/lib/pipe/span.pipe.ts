@@ -4,6 +4,7 @@ import { Span } from "../enums/span.enum";
 
 @Pipe({
     name: 'spanPipe',
+    standalone: false
 })
 export class SpanPipe implements PipeTransform {
 

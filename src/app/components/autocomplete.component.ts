@@ -8,7 +8,8 @@ import * as _ from "lodash";
     <span>
         {{value.key}} - {{value.label}}
     </span> 
-`
+`,
+    standalone: false
 })
 export class AutocompleteComponent implements IKlesComponent, OnInit {
     component: Type<any>;

@@ -6,6 +6,7 @@ import { Options } from "../models/options.model";
 
 @Directive({
     selector: '[klesDynamicHeader]',
+    standalone: false
 })
 export class KlesDynamicHeaderDirective extends KlesDynamicFieldDirective implements OnInit, OnChanges, OnDestroy {
     @Input() field: IKlesFieldConfig;

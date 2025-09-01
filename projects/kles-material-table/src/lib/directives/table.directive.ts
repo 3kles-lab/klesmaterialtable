@@ -7,7 +7,8 @@ import { MatPaginatorIntl } from '@angular/material/paginator';
 import { SubscriptSizing } from "@angular/material/form-field";
 
 @Directive({
-    selector: '[klesTable]'
+    selector: '[klesTable]',
+    standalone: false
 })
 export class KlesTableDirective implements OnInit, OnChanges {
     @Input() tableConfig: KlesTableConfig;
