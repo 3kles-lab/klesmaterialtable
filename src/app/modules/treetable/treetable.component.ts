@@ -1,13 +1,19 @@
 import { KlesFormCheckboxComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesTreetableComponent, KlesTreetableService, KlesTreeColumnConfig, KlesTreetableDirective } from 'kles-material-table';
+import { KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesTreetableComponent, KlesTreetableService, KlesTreeColumnConfig, KlesTreetableDirective, KlesMaterialTableModule } from 'kles-material-table';
 import { AgePipe } from '../../pipes/age.pipe';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-treetable',
     templateUrl: './treetable.component.html',
     styleUrls: ['./treetable.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        KlesMaterialTableModule
+    ],
+    providers: [AgePipe]
 })
 export class TreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild(KlesTreetableDirective) set tableDirective(content: KlesTreetableDirective) {

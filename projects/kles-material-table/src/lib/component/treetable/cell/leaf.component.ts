@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { AbstractTreeCell } from "./treecell.abstract";
+import { CommonModule } from "@angular/common";
+import { KlesDynamicCellDirective } from "../../../directives/dynamic-cell.directive";
 
 @Component({
     selector: 'app-kles-leaf',
@@ -11,7 +13,11 @@ import { AbstractTreeCell } from "./treecell.abstract";
     styles: [
         `:host { display: inline-flex}`
     ],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        KlesDynamicCellDirective
+    ]
 })
 
 export class KlesLeafComponent extends AbstractTreeCell {

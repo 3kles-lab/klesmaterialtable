@@ -4,7 +4,7 @@ import { KlesColumnConfig } from '../models/columnconfig.model';
 @Pipe({
     name: 'fieldPipe',
     pure: false,
-    standalone: false
+    standalone: true
 })
 export class FieldPipe implements PipeTransform {
 

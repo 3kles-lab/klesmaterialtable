@@ -5,7 +5,7 @@ import { UntypedFormGroup } from "@angular/forms";
 @Pipe({
     name: 'rowTreePipe',
     pure: false,
-    standalone: false
+    standalone: true
 })
 export class RowTreePipe extends RowPipe {
 

@@ -5,7 +5,7 @@ import { Input } from "@angular/core";
 
 @Directive({
     selector: '[klesTreetable]',
-    standalone: false
+    standalone: true
 })
 export class KlesTreetableDirective extends KlesTableDirective {
   @Input() tableConfig: KlesTreeTableConfig;

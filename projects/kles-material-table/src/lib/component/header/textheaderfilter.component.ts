@@ -3,14 +3,24 @@ import { OnInit, Component } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { startWith, map, switchMap } from 'rxjs/operators';
 import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'kles-form-textheaderfilter',
     template: `
-    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label | translate}}</span></div>
+    <div mat-sort-header [disabled]="!field.sortable"><span>{{ field.label }}</span></div>
     <mat-form-field [formGroup]="group" class="form-element">
         @if (field.autocomplete) {
-            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType"
+            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder" [type]="field.inputType"
             [matAutocomplete]="auto">
 
             <mat-autocomplete #auto="matAutocomplete">
@@ -20,7 +30,7 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
             </mat-autocomplete>
         }
         @else {
-            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder | translate" [type]="field.inputType">
+            <input matInput matTooltip="{{field.tooltip}}" [attr.id]="field.id" (click)="stopPropagation($event)" [ngClass]="field.ngClass" [formControlName]="field.name" [placeholder]="field.placeholder" [type]="field.inputType">
         }
 
         <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="group.controls[field.name].reset(''); stopPropagation($event)">
@@ -34,21 +44,33 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
         @for (validation of field.validations; track validation.name) {
             <ng-container ngProjectAs="mat-error">
                 @if (group.get(field.name).hasError(validation.name)) {
-                    <mat-error>{{validation.message | translate}}</mat-error>
+                    <mat-error>{{validation.message}}</mat-error>
                 }
             </ng-container>
         }
         @for (validation of field.asyncValidations; track validation.name) {
             <ng-container ngProjectAs="mat-error">
                 @if (group.get(field.name).hasError(validation.name)) {
-                    <mat-error>{{validation.message | translate}}</mat-error>
+                    <mat-error>{{validation.message}}</mat-error>
                 }
             </ng-container>
         }
     </mat-form-field>
     `,
     styles: ['mat-form-field {width: calc(100%)}'],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        MatButtonModule,
+        MatAutocompleteModule,
+        MatTooltipModule,
+        MatProgressSpinnerModule,
+        MatSortModule
+    ]
 })
 export class KlesFormTextHeaderFilterComponent extends KlesFieldAbstract implements OnInit {
 

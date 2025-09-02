@@ -1,9 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnChanges, OnDestroy, OnInit, Output, Signal, SimpleChanges, signal } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateService } from '@ngx-translate/core';
 import * as _ from 'lodash';
 import { BehaviorSubject, Subject, combineLatest, concat, merge, of } from 'rxjs';
 import { catchError, debounceTime, switchMap, tap, take, takeUntil, filter, map, startWith, skip, withLatestFrom, distinctUntilChanged } from 'rxjs/operators';
@@ -15,6 +14,32 @@ import { KlesTreetableComponent } from '../treetable/treetable.component';
 import { rowsAnimation } from '../../animations/row.animation';
 import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 import { IKlesCellFieldConfig } from '../../models/cell.model';
+import { CommonModule } from '@angular/common';
+import { RowDragDisabledPipe } from '../../pipe/rowdragdisabled.pipe';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CellPipe } from '../../pipe/cell.pipe';
+import { ElevationPipe } from '../../pipe/elevation.pipe';
+import { FieldPipe } from '../../pipe/field.pipe';
+import { RowPipe } from '../../pipe/row.pipe';
+import { RowTreePipe } from '../../pipe/rowtree.pipe';
+import { SpanPipe } from '../../pipe/span.pipe';
+import { KlesDynamicCellDirective } from '../../directives/dynamic-cell.directive';
+import { KlesDynamicTreeCellDirective } from '../../directives/dynamic-treecell.directive';
+import { KlesComponentDirective, KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
+import { GroupPipe } from '../../pipe/group.pipe';
+import { KlesDynamicHeaderDirective } from '../../directives/dynamic-header.directive';
+import { KlesResizeColumnDirective } from '../../directives/resizecolumn.directive';
 
 @Component({
     selector: 'app-kles-lazytreetable',
@@ -22,7 +47,39 @@ import { IKlesCellFieldConfig } from '../../models/cell.model';
     styleUrls: ['./lazytreetable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
     animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      MatDialogModule,
+      MatTableModule,
+      MatSortModule,
+      MatPaginatorModule,
+      MatProgressSpinnerModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      MatIconModule,
+      MatTooltipModule,
+      DragDropModule,
+      ScrollingModule,
+      CdkTableModule,
+      RowDragDisabledPipe,
+      RowPipe,
+      RowTreePipe,
+      CellPipe,
+      FieldPipe,
+      SpanPipe,
+      ElevationPipe,
+      GroupPipe,
+      KlesTreetableComponent,
+      KlesDynamicCellDirective,
+      KlesDynamicHeaderDirective,
+      KlesDynamicTreeCellDirective,
+      KlesDynamicFieldDirective,
+      KlesComponentDirective,
+      KlesResizeColumnDirective
+    ]
 })
 
 export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -33,7 +90,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
   reload$ = new Subject<void>();
   filteredValues$ = new BehaviorSubject<{ [key: string]: any; }>({});
 
-  constructor(protected translate: TranslateService,
+  constructor(
     protected adapter: DateAdapter<any>,
     protected formBuilder: UntypedFormBuilder,
     public ref: ChangeDetectorRef,
@@ -44,7 +101,7 @@ export class KlesLazyTreetableComponent<T> extends KlesTreetableComponent<T> imp
     public converterService: ConverterService,
     @Inject('tableService') public tableService: AbstractKlesLazyTreetableService,
     protected _elementRef: ElementRef) {
-    super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, treeService, converterService
+    super(adapter, formBuilder, ref, dialog, sanitizer, _adapter, treeService, converterService
       , tableService, _elementRef);
   }
 

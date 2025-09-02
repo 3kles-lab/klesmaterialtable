@@ -1,15 +1,37 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, signal } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { TranslateService } from '@ngx-translate/core';
 import { BehaviorSubject, concat, merge, of, Subject } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, map, skip, startWith, switchMap, takeUntil, tap } from 'rxjs/operators';
 import { AbstractKlesLazyTableService } from '../../services/lazy/abstractlazytable.service';
 import { KlesTableComponent } from '../table/table.component';
 import { rowsAnimation } from '../../animations/row.animation';
-import { MatTable } from '@angular/material/table';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CellPipe } from '../../pipe/cell.pipe';
+import { ElevationPipe } from '../../pipe/elevation.pipe';
+import { FieldPipe } from '../../pipe/field.pipe';
+import { RowPipe } from '../../pipe/row.pipe';
+import { SpanPipe } from '../../pipe/span.pipe';
+import { KlesDynamicCellDirective } from '../../directives/dynamic-cell.directive';
+import { KlesComponentDirective, KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
+import { RowDragDisabledPipe } from '../../pipe/rowdragdisabled.pipe';
+import { GroupPipe } from '../../pipe/group.pipe';
+import { KlesDynamicHeaderDirective } from '../../directives/dynamic-header.directive';
+import { KlesResizeColumnDirective } from '../../directives/resizecolumn.directive';
 
 @Component({
     selector: 'app-kles-lazytable',
@@ -17,7 +39,36 @@ import { MatTable } from '@angular/material/table';
     styleUrls: ['./lazytable.component.scss', '../../styles/dragdrop.scss', '../../styles/align-cell.scss', '../../styles/input.scss'],
     animations: [rowsAnimation],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      FormsModule,
+      MatTableModule,
+      MatSortModule,
+      MatPaginatorModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatButtonModule,
+      MatIconModule,
+      MatTooltipModule,
+      MatProgressSpinnerModule,
+      DragDropModule,
+      ScrollingModule,
+      CdkTableModule,
+      KlesDynamicCellDirective,
+      KlesDynamicHeaderDirective,
+      KlesDynamicFieldDirective,
+      KlesComponentDirective,
+      KlesResizeColumnDirective,
+      RowPipe,
+      CellPipe,
+      FieldPipe,
+      SpanPipe,
+      ElevationPipe,
+      RowDragDisabledPipe,
+      GroupPipe
+    ]
 })
 export class KlesLazyTableComponent extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
@@ -30,7 +81,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
   @Output() _onSelectedLineResponse = new EventEmitter<any>();
   @Output() _onSelectedResponse = new EventEmitter<any>();
 
-  constructor(protected translate: TranslateService,
+  constructor(
     protected adapter: DateAdapter<any>,
     private fb1: UntypedFormBuilder,
     public ref: ChangeDetectorRef,
@@ -40,7 +91,7 @@ export class KlesLazyTableComponent extends KlesTableComponent implements OnInit
     @Inject('tableService') public tableService: AbstractKlesLazyTableService,
     protected _elementRef: ElementRef
   ) {
-    super(translate, adapter, fb1, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
+    super(adapter, fb1, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
   }
 
   ngOnInit(): void {

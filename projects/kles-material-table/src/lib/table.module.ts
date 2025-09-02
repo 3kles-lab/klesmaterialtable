@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { KlesTableComponent } from './component/table/table.component';
 import { KlesLazyTableComponent } from './component/lazytable/lazytable.component';
 import { MaterialModule } from './modules/material.module';
-import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { KlesFormTextHeaderFilterComponent } from './component/header/textheaderfilter.component';
 import { KlesMaterialDynamicformsModule } from '@3kles/kles-material-dynamicforms';
@@ -68,30 +67,24 @@ const services = [
     AbstractKlesTableService,
     AbstractKlesLazyTableService,
     KlesTableService,
-    // KlesLazyTableService,
     AbstractKlesTreeTableService,
     AbstractKlesLazyTreetableService,
-    // KlesTreetableService,
     DefaultKlesTreetableService,
-    // KlesLazyTreetableService,
     ConverterService,
     TreeService
 ];
 const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDragDisabledPipe, SpanPipe, CellPipe, CapitalizePipe];
 
 @NgModule({
-    declarations: [
-        components,
-        directives,
-        pipes
-    ],
     imports: [
         CommonModule,
         MaterialModule,
-        TranslateModule,
         ReactiveFormsModule,
         FormsModule,
-        KlesMaterialDynamicformsModule
+        KlesMaterialDynamicformsModule,
+        components,
+        directives,
+        pipes
     ],
     exports: [
         components,
@@ -99,8 +92,8 @@ const pipes = [FieldPipe, GroupPipe, ElevationPipe, RowPipe, RowTreePipe, RowDra
         pipes
     ],
     providers: [
-        services
+        services,
+        pipes
     ]
 })
-
 export class KlesMaterialTableModule { }

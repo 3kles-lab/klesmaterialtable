@@ -6,7 +6,7 @@ import { KlesUnfoldCellComponent } from '../component/cell/unfoldcell.component'
 
 @Directive({
     selector: '[klesDynamicCell]',
-    standalone: false
+    standalone: true
 })
 export class KlesDynamicCellDirective extends KlesDynamicFieldDirective implements OnInit, OnChanges, OnDestroy {
 

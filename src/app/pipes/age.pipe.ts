@@ -3,7 +3,7 @@ import { TranslateService } from "@ngx-translate/core";
 
 @Pipe({
     name: 'age-pipe',
-    standalone: false
+    standalone: true
 })
 export class AgePipe implements PipeTransform {
     constructor(private translateService: TranslateService) { }

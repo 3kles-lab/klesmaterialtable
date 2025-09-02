@@ -146,6 +146,7 @@ td div {
   .mat-mdc-cell,
   .mat-mdc-header-cell {
     border-right: 1px solid rgba(0, 0, 0, 0.12);
+    border-bottom: 1px solid rgba(0, 0, 0, .12);
 
     &:not(:nth-child(1)) {
       padding: 0 10px;
@@ -155,7 +156,7 @@ td div {
 
 
 .row-odd {
-  background: var(--accent-lighter-color)
+  background: var(--mat-sys-inverse-primary);
 }
 
 // .mat-sort-header-container{

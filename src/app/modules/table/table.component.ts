@@ -1,21 +1,27 @@
 import { EnumType, KlesFormButtonComponent, KlesFormCheckboxComponent, KlesFormDateComponent, KlesFormInputClearableComponent, KlesFormInputComponent, KlesFormSelectComponent, KlesFormSelectSearchComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
 import { AfterViewInit, Component, OnDestroy, QueryList, ViewChildren, ViewEncapsulation } from '@angular/core';
 import { FormGroup, UntypedFormGroup, Validators } from '@angular/forms';
-import { IChangeCell, IKlesCellFieldConfig, IKlesHeaderFieldConfig, KlesColumnConfig, KlesFormDynamicHeaderFilterComponent, KlesFormTextHeaderComponent, KlesTableComponent, KlesTableConfig, KlesTableDirective, KlesTableService } from 'kles-material-table';
+import { IChangeCell, IKlesCellFieldConfig, IKlesHeaderFieldConfig, KlesColumnConfig, KlesFormDynamicHeaderFilterComponent, KlesFormTextHeaderComponent, KlesMaterialTableModule, KlesTableComponent, KlesTableConfig, KlesTableDirective, KlesTableService } from 'kles-material-table';
 import { Subject, of } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { StyleService } from './style.service';
 import { FakeApiService } from 'src/app/services/fakemi.service';
 import { SelectTableService } from './select.service';
 import { CustomPaginator } from './custom-paginator.component';
-import { AgePipe } from '../../pipes/age.pipe';
+import { CommonModule } from '@angular/common';
+import { AgePipe } from 'src/app/pipes/age.pipe';
 
 @Component({
     selector: 'app-table',
     templateUrl: './table.component.html',
     styleUrls: ['./table.component.scss'],
     encapsulation: ViewEncapsulation.None,
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        KlesMaterialTableModule
+    ],
+    providers: [AgePipe]
 })
 export class TableComponent implements AfterViewInit, OnDestroy {
     @ViewChildren(KlesTableDirective) listDirective: QueryList<KlesTableDirective>;

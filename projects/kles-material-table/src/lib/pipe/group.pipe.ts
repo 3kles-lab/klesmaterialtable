@@ -2,7 +2,7 @@ import { Pipe, PipeTransform, ChangeDetectorRef, EmbeddedViewRef, Type } from '@
 @Pipe({
     name: 'groupPipe',
     pure: true,
-    standalone: false
+    standalone: true
 })
 export class GroupPipe implements PipeTransform {
 

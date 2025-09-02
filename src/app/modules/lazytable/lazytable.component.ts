@@ -1,6 +1,7 @@
 import { KlesFormInputClearableComponent, KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
+import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { IKlesCellFieldConfig, IKlesHeaderFieldConfig, IPagination, KlesColumnConfig, KlesFormDynamicHeaderFilterComponent, KlesFormTextHeaderComponent, KlesLazyTableComponent, KlesLazyTableService, KlesTableConfig } from 'kles-material-table';
+import { IKlesCellFieldConfig, IKlesHeaderFieldConfig, IPagination, KlesColumnConfig, KlesFormDynamicHeaderFilterComponent, KlesFormTextHeaderComponent, KlesLazyTableComponent, KlesLazyTableService, KlesMaterialTableModule, KlesTableConfig } from 'kles-material-table';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 
@@ -8,7 +9,11 @@ import { delay, map } from 'rxjs/operators';
     selector: 'app-lazytable',
     templateUrl: './lazytable.component.html',
     styleUrls: ['./lazytable.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        KlesMaterialTableModule
+    ]
 })
 export class LazyTableComponent implements OnInit, AfterViewInit, OnDestroy {
     columnsExample1: KlesColumnConfig[] = [

@@ -1,16 +1,24 @@
 import { KlesFormTextComponent } from '@3kles/kles-material-dynamicforms';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { KlesTreeColumnConfig, KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesLazyTreetableComponent, KlesLazyTreetableService, IPagination, ILoadChildren } from 'kles-material-table';
+import { KlesTreeColumnConfig, KlesFormTextHeaderComponent, IKlesHeaderFieldConfig, IKlesCellFieldConfig, KlesTableConfig, KlesLazyTreetableComponent, KlesLazyTreetableService, IPagination, ILoadChildren, KlesMaterialTableModule } from 'kles-material-table';
 import { Observable, of } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { AgePipe } from '../../pipes/age.pipe';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-lazytreetable',
     templateUrl: './lazytreetable.component.html',
     styleUrls: ['./lazytreetable.component.scss'],
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      TranslateModule,
+      KlesMaterialTableModule
+    ],
+    providers: [AgePipe]
 })
 export class LazyTreeTableComponent implements OnInit, AfterViewInit, OnDestroy {
   columnsExample1: KlesTreeColumnConfig[] = [

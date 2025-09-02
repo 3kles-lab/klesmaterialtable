@@ -1,4 +1,5 @@
 import { IKlesComponent } from "@3kles/kles-material-dynamicforms";
+import { CommonModule } from "@angular/common";
 import { Component, OnInit, Type } from "@angular/core";
 import * as _ from "lodash";
 
@@ -9,7 +10,10 @@ import * as _ from "lodash";
         {{value.key}} - {{value.label}}
     </span> 
 `,
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule
+    ]
 })
 export class AutocompleteComponent implements IKlesComponent, OnInit {
     component: Type<any>;

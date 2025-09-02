@@ -2,11 +2,10 @@ import {
   Component, ChangeDetectionStrategy, SimpleChanges, EventEmitter, Output, ChangeDetectorRef, Inject, Signal, OnInit, OnChanges, OnDestroy, AfterViewChecked, ElementRef, AfterViewInit
 } from '@angular/core';
 import * as _ from 'lodash';
-import { TranslateService } from '@ngx-translate/core';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { AbstractControl, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { AbstractControl, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatTreetableData } from './mat-treetable-datasource';
 import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS } from '@angular/material-moment-adapter';
 import { SearchableNode, TreeTableNode } from '../../models/node.model';
@@ -20,6 +19,26 @@ import { rowsAnimation } from '../../animations/row.animation';
 import { KlesTreeColumnConfig } from '../../models/columnconfig.model';
 import * as uuid from 'uuid';
 import { IKlesCellFieldConfig } from '../../models/cell.model';
+import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { CdkScrollableModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkTableModule } from '@angular/cdk/table';
+import { KlesDynamicTreeCellDirective } from '../../directives/dynamic-treecell.directive';
+import { KlesComponentDirective, KlesDynamicFieldDirective } from '@3kles/kles-material-dynamicforms';
+import { KlesDynamicHeaderDirective } from '../../directives/dynamic-header.directive';
+import { RowTreePipe } from '../../pipe/rowtree.pipe';
+import { RowDragDisabledPipe } from '../../pipe/rowdragdisabled.pipe';
+import { GroupPipe } from '../../pipe/group.pipe';
+import { SpanPipe } from '../../pipe/span.pipe';
+import { FieldPipe } from '../../pipe/field.pipe';
+import { CellPipe } from '../../pipe/cell.pipe';
+import { ElevationPipe } from '../../pipe/elevation.pipe';
+import { KlesResizeColumnDirective } from '../../directives/resizecolumn.directive';
 
 @Component({
     selector: 'app-kles-dynamictreetable',
@@ -36,7 +55,33 @@ import { IKlesCellFieldConfig } from '../../models/cell.model';
         { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      MatTableModule,
+      MatSortModule,
+      MatPaginatorModule,
+      MatIconModule,
+      MatDialogModule,
+      MatProgressSpinnerModule,
+      CdkScrollableModule,
+      DragDropModule,
+      CdkTableModule,
+      KlesDynamicTreeCellDirective,
+      KlesDynamicFieldDirective,
+      KlesDynamicHeaderDirective,
+      KlesComponentDirective,
+      KlesResizeColumnDirective,
+      KlesTableComponent,
+      RowTreePipe,
+      RowDragDisabledPipe,
+      GroupPipe,
+      SpanPipe,
+      FieldPipe,
+      CellPipe,
+      ElevationPipe
+    ]
 })
 
 export class KlesTreetableComponent<T> extends KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -48,7 +93,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
 
   dataSource = new MatTreetableData<AbstractControl>([], []);
 
-  constructor(protected translate: TranslateService,
+  constructor(
     protected adapter: DateAdapter<any>,
     protected formBuilder: UntypedFormBuilder,
     public ref: ChangeDetectorRef,
@@ -59,7 +104,7 @@ export class KlesTreetableComponent<T> extends KlesTableComponent implements OnI
     public converterService: ConverterService,
     @Inject('tableService') public tableService: AbstractKlesTreeTableService,
     protected _elementRef: ElementRef) {
-    super(translate, adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
+    super(adapter, formBuilder, ref, dialog, sanitizer, _adapter, tableService, _elementRef);
   }
 
 

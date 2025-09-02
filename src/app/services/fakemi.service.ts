@@ -3,7 +3,9 @@ import { IMIRequest, IMIResponse, MIRecord } from '@infor-up/m3-odin';
 import { Observable, of, Subject } from 'rxjs';
 import { map, tap, delay, switchMap } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class FakeApiService {
 
     constructor() { }

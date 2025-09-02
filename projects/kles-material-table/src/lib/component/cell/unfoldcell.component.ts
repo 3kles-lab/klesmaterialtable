@@ -1,8 +1,12 @@
 import { Component, ViewEncapsulation } from "@angular/core";
 import { AbstractCell } from "./cell.abstract";
 import { KlesColumnConfig } from "../../models/columnconfig.model";
-import { UntypedFormGroup } from "@angular/forms";
+import { ReactiveFormsModule, UntypedFormGroup } from "@angular/forms";
 import { IKlesCellFieldConfig } from "../../models/cell.model";
+import { CommonModule } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { KlesDynamicFieldDirective } from "@3kles/kles-material-dynamicforms";
 
 @Component({
     selector: 'app-kles-fold',
@@ -27,7 +31,14 @@ import { IKlesCellFieldConfig } from "../../models/cell.model";
         `.fold-field {flex-grow: 1;}`,
         `.fold-cell {display:flex; align-items:center}`
     ],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        KlesDynamicFieldDirective
+    ]
 })
 
 export class KlesUnfoldCellComponent extends AbstractCell<KlesColumnConfig> {

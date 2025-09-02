@@ -1,8 +1,12 @@
 import { Component, QueryList, ViewChild, ViewChildren, ViewEncapsulation } from "@angular/core";
 import { AbstractTreeCell } from "./treecell.abstract";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { FormGroup, UntypedFormGroup } from "@angular/forms";
+import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { FormGroup, ReactiveFormsModule, UntypedFormGroup } from "@angular/forms";
 import { IKlesCellFieldConfig } from "../../../models/cell.model";
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from "@angular/material/icon";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { KlesDynamicCellDirective } from "../../../directives/dynamic-cell.directive";
 
 @Component({
     selector: 'app-kles-node',
@@ -64,7 +68,15 @@ import { IKlesCellFieldConfig } from "../../../models/cell.model";
         `app-kles-node .mat-mdc-paginator-container { padding: 0 2px 0 8px; min-height: auto }`,
         `app-kles-node .paginator { display: flex; width: 100%; justify-content: end; }`,
     ],
-    standalone: false
+    standalone: true,
+    imports: [
+        CommonModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatPaginatorModule,
+        ReactiveFormsModule,
+        KlesDynamicCellDirective
+    ]
 })
 
 export class KlesNodeComponent extends AbstractTreeCell {

@@ -2,7 +2,7 @@ import { Directive, OnInit, Renderer2, Input, ElementRef } from "@angular/core";
 
 @Directive({
     selector: "[klesResizeColumn]",
-    standalone: false
+    standalone: true
 })
 export class KlesResizeColumnDirective implements OnInit {
     @Input("klesResizeColumn") resizable: boolean;

@@ -4,7 +4,7 @@ import { SafeStyle } from '@angular/platform-browser';
 
 @Directive({
     selector: "[klesCellStyle]",
-    standalone: false
+    standalone: true
 })
 export class KlesCellStyleDirective implements OnChanges {
 

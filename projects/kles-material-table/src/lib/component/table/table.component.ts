@@ -7,16 +7,15 @@ import {
 import { DomSanitizer, SafeStyle } from '@angular/platform-browser';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { AbstractControl, AsyncValidatorFn, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTable } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { AbstractControl, AsyncValidatorFn, ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, ValidatorFn } from '@angular/forms';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatTable, MatTableModule } from '@angular/material/table';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { KlesColumnConfig } from '../../models/columnconfig.model';
 import { Options } from '../../models/options.model';
 import { Node } from '../../models/node.model';
-import { componentMapper, IKlesFieldConfig, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
+import { componentMapper, IKlesFieldConfig, KlesComponentDirective, KlesDynamicFieldDirective, klesFieldControlFactory } from '@3kles/kles-material-dynamicforms';
 import * as uuid from 'uuid';
 import * as _ from 'lodash';
 import { catchError, debounceTime, map, switchMap, take, takeUntil, tap } from 'rxjs/operators';
@@ -25,10 +24,29 @@ import { AbstractKlesTableService } from '../../services/abstracttable.service';
 import { of, Subject } from 'rxjs';
 import { rowsAnimation } from '../../animations/row.animation';
 
-import { CdkDragDrop, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 import { Span } from '../../enums/span.enum';
 import { KlesTableDatasource } from './table.datasource';
 import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { CellPipe } from '../../pipe/cell.pipe';
+import { FieldPipe } from '../../pipe/field.pipe';
+import { RowPipe } from '../../pipe/row.pipe';
+import { SpanPipe } from '../../pipe/span.pipe';
+import { KlesDynamicCellDirective } from '../../directives/dynamic-cell.directive';
+import { RowDragDisabledPipe } from '../../pipe/rowdragdisabled.pipe';
+import { GroupPipe } from '../../pipe/group.pipe';
+import { ElevationPipe } from '../../pipe/elevation.pipe';
+import { KlesDynamicHeaderDirective } from '../../directives/dynamic-header.directive';
+import { KlesResizeColumnDirective } from '../../directives/resizecolumn.directive';
 
 
 @Component({
@@ -46,7 +64,35 @@ import { IKlesHeaderFieldConfig } from '../../models/header-field.config.model';
         { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone: true,
+    imports: [
+      CommonModule,
+      ReactiveFormsModule,
+      MatTableModule,
+      MatSortModule,
+      MatPaginatorModule,
+      MatFormFieldModule,
+      MatInputModule,
+      MatIconModule,
+      MatButtonModule,
+      MatTooltipModule,
+      MatProgressSpinnerModule,
+      DragDropModule,
+      ScrollingModule,
+      CdkTableModule,
+      KlesDynamicCellDirective,
+      KlesDynamicHeaderDirective,
+      KlesDynamicFieldDirective,
+      KlesComponentDirective,
+      KlesResizeColumnDirective,
+      RowPipe,
+      CellPipe,
+      FieldPipe,
+      SpanPipe,
+      RowDragDisabledPipe,
+      GroupPipe,
+      ElevationPipe
+    ]
 })
 
 export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -150,7 +196,7 @@ export class KlesTableComponent implements OnInit, OnChanges, AfterViewInit, OnD
 
   protected _resizeObserver: ResizeObserver;
 
-  constructor(protected translate: TranslateService,
+  constructor(
     protected adapter: DateAdapter<any>,
     protected fb: UntypedFormBuilder,
     public ref: ChangeDetectorRef,

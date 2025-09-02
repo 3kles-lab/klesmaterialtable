@@ -4,7 +4,7 @@ import { UntypedFormGroup } from '@angular/forms';
 
 @Directive({
     selector: '[klesComponentHeader]',
-    standalone: false
+    standalone: true
 })
 export class KlesComponentHeaderDirective implements OnInit, OnChanges {
     @Input() component: Type<any>;
