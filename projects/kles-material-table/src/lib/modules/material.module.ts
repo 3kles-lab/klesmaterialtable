@@ -32,7 +32,6 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTreeModule } from '@angular/material/tree';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { KlesMaterialDatepickerModule } from '@3kles/kles-material-datepicker';
 
@@ -74,7 +73,6 @@ import { KlesMaterialDatepickerModule } from '@3kles/kles-material-datepicker';
         MatSliderModule,
         MatButtonModule,
         MatSlideToggleModule,
-        ColorPickerModule,
         DragDropModule
     ],
 
@@ -112,7 +110,6 @@ import { KlesMaterialDatepickerModule } from '@3kles/kles-material-datepicker';
         MatSliderModule,
         MatButtonModule,
         MatSlideToggleModule,
-        ColorPickerModule,
         DragDropModule,
         KlesMaterialDatepickerModule
     ],
